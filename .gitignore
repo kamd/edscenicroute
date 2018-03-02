@@ -1,1 +1,9 @@
 *~
+*.dll
+*.exe
+db.lock
+*.pdb
+sqlite3/
+*.swp
+
+
