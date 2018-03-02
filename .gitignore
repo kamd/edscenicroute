@@ -5,5 +5,7 @@ db.lock
 *.pdb
 sqlite3/
 *.swp
-
+bin/
+obj/
+packages/
 
