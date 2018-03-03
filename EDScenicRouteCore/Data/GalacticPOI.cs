@@ -5,7 +5,8 @@ using System.Text;
 
 namespace EDScenicRouteCore.Data
 {
-    public class GalacticPOI
+    [Serializable]
+    public class GalacticPOI : IGalacticPoint
     {
         public string Id { get; set; }
         public string Type { get; set; }
@@ -13,6 +14,7 @@ namespace EDScenicRouteCore.Data
         public string GalMapSearch { get; set; }
         public string GalMapUrl { get; set; }
         public Vector3 Coordinates { get; set; }
+        public float DistanceFromSol { get; set; }
 
         public override string ToString()
         {
