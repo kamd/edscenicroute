@@ -25,8 +25,11 @@ namespace EDScenicRouteCore
             float acceptableExtraDistance)
         {
             var originalDistance = DistanceBetweenPoints(from, to);
-            var suggestions = POIs.Where(p => p.DistanceFromSol > 200f).Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
+            var suggestions = POIs.
+                Where(p => p.DistanceFromSol > 200f). // Ignore the "bubble" of near-Earth POIs TODO
+                Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
                 Where(ss => ss.ExtraDistance <= acceptableExtraDistance).ToList();
+
             return (originalDistance, suggestions);
         }
 
