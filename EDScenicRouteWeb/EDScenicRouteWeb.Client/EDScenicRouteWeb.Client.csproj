@@ -15,4 +15,17 @@
     <ProjectReference Include="..\EDScenicRouteWeb.Shared\EDScenicRouteWeb.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Pages\ScenicResults.cshtml" />
+    <None Include="Pages\RouteEntry.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\RouteEntry.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\ScenicResults.cshtml" />
+  </ItemGroup>
+
 </Project>

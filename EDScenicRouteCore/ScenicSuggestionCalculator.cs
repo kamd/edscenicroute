@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using EDScenicRouteCoreModels;
+
+using Vector3 = EDScenicRouteCoreModels.Vector3;
 
 namespace EDScenicRouteCore
 {
@@ -40,7 +43,7 @@ namespace EDScenicRouteCore
 
         public static float DistanceFromSol(Vector3 point)
         {
-            return Vector3.Distance(point, Vector3.Zero);
+            return System.Numerics.Vector3.Distance(ToNumericsVector3(point), System.Numerics.Vector3.Zero);
         }
 
         private static float ExtraDistanceIncurred(GalacticSystem a, GalacticSystem b, GalacticPOI poi, float originalDistance)
@@ -51,7 +54,12 @@ namespace EDScenicRouteCore
 
         private static float DistanceBetweenPoints(IGalacticPoint a, IGalacticPoint b)
         {
-            return Vector3.Distance(a.Coordinates, b.Coordinates);
+            return System.Numerics.Vector3.Distance(ToNumericsVector3(a.Coordinates), ToNumericsVector3(b.Coordinates));
+        }
+
+        private static System.Numerics.Vector3 ToNumericsVector3(Vector3 vector)
+        {
+            return new System.Numerics.Vector3(vector.X, vector.Y, vector.Z);
         }
 
 

@@ -11,4 +11,8 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EDScenicRouteCoreModels\EDScenicRouteCoreModels.csproj" />
+  </ItemGroup>
+
 </Project>

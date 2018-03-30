@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore.DataUpdates
 {
@@ -33,7 +34,7 @@ namespace EDScenicRouteCore.DataUpdates
                 system = new GalacticSystem();
                 system.Name = (string) obj["name"];
                 var coords = (JObject) obj["coords"];
-                system.Coordinates = new System.Numerics.Vector3(
+                system.Coordinates = new Vector3(
                     (float)coords["x"],
                     (float)coords["y"],
                     (float)coords["z"]);

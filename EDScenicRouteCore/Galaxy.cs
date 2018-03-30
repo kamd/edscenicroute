@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore
 {
@@ -75,6 +76,11 @@ namespace EDScenicRouteCore
         {
             CheckInitialised();
             return calculator.GenerateSuggestions(from, to, acceptableExtraDistance);
+        }
+
+        public async Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(RouteDetails details)
+        {
+            return await GenerateSuggestions(details.FromSystemName, details.ToSystemName, details.AcceptableExtraDistance);
         }
 
         public async Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(

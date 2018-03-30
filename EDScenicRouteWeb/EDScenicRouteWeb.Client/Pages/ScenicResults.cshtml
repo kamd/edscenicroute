@@ -1,0 +1,33 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using EDScenicRouteCoreModels
+
+@page "/scenicresults"
+
+
+@if (ScenicSuggestions.Count > 0)
+{
+    <p>Have we got suggestions for you!</p>
+}
+else
+{
+    <p>Suggestions will appear here.</p>
+}
+
+<p>Enter trip details below.</p>
+
+<p>Straight line distance: @StraightLineDistance Ly</p>
+<ul>
+@foreach (var item in ScenicSuggestions)
+{
+    <li>@item.POI.Name, @StraightLineDistance Ly extra</li>
+}
+</ul>
+    
+@functions {
+
+    public float StraightLineDistance { get; set; }
+    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; } = new List<ScenicSuggestion>();
+
+}

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore.DataUpdates
 {
@@ -45,7 +46,7 @@ namespace EDScenicRouteCore.DataUpdates
                         continue;
                     }
                     var coords = (r.coordinates as JArray).Select(c => (float)c).ToArray();
-                    var coordsVector = new System.Numerics.Vector3(coords[0], coords[1], coords[2]);
+                    var coordsVector = new Vector3(coords[0], coords[1], coords[2]);
                     pois.Add(new GalacticPOI()
                     {
                         Id = r.id,

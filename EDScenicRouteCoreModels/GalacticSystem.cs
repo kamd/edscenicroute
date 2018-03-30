@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 
-namespace EDScenicRouteCore.Data
+namespace EDScenicRouteCoreModels
 {
     [Serializable]
     public class GalacticSystem : IGalacticPoint

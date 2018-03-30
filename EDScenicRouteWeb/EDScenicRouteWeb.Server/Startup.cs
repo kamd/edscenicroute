@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
+using EDScenicRouteWeb.Server.Services;
 
 namespace EDScenicRouteWeb.Server
 {
@@ -31,6 +32,8 @@ namespace EDScenicRouteWeb.Server
                     WasmMediaTypeNames.Application.Wasm,
                 });
             });
+
+            services.AddSingleton<IGalaxyManager, GalaxyManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

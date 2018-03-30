@@ -1,7 +1,25 @@
 ﻿@page "/"
+@using EDScenicRouteWeb.Client.Services
+@inject AppState state
+    <h1>Hello, galaxy!</h1>
 
-<h1>Hello, world!</h1>
+    Welcome to your new app.
+    <div id="scenic-routes-area">
+        <RouteEntry OnSearch=state.GetSuggestions />
+    </div>
+<div id="suggestions-area">
+    <ScenicResults StraightLineDistance=state.StraightLineDistanceOfTrip ScenicSuggestions=state.Suggestions />
+</div>
 
-Welcome to your new app.
+<p>Stuff distance: @state.StraightLineDistanceOfTrip</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@functions
+    {
+
+        protected override void OnInit()
+        {
+            state.OnChanged += StateHasChanged;
+        }
+
+    }
+

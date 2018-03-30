@@ -66,6 +66,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EDScenicRouteCoreModels\EDScenicRouteCoreModels.csproj">
+      <Project>{9241f33c-c199-4581-b6d1-e8eb9625e701}</Project>
+      <Name>EDScenicRouteCoreModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDScenicRouteCore\EDScenicRouteCore.csproj">
       <Project>{f777f2e6-ce24-45ab-a0ba-ce959f4deb9c}</Project>
       <Name>EDScenicRouteCore</Name>
