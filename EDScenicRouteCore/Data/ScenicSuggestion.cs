@@ -19,5 +19,16 @@ namespace EDScenicRouteCore.Data
         {
             return $"{POI.Name}, extra distance: {ExtraDistance} Ly";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ScenicSuggestion other)) return false;
+            return POI == other.POI && ExtraDistance == other.ExtraDistance;
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(POI.GetHashCode() * 17 + ExtraDistance.GetHashCode());
+        }
     }
 }
