@@ -14,6 +14,7 @@ namespace EDScenicRouteWeb.Client.Services
         public float StraightLineDistanceOfTrip { get; private set; }
         public IReadOnlyList<ScenicSuggestion> Suggestions { get; private set; } = new List<ScenicSuggestion>();
         public bool CurrentlySearching { get; private set; }
+        public string DebugString { get; set; } = "nonono...";
 
         // Lets components receive change notifications
         // Could have whatever granularity you want (more events, hierarchy...)
@@ -26,12 +27,20 @@ namespace EDScenicRouteWeb.Client.Services
             http = httpInstance;
         }
 
+        public async Task ChangeDebugString()
+        {
+            await Task.Delay(1000);
+            DebugString = "YESYESYES";
+            NotifyStateChanged();
+        }
+
         public async Task GetSuggestions(RouteDetails details)
         {
             CurrentlySearching = true;
             NotifyStateChanged();
 
             (StraightLineDistanceOfTrip, Suggestions) = (11f, await http.PostJsonAsync<ScenicSuggestion[]>("/api/scenicsuggestions", details));
+            DebugString = "Yes yes yes!";
             CurrentlySearching = false;
             NotifyStateChanged();
         }

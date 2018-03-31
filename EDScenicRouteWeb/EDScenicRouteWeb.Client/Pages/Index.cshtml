@@ -5,21 +5,33 @@
 
     Welcome to your new app.
     <div id="scenic-routes-area">
-        <RouteEntry OnSearch=state.GetSuggestions />
+        <RouteEntry OnSearch=@state.GetSuggestions />
     </div>
 <div id="suggestions-area">
-    <ScenicResults StraightLineDistance=state.StraightLineDistanceOfTrip ScenicSuggestions=state.Suggestions />
+    <ScenicResults StraightLineDistance=@state.StraightLineDistanceOfTrip DebugStuff=@state.DebugString ScenicSuggestions=@state.Suggestions  />
 </div>
 
+<button @onclick(async () => await state.ChangeDebugString()) title="Click me now!" />
+
 <p>Stuff distance: @state.StraightLineDistanceOfTrip</p>
+
+<button @onclick(DoClicko) title="Click me now"></button>
 
 @functions
     {
 
-        protected override void OnInit()
-        {
-            state.OnChanged += StateHasChanged;
-        }
+    protected override void OnInit()
+    {
+        state.OnChanged += StateHasChanged;
+    }
+
+    private void DoClicko()
+    {
+        state.DebugString = "Yippity yes!";
+        StateHasChanged();
+    }
+
+
 
     }
 

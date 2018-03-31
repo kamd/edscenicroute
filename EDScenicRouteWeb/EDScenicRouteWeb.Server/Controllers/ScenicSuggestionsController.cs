@@ -34,8 +34,21 @@ namespace EDScenicRouteWeb.Server.Controllers
         {
             Console.WriteLine(details.FromSystemName);
             await Task.Delay(500);
-            return new List<ScenicSuggestion>() {new ScenicSuggestion(new GalacticPOI(){Name = "Funland"}, 7f)};
-          //  return await Galaxy.GenerateSuggestions(details);
+            return new List<ScenicSuggestion>()
+            {
+                new ScenicSuggestion(
+                    new GalacticPOI()
+                    {
+                        Name = "Funland",
+                        Coordinates = new Vector3(1, 2, 3),
+                        DistanceFromSol = 1f,
+                        GalMapSearch = "asd",
+                        GalMapUrl = "dfg",
+                        Id = "FUNL",
+                        Type = "Nebula"
+                    }, 7f)
+            };
+            //  return await Galaxy.GenerateSuggestions(details);
         }
 
 

@@ -1,7 +1,12 @@
-﻿namespace EDScenicRouteCoreModels
+﻿using System;
+
+namespace EDScenicRouteCoreModels
 {
+    [Serializable]
     public class ScenicSuggestion
     {
+        public ScenicSuggestion() { }
+
         public ScenicSuggestion(GalacticPOI poi, float extraDistance)
         {
             POI = poi;

@@ -5,6 +5,7 @@
 
 @page "/scenicresults"
 
+<h1>@DebugStuff</h1>
 
 @if (ScenicSuggestions.Count > 0)
 {
@@ -27,7 +28,29 @@ else
     
 @functions {
 
-    public float StraightLineDistance { get; set; }
-    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; } = new List<ScenicSuggestion>();
+    public string DebugStuff { get; set; }
 
+    public float StraightLineDistance
+    {
+        get => _straightLineDistance;
+        set
+        {
+            _straightLineDistance = value;
+            StateHasChanged();
+        }
+    }
+
+    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions
+    {
+        get => _scenicSuggestions;
+        set
+        {
+
+            _scenicSuggestions = value;
+            StateHasChanged();
+        }
+    }
+
+    private float _straightLineDistance;
+    private IReadOnlyList<ScenicSuggestion> _scenicSuggestions = new List<ScenicSuggestion>();
 }

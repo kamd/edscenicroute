@@ -12,7 +12,7 @@
 <input @bind(details.FromSystemName) placeholder="From" />
 <input @bind(details.ToSystemName) placeholder="To" />
 <input @bind(AcceptableExtraDistance) placeholder="Acceptable Extra Ly" />
-<button @onclick(() => OnSearch(details))>Search for POIs to visit</button>
+<button @onclick(async () => await OnSearch(details))>Search for POIs to visit</button>
 
 
 @functions {

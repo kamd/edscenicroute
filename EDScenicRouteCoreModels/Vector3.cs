@@ -4,8 +4,11 @@ using System.Text;
 
 namespace EDScenicRouteCoreModels
 {
-    public struct Vector3
+    [Serializable]
+    public class Vector3
     {
+        public Vector3() { }
+
         public Vector3(float x, float y, float z)
         {
             X = x;
