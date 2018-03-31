@@ -2,11 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Rest;
 
 namespace EDScenicRouteWeb.Server.Controllers
 {
@@ -30,19 +34,20 @@ namespace EDScenicRouteWeb.Server.Controllers
         }
         */
         [HttpPost]
-        public async Task<ScenicSuggestionResults> GetSuggestions([FromBody] RouteDetails details)
+        public async Task<IActionResult> GetSuggestions([FromBody] RouteDetails details)
         {
             //await Task.Delay(500);
             //return new ScenicSuggestionResults() {StraightLineDistance = 123f, Suggestions = TestData};
             try
             {
-
-                return await Galaxy.GenerateSuggestions(details);
+                var results = await Galaxy.GenerateSuggestions(details);
+                return Ok(results);
             }
-            catch (Exception )
+            catch (SystemNotFoundException systemNotFoundException)
             {
                 // throw error?
-                throw;
+                return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
+                
             }
             
         }

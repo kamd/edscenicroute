@@ -30,14 +30,22 @@ namespace EDScenicRouteCore.DataUpdates
             HttpResponseMessage response = await client.GetAsync($"?systemName={name}&showCoordinates=1");
             if (response.IsSuccessStatusCode)
             {
-                JObject obj = await response.Content.ReadAsAsync<JObject>();
-                system = new GalacticSystem();
-                system.Name = (string) obj["name"];
-                var coords = (JObject) obj["coords"];
-                system.Coordinates = new Vector3(
-                    (float)coords["x"],
-                    (float)coords["y"],
-                    (float)coords["z"]);
+                try
+                {
+                    JObject obj = await response.Content.ReadAsAsync<JObject>();
+                    system = new GalacticSystem();
+                    system.Name = (string) obj["name"];
+                    var coords = (JObject) obj["coords"];
+                    system.Coordinates = new Vector3(
+                        (float) coords["x"],
+                        (float) coords["y"],
+                        (float) coords["z"]);
+                }
+                catch (Exception)
+                {
+                    throw new SystemNotFoundException() {SystemName = name};
+                }
+                
             } else
             {
                 throw new HttpRequestException(response.ReasonPhrase);
