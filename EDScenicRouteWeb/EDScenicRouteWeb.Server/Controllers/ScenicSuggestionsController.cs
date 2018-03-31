@@ -30,25 +30,21 @@ namespace EDScenicRouteWeb.Server.Controllers
         }
         */
         [HttpPost]
-        public async Task<IEnumerable<ScenicSuggestion>> GetSuggestions([FromBody] RouteDetails details)
+        public async Task<ScenicSuggestionResults> GetSuggestions([FromBody] RouteDetails details)
         {
-            Console.WriteLine(details.FromSystemName);
-            await Task.Delay(500);
-            return new List<ScenicSuggestion>()
+            //await Task.Delay(500);
+            //return new ScenicSuggestionResults() {StraightLineDistance = 123f, Suggestions = TestData};
+            try
             {
-                new ScenicSuggestion(
-                    new GalacticPOI()
-                    {
-                        Name = "Funland",
-                        Coordinates = new Vector3(1, 2, 3),
-                        DistanceFromSol = 1f,
-                        GalMapSearch = "asd",
-                        GalMapUrl = "dfg",
-                        Id = "FUNL",
-                        Type = "Nebula"
-                    }, 7f)
-            };
-            //  return await Galaxy.GenerateSuggestions(details);
+
+                return await Galaxy.GenerateSuggestions(details);
+            }
+            catch (Exception )
+            {
+                // throw error?
+                throw;
+            }
+            
         }
 
 
@@ -82,5 +78,31 @@ namespace EDScenicRouteWeb.Server.Controllers
         public void Delete(int id)
         {
         }*/
+
+        private List<ScenicSuggestion> TestData => new List<ScenicSuggestion>()
+        {
+            new ScenicSuggestion(
+                new GalacticPOI()
+                {
+                    Name = "Funland",
+                    Coordinates = new Vector3(1, 2, 3),
+                    DistanceFromSol = 1f,
+                    GalMapSearch = "asd",
+                    GalMapUrl = "dfg",
+                    Id = "FUNL",
+                    Type = "Nebula"
+                }, 7f),
+            new ScenicSuggestion(
+                new GalacticPOI()
+                {
+                    Name = "Extraland",
+                    Coordinates = new Vector3(2, 3, 3),
+                    DistanceFromSol = 10f,
+                    GalMapSearch = "aasdsd",
+                    GalMapUrl = "dfgdsa",
+                    Id = "EXL",
+                    Type = "Nebula"
+                }, 12f)
+        };
     }
 }

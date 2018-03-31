@@ -39,7 +39,9 @@ namespace EDScenicRouteWeb.Client.Services
             CurrentlySearching = true;
             NotifyStateChanged();
 
-            (StraightLineDistanceOfTrip, Suggestions) = (11f, await http.PostJsonAsync<ScenicSuggestion[]>("/api/scenicsuggestions", details));
+            var results = await http.PostJsonAsync<ScenicSuggestionResults>("/api/scenicsuggestions", details);
+            StraightLineDistanceOfTrip = results.StraightLineDistance;
+            Suggestions = results.Suggestions;
             DebugString = "Yes yes yes!";
             CurrentlySearching = false;
             NotifyStateChanged();

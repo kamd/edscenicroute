@@ -69,7 +69,7 @@ namespace EDScenicRouteCore
             GalacticSystemSerialization.SaveToFile(Systems, DefaultSystemsFilePath);
         }
 
-        public (float, List<ScenicSuggestion>) GenerateSuggestions(
+        public ScenicSuggestionResults GenerateSuggestions(
             GalacticSystem from,
             GalacticSystem to,
             float acceptableExtraDistance)
@@ -78,12 +78,12 @@ namespace EDScenicRouteCore
             return calculator.GenerateSuggestions(from, to, acceptableExtraDistance);
         }
 
-        public async Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(RouteDetails details)
+        public async Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details)
         {
             return await GenerateSuggestions(details.FromSystemName, details.ToSystemName, details.AcceptableExtraDistance);
         }
 
-        public async Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(
+        public async Task<ScenicSuggestionResults> GenerateSuggestions(
             string systemNameFrom,
             string systemNameTo,
             float acceptableExtraDistance)

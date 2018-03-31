@@ -9,6 +9,6 @@ namespace EDScenicRouteWeb.Server.Services
     public interface IGalaxyManager
     {
         Task Initialise();
-        Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(RouteDetails details);
+        Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details);
     }
 }

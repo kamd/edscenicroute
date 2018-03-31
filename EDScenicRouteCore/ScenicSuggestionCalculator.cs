@@ -22,7 +22,7 @@ namespace EDScenicRouteCore
 
         private List<GalacticSystem> Systems { get; set; }
 
-        public (float, List<ScenicSuggestion>) GenerateSuggestions(
+        public ScenicSuggestionResults GenerateSuggestions(
             GalacticSystem from,
             GalacticSystem to,
             float acceptableExtraDistance)
@@ -33,7 +33,7 @@ namespace EDScenicRouteCore
                 Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
                 Where(ss => ss.ExtraDistance <= acceptableExtraDistance).ToList();
 
-            return (originalDistance, suggestions);
+            return new ScenicSuggestionResults(){StraightLineDistance = originalDistance, Suggestions = suggestions};
         }
 
         public static float DistanceFromSol(IGalacticPoint point)

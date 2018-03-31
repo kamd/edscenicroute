@@ -51,32 +51,32 @@ namespace EDScenicRouteTest
 
             var calculator = new ScenicSuggestionCalculator(pois, systems);
 
-            (var originalDistance, var suggestions) = calculator.GenerateSuggestions(system1, system2, 15f);
+            var results = calculator.GenerateSuggestions(system1, system2, 15f);
             Assert.AreEqual(
                 new List<ScenicSuggestion>() {new ScenicSuggestion(poi1, 0.08541584f), new ScenicSuggestion(poi3, 0.4010582f) },
-                suggestions);
-            Assert.AreEqual(15.5884571f, originalDistance);
+                results.Suggestions);
+            Assert.AreEqual(15.5884571f, results.StraightLineDistance);
 
-            (originalDistance, suggestions) = calculator.GenerateSuggestions(system1, system2, 0.2f);
+            results = calculator.GenerateSuggestions(system1, system2, 0.2f);
             Assert.AreEqual(
-                new List<ScenicSuggestion>() { new ScenicSuggestion(poi1, 0.08541584f) }, suggestions);
-            Assert.AreEqual(15.5884571f, originalDistance);
+                new List<ScenicSuggestion>() { new ScenicSuggestion(poi1, 0.08541584f) }, results.Suggestions);
+            Assert.AreEqual(15.5884571f, results.StraightLineDistance);
 
-            (originalDistance, suggestions) = calculator.GenerateSuggestions(system1, system2, 0f);
+            results = calculator.GenerateSuggestions(system1, system2, 0f);
             Assert.AreEqual(
-                new List<ScenicSuggestion>(), suggestions);
-            Assert.AreEqual(15.5884571f, originalDistance);
+                new List<ScenicSuggestion>(), results.Suggestions);
+            Assert.AreEqual(15.5884571f, results.StraightLineDistance);
 
-            (originalDistance, suggestions) = calculator.GenerateSuggestions(system1, system2, 20f);
+            results = calculator.GenerateSuggestions(system1, system2, 20f);
             Assert.AreEqual(
                 new List<ScenicSuggestion>()
                 {
                     new ScenicSuggestion(poi1, 0.08541584f),
                     new ScenicSuggestion(poi2, 16.4832211f),
                     new ScenicSuggestion(poi3, 0.4010582f)
-                }, 
-                suggestions);
-            Assert.AreEqual(15.5884571f, originalDistance);
+                },
+                results.Suggestions);
+            Assert.AreEqual(15.5884571f, results.StraightLineDistance);
         }
     }
 }

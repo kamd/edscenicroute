@@ -12,7 +12,7 @@ namespace EDScenicRouteWeb.Server.Services
 
         public GalaxyManager()
         {
-           // Initialise().Wait(); //TODO Dodgy
+            Initialise().Wait(); //TODO Dodgy
         }
 
         public Galaxy EDGalaxy { get; set; }
@@ -23,7 +23,7 @@ namespace EDScenicRouteWeb.Server.Services
             await EDGalaxy.Initialise();
         }
 
-        public async Task<(float, List<ScenicSuggestion>)> GenerateSuggestions(RouteDetails details)
+        public async Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details)
         {
             return await EDGalaxy.GenerateSuggestions(details);
         }

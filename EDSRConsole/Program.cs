@@ -27,16 +27,16 @@ namespace EDSRConsole
                         Console.WriteLine("Extra distance should be 500Ly or less.");
                         return;
                     }
-                    (var distance, var suggestions) = galaxy.GenerateSuggestions(fromName, toName, extraDistance).Result;
-                    Console.WriteLine($"Direct distance: {distance} Ly");
-                    if (suggestions.Count() == 0)
+                    var results = galaxy.GenerateSuggestions(fromName, toName, extraDistance).Result;
+                    Console.WriteLine($"Direct distance: {results.StraightLineDistance} Ly");
+                    if (!results.Suggestions.Any())
                     {
                         Console.WriteLine("There's nowhere else interesting near your route.");
                         return;
                     }
                     
                     Console.WriteLine("On your way, why not visit...");
-                    foreach(var s in suggestions)
+                    foreach(var s in results.Suggestions)
                     {
                         Console.WriteLine(s);
                     }
