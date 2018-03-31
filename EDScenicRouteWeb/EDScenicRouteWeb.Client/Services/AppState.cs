@@ -11,17 +11,14 @@ namespace EDScenicRouteWeb.Client.Services
 {
     public class AppState
     {
-        // Actual state
+        
         public float StraightLineDistanceOfTrip { get; private set; }
         public IReadOnlyList<ScenicSuggestion> Suggestions { get; private set; } = new List<ScenicSuggestion>();
         public bool CurrentlySearching { get; private set; }
         public string DebugString { get; set; } = "nonono...";
-
-        // Lets components receive change notifications
-        // Could have whatever granularity you want (more events, hierarchy...)
+        public string ErrorMessage { get; set; }
         public event Action OnChanged;
 
-        // Receive 'http' instance from DI
         private readonly HttpClient http;
         public AppState(HttpClient httpInstance)
         {
@@ -44,18 +41,19 @@ namespace EDScenicRouteWeb.Client.Services
             var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(JsonUtil.Serialize(details), Encoding.UTF8, "application/json"));
             if (! response.IsSuccessStatusCode)
             {
-                DebugString = $"Terrible error: {await response.Content.ReadAsStringAsync()}";
+                ErrorMessage = $"Terrible error: {await response.Content.ReadAsStringAsync()}";
                 StraightLineDistanceOfTrip = 0f;
                 Suggestions = new List<ScenicSuggestion>();
+                CurrentlySearching = false;
                 NotifyStateChanged();
                 return;
             }
             var results = JsonUtil.Deserialize<ScenicSuggestionResults>(await response.Content.ReadAsStringAsync());
-           // var results = await http.PostJsonAsync<ScenicSuggestionResults>("/api/scenicsuggestions", details);
             StraightLineDistanceOfTrip = results.StraightLineDistance;
             Suggestions = results.Suggestions;
             DebugString = "Yes yes yes!";
             CurrentlySearching = false;
+            ErrorMessage = null;
             NotifyStateChanged();
         }
 

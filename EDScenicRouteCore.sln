@@ -9,13 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDSRConsole", "EDSRConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDScenicRouteTest", "EDScenicRouteTest\EDScenicRouteTest.csproj", "{C95C6C92-F146-4F86-A4F4-99C28447B98B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDScenicRouteWeb.Server", "EDScenicRouteWeb\EDScenicRouteWeb.Server\EDScenicRouteWeb.Server.csproj", "{E15AD5B6-C32F-4B5F-9D82-DB9B92791203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDScenicRouteWeb.Server", "EDScenicRouteWeb\EDScenicRouteWeb.Server\EDScenicRouteWeb.Server.csproj", "{E15AD5B6-C32F-4B5F-9D82-DB9B92791203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDScenicRouteWeb.Client", "EDScenicRouteWeb\EDScenicRouteWeb.Client\EDScenicRouteWeb.Client.csproj", "{A543F06A-49AE-4538-83C5-13CC74E65666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDScenicRouteWeb.Client", "EDScenicRouteWeb\EDScenicRouteWeb.Client\EDScenicRouteWeb.Client.csproj", "{A543F06A-49AE-4538-83C5-13CC74E65666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDScenicRouteWeb.Shared", "EDScenicRouteWeb\EDScenicRouteWeb.Shared\EDScenicRouteWeb.Shared.csproj", "{10B379EB-B690-4F63-9AC7-87FA78863507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDScenicRouteWeb.Shared", "EDScenicRouteWeb\EDScenicRouteWeb.Shared\EDScenicRouteWeb.Shared.csproj", "{10B379EB-B690-4F63-9AC7-87FA78863507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDScenicRouteCoreModels", "EDScenicRouteCoreModels\EDScenicRouteCoreModels.csproj", "{9241F33C-C199-4581-B6D1-E8EB9625E701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDScenicRouteCoreModels", "EDScenicRouteCoreModels\EDScenicRouteCoreModels.csproj", "{9241F33C-C199-4581-B6D1-E8EB9625E701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

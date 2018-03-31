@@ -2,16 +2,15 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 
-@page "/routeentry"
-
-
-<h1>Scenic Route Suggester</h1>
 
 <p>Enter trip details below.</p>
 
-<input @bind(details.FromSystemName) placeholder="From" />
-<input @bind(details.ToSystemName) placeholder="To" />
-<input @bind(AcceptableExtraDistance) placeholder="Acceptable Extra Ly" />
+<span>From:</span><input @bind(details.FromSystemName) placeholder="Sol" />
+<span>To:</span><input @bind(details.ToSystemName) placeholder="Colonia" />
+<br />
+<span>Jump Range of Ship: </span><input @bind(JumpRange) type="number" min="10" max="80"/>
+<br />
+<span>Acceptable Extra Jumps:</span><input @bind(AcceptableExtraJumps) type="number" min="1" max="10000" />
 <button @onclick(async () => await OnSearch(details))>Search for POIs to visit</button>
 
 
@@ -20,18 +19,47 @@
 
     public Func<RouteDetails, Task> OnSearch { get; set; }
 
-    private readonly RouteDetails details = new RouteDetails();
-
-    private string AcceptableExtraDistance
+    private readonly RouteDetails details = new RouteDetails()
     {
-        get { return details.AcceptableExtraDistance.ToString(); }
+        FromSystemName = "Sol",
+        ToSystemName = "Colonia"
+    };
+    private float jumpRange = 30f;
+    private int acceptableExtraJumps = 5;
+
+    private string JumpRange
+    {
+        get { return jumpRange.ToString(); }
         set
         {
             if (float.TryParse(value, out var result))
             {
-                details.AcceptableExtraDistance = result;
+                jumpRange = result;
+                RecalculateAcceptableExtraDistance();
             }
         }
     }
 
+    private string AcceptableExtraJumps
+    {
+        get { return acceptableExtraJumps.ToString(); }
+        set
+        {
+            if (int.TryParse(value, out var result))
+            {
+                acceptableExtraJumps = result;
+                RecalculateAcceptableExtraDistance();
+            }
+        }
+    }
+
+    private void RecalculateAcceptableExtraDistance()
+    {
+        details.AcceptableExtraDistance = jumpRange * acceptableExtraJumps;
+    }
+
+    protected override void OnInit()
+    {
+        RecalculateAcceptableExtraDistance();
+    }
 }

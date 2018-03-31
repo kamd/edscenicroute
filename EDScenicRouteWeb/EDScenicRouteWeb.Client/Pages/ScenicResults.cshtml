@@ -3,54 +3,43 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 
-@page "/scenicresults"
-
-<h1>@DebugStuff</h1>
-
-@if (ScenicSuggestions.Count > 0)
+@if (CurrentlySearching)
 {
-    <p>Have we got suggestions for you!</p>
+    <div class="alert-warning"><h2>Searching...</h2></div>
 }
 else
 {
-    <p>Suggestions will appear here.</p>
+    if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert-danger"><h3>@(ErrorMessage)</h3></div>
+    } else if (ScenicSuggestions.Count > 0)
+    {
+         <p>Straight line distance of your trip: @(StraightLineDistance)Ly</p>
+         <div class="alert-success"><h2>Consider visiting...</h2></div>
+         
+     }
+     else
+     {
+         <div class="alert">No suggestions.</div>
+     }
 }
 
-<p>Enter trip details below.</p>
-
-<p>Straight line distance: @StraightLineDistance Ly</p>
-<ul>
 @foreach (var item in ScenicSuggestions)
 {
-    <li>@item.POI.Name, @item.ExtraDistance Ly extra</li>
+    <ScenicSuggestionView Item=@item />
 }
-</ul>
+
     
 @functions {
 
+    public bool CurrentlySearching { get; set; }
+
+    public string ErrorMessage { get; set; }
+
     public string DebugStuff { get; set; }
 
-    public float StraightLineDistance
-    {
-        get => _straightLineDistance;
-        set
-        {
-            _straightLineDistance = value;
-            StateHasChanged();
-        }
-    }
+    public float StraightLineDistance { get;set; }
 
-    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions
-    {
-        get => _scenicSuggestions;
-        set
-        {
+    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
 
-            _scenicSuggestions = value;
-            StateHasChanged();
-        }
-    }
-
-    private float _straightLineDistance;
-    private IReadOnlyList<ScenicSuggestion> _scenicSuggestions = new List<ScenicSuggestion>();
 }

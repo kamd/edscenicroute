@@ -1,21 +1,23 @@
 ﻿@page "/"
 @using EDScenicRouteWeb.Client.Services
 @inject AppState state
-    <h1>Hello, galaxy!</h1>
 
-    Welcome to your new app.
-    <div id="scenic-routes-area">
-        <RouteEntry OnSearch=@state.GetSuggestions />
-    </div>
+<h1>Scenic Route Finder</h1>
+<div id="scenic-routes-area">
+    <RouteEntry OnSearch=@state.GetSuggestions />
+</div>
 <div id="suggestions-area">
-    <ScenicResults StraightLineDistance=@state.StraightLineDistanceOfTrip DebugStuff=@state.DebugString ScenicSuggestions=@state.Suggestions  />
+    <ScenicResults 
+        CurrentlySearching=@state.CurrentlySearching
+        StraightLineDistance=@state.StraightLineDistanceOfTrip
+        DebugStuff=@state.DebugString
+        ScenicSuggestions=@state.Suggestions
+        ErrorMessage=@state.ErrorMessage />
 </div>
 
-<button @onclick(async () => await state.ChangeDebugString()) title="Click me now!" />
+<!--<button onclick(async () => await state.ChangeDebugString()) title="Click me now!" />
 
-<p>Stuff distance: @state.StraightLineDistanceOfTrip</p>
-
-<button @onclick(DoClicko) title="Click me now"></button>
+<button onclick(DoClicko) title="Click me now"></button>-->
 
 @functions
     {

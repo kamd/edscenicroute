@@ -1,0 +1,18 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using EDScenicRouteCoreModels
+
+
+<div class="alert-info">
+    <ul>
+        <li><strong>@Item.POI.Name</strong>, <i>@Item.POI.Type</i></li>
+        <li>@Item.ExtraDistance Ly extra</li>
+    </ul>
+</div>
+
+@functions {
+
+    public ScenicSuggestion Item { get; set; }
+
+}
