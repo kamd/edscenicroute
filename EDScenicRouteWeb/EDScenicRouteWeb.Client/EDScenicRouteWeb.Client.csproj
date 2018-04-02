@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\About.cshtml" />
     <None Include="Pages\ScenicResults.cshtml" />
     <None Include="Pages\RouteEntry.cshtml" />
     <None Include="Shared\ScenicSuggestionView.cshtml" />
@@ -31,6 +32,14 @@
 
   <ItemGroup>
     <BlazorGenerate Remove="Shared\ScenicSuggestionView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Pages\About.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\About.cshtml" />
   </ItemGroup>
 
 </Project>

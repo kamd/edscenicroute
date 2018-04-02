@@ -6,7 +6,7 @@
 .main-nav li a.active,
 .main-nav li a.active:hover,
 .main-nav li a.active:focus {
-    background-color: #4189C7;
+    background-color: #28415b;
     color: white;
 }
 
@@ -30,7 +30,7 @@
     /* On small screens, convert the nav menu to a vertical sidebar */
     .main-nav {
         height: 100%;
-        width: calc(25% - 20px);
+        width: calc(16.67% - 20px);
     }
     .main-nav .navbar {
         border-radius: 0px;
@@ -70,7 +70,7 @@
     will be eliminated in a future update, making this workaround unnecessary.
 */
 .navbar-nav > li a {
-    color: #9d9d9d;
+    /*color: #9d9d9d;*/
     line-height: 20px;
     position: relative;
     display: block;
@@ -82,15 +82,4 @@
 }
 .navbar-nav > li a:focus {
     text-decoration: none;
-}
-
-.alert-survey {
-    color: #6a6969;
-    background-color: #e8e8e8;
-    border-color: #d3d3d3;
-    margin-top: 25px;
-}
-
-.alert-survey a {
-    font-weight: bold;
 }

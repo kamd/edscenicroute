@@ -3,32 +3,41 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 
-@if (CurrentlySearching)
-{
-    <div class="alert-warning"><h2>Searching...</h2></div>
-}
-else
-{
-    if (!string.IsNullOrEmpty(ErrorMessage))
-    {
-        <div class="alert-danger"><h3>@(ErrorMessage)</h3></div>
-    } else if (ScenicSuggestions.Count > 0)
-    {
-         <p>Straight line distance of your trip: @(StraightLineDistance)Ly</p>
-         <div class="alert-success"><h2>Consider visiting...</h2></div>
+<div class="row">
+    <div class="col-sm-12">
+
+        @if (CurrentlySearching)
+        {
+            <div class="alert alert-warning">Searching...</div>
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger">@(ErrorMessage)</div>
+            } else if (ScenicSuggestions.Count > 0)
+            {
+                <div class="panel">
+                    <div class="panel-body panel-default">
+                        Straight line distance of your trip: @(StraightLineDistance)Ly
+                    </div>
+                </div>
+                <div class="alert alert-success">Consider visiting...</div>
          
-     }
-     else
-     {
-         <div class="alert">No suggestions.</div>
-     }
-}
+            }
+            else
+            {
+                <div class="alert">No suggestions.</div>
+            }
+        }
 
-@foreach (var item in ScenicSuggestions)
-{
-    <ScenicSuggestionView Item=@item />
-}
-
+        @foreach (var item in ScenicSuggestions)
+        {
+            <ScenicSuggestionView Item=@item />
+        }
+        
+    </div>
+    </div>
     
 @functions {
 
