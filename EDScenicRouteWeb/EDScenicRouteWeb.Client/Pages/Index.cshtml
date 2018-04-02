@@ -4,33 +4,38 @@
 
 <h1>Scenic Route Finder</h1>
 <div id="scenic-routes-area">
-    <RouteEntry OnSearch=@state.GetSuggestions State=@state />
+
+        <RouteEntry OnSearch=@state.GetSuggestions State=@state />
+
+
 </div>
 <div id="suggestions-area">
-    <ScenicResults 
-        CurrentlySearching=@state.CurrentlySearching
-        StraightLineDistance=@state.StraightLineDistanceOfTrip
-        DebugStuff=@state.DebugString
-        ScenicSuggestions=@state.Suggestions
-        ErrorMessage=@state.ErrorMessage
-        ShipJumpRange=@state.ShipJumpRange />
+    <div class="row">
+        <ScenicResults CurrentlySearching=@state.CurrentlySearching
+                       StraightLineDistance=@state.StraightLineDistanceOfTrip
+                       DebugStuff=@state.DebugString
+                       ScenicSuggestions=@state.Suggestions
+                       ErrorMessage=@state.ErrorMessage
+                       ShipJumpRange=@state.ShipJumpRange />
+    </div>
+
 </div>
 
 @functions
-    {
+{
 
-    protected override void OnInit()
-    {
-        state.OnChanged += StateHasChanged;
-    }
+protected override void OnInit()
+{
+    state.OnChanged += StateHasChanged;
+}
 
-    private void DoClicko()
-    {
-        state.DebugString = "Yippity yes!";
-        StateHasChanged();
-    }
+private void DoClicko()
+{
+    state.DebugString = "Yippity yes!";
+    StateHasChanged();
+}
 
 
 
-    }
+}
 

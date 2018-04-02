@@ -3,13 +3,23 @@
 @using System.ComponentModel
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
+@using EDScenicRouteWeb.Client.Shared
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 
-<div class="alert alert-info">
-    <ul>
-        <li><strong>@Item.POI.Name</strong>, <i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i>, System: <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code></li>
-        <li>@ExtraJumps(Item.ExtraDistance) extra jumps, @Item.ExtraDistance Ly</li>
-    </ul>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-xs-1">
+            <h2><span class="@(IconClass)"></span></h2>
+        </div>
+        <div class="col-xs-11">
+            <ul>
+                <li><strong>@Item.POI.Name</strong>, <i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i></li>
+                <li>@ExtraJumps(Item.ExtraDistance) extra jumps, @Item.ExtraDistance Ly</li>
+                <li>System: <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code>, <a href=@Item.POI.GalMapUrl>EDSM Info</a></li>
+            </ul>
+        </div>
+
+    </div>
 </div>
 
 @functions {
@@ -27,4 +37,6 @@
     {
         RegisteredFunction.Invoke<bool>("selectbox", Item?.POI.Name);
     }
+
+    private string IconClass => Item == null ? "" : GalacticPOIIcons.IconClassForGalacticPOIType(Item.POI.Type);
 }

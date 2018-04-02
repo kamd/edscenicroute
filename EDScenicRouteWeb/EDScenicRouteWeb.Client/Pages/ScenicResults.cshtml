@@ -4,8 +4,6 @@
 @using EDScenicRouteCoreModels
 
 
-
-<div class="row">
     <div class="col-sm-12">
 
         @if (CurrentlySearching)
@@ -20,7 +18,7 @@
             } else if (ScenicSuggestions.Count > 0)
             {
                 <div class="panel">
-                    <div class="panel-body panel-default">
+                    <div class="panel-body panel-info">
                         Straight line distance of your trip: @(StraightLineDistance)Ly
                     </div>
                 </div>
@@ -29,7 +27,7 @@
             }
             else
             {
-                <div class="alert">No suggestions.</div>
+                <div class="alert alert-info">No suggestions.</div>
             }
         }
 
@@ -38,7 +36,6 @@
             <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange/>
         }
         
-    </div>
     </div>
     
 @functions {
