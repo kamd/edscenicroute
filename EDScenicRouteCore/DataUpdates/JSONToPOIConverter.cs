@@ -12,24 +12,6 @@ namespace EDScenicRouteCore.DataUpdates
     public class JSONToPOIConverter
     {
 
-        private readonly List<string> acceptedTypes = new List<string> {
-            "planetaryNebula",
-            "nebula",
-            "blackHole",
-            "historicalLocation",
-            "stellarRemnant",
-            "planetFeatures",
-            "minorPOI",
-            "regional",
-            "pulsar",
-            "starCluster",
-            "surfacePOI",
-            "deepSpaceOutpost",
-            "mysteryPOI",
-            "organicPOI",
-            "geyserPOI"
-        };
-
         public List<GalacticPOI> ConvertJSONToPOIs(string json)
         {
             var pois = new List<GalacticPOI>();
@@ -39,9 +21,7 @@ namespace EDScenicRouteCore.DataUpdates
             {
                 try
                 {
-                    Console.WriteLine(r.id);
-                    var type = r.type;
-                    if (!acceptedTypes.Contains(type.ToString()))
+                    if(!Enum.TryParse<GalacticPOIType>(r.type, out GalacticPOIType poiType))
                     {
                         continue;
                     }
@@ -54,7 +34,7 @@ namespace EDScenicRouteCore.DataUpdates
                         GalMapSearch = r.galMapSearch,
                         GalMapUrl = r.galMapUrl,
                         Coordinates = coordsVector,
-                        Type = r.type,
+                        Type = poiType,
                         DistanceFromSol = ScenicSuggestionCalculator.DistanceFromSol(coordsVector)
                     });
                 }

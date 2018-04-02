@@ -22,7 +22,7 @@ namespace EDScenicRouteTest
                 DistanceFromSol = 250,
                 Id = "POI1",
                 Name = "Exciting POI",
-                Type = "Nebula"
+                Type = GalacticPOIType.nebula
             };
 
             var poi2 = new GalacticPOI()
@@ -31,7 +31,7 @@ namespace EDScenicRouteTest
                 DistanceFromSol = 300,
                 Id = "POI2",
                 Name = "Farawayland",
-                Type = "Nebula"
+                Type = GalacticPOIType.nebula
             };
 
             var poi3 = new GalacticPOI()
@@ -40,7 +40,7 @@ namespace EDScenicRouteTest
                 DistanceFromSol = 220,
                 Id = "POI3",
                 Name = "On the way POI",
-                Type = "Nebula"
+                Type = GalacticPOIType.nebula
             };
 
             var pois = new List<GalacticPOI>() {poi1, poi2, poi3};

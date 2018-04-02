@@ -4,7 +4,7 @@
 
 <h1>Scenic Route Finder</h1>
 <div id="scenic-routes-area">
-    <RouteEntry OnSearch=@state.GetSuggestions />
+    <RouteEntry OnSearch=@state.GetSuggestions State=@state />
 </div>
 <div id="suggestions-area">
     <ScenicResults 
@@ -12,7 +12,8 @@
         StraightLineDistance=@state.StraightLineDistanceOfTrip
         DebugStuff=@state.DebugString
         ScenicSuggestions=@state.Suggestions
-        ErrorMessage=@state.ErrorMessage />
+        ErrorMessage=@state.ErrorMessage
+        ShipJumpRange=@state.ShipJumpRange />
 </div>
 
 @functions

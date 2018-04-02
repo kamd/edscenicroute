@@ -95,7 +95,7 @@ namespace EDScenicRouteWeb.Server.Controllers
                     GalMapSearch = "asd",
                     GalMapUrl = "dfg",
                     Id = "FUNL",
-                    Type = "Nebula"
+                    Type = GalacticPOIType.nebula
                 }, 7f),
             new ScenicSuggestion(
                 new GalacticPOI()
@@ -106,7 +106,7 @@ namespace EDScenicRouteWeb.Server.Controllers
                     GalMapSearch = "aasdsd",
                     GalMapUrl = "dfgdsa",
                     Id = "EXL",
-                    Type = "Nebula"
+                    Type = GalacticPOIType.nebula
                 }, 12f)
         };
     }

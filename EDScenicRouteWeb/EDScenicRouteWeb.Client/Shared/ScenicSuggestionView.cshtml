@@ -1,13 +1,14 @@
 ﻿@using System
 @using System.Collections.Generic
+@using System.ComponentModel
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
-
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
 
 <div class="alert alert-info">
     <ul>
-        <li><strong>@Item.POI.Name</strong>, <i>@Item.POI.Type</i></li>
-        <li>@Item.ExtraDistance Ly extra</li>
+        <li><strong>@Item.POI.Name</strong>, <i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i>, System: <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code></li>
+        <li>@ExtraJumps(Item.ExtraDistance) extra jumps, @Item.ExtraDistance Ly</li>
     </ul>
 </div>
 
@@ -15,4 +16,15 @@
 
     public ScenicSuggestion Item { get; set; }
 
+    public float ShipJumpRange { get; set; }
+
+    private string ExtraJumps(float distance)
+    {
+        return Math.Ceiling(distance / ShipJumpRange).ToString();
+    }
+
+    private void SelectBox()
+    {
+        RegisteredFunction.Invoke<bool>("selectbox", Item?.POI.Name);
+    }
 }

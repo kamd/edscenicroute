@@ -13,6 +13,7 @@ namespace EDScenicRouteWeb.Client.Services
     {
         
         public float StraightLineDistanceOfTrip { get; private set; }
+        public float ShipJumpRange { get; set; } = 30f;
         public IReadOnlyList<ScenicSuggestion> Suggestions { get; private set; } = new List<ScenicSuggestion>();
         public bool CurrentlySearching { get; private set; }
         public string DebugString { get; set; } = "nonono...";

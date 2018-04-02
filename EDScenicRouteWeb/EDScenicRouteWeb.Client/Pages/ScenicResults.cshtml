@@ -3,6 +3,8 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 
+
+
 <div class="row">
     <div class="col-sm-12">
 
@@ -33,7 +35,7 @@
 
         @foreach (var item in ScenicSuggestions)
         {
-            <ScenicSuggestionView Item=@item />
+            <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange/>
         }
         
     </div>
@@ -47,7 +49,9 @@
 
     public string DebugStuff { get; set; }
 
-    public float StraightLineDistance { get;set; }
+    public float StraightLineDistance { get; set; }
+
+    public float ShipJumpRange { get; set; }
 
     public IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
 

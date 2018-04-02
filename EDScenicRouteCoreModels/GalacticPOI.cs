@@ -10,7 +10,7 @@ namespace EDScenicRouteCoreModels
         public GalacticPOI() { }
 
         public string Id { get; set; }
-        public string Type { get; set; }
+        public GalacticPOIType Type { get; set; }
         public string Name { get; set; }
         public string GalMapSearch { get; set; }
         public string GalMapUrl { get; set; }

@@ -1,6 +1,7 @@
 ﻿@using System
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
+@using EDScenicRouteWeb.Client.Services
 
 
 <p>Enter trip details below.</p>
@@ -34,22 +35,33 @@
 
     public Func<RouteDetails, Task> OnSearch { get; set; }
 
+    public AppState State
+    {
+        get => _state;
+        set
+        {
+            _state = value;
+            RecalculateAcceptableExtraDistance();
+        }
+    }
+
     private readonly RouteDetails details = new RouteDetails()
     {
         FromSystemName = "Sol",
         ToSystemName = "Colonia"
     };
-    private float jumpRange = 30f;
+
     private int acceptableExtraJumps = 5;
+    private AppState _state;
 
     private string JumpRange
     {
-        get { return jumpRange.ToString(); }
+        get { return State.ShipJumpRange.ToString(); }
         set
         {
             if (float.TryParse(value, out var result))
             {
-                jumpRange = result;
+                State.ShipJumpRange = result;
                 RecalculateAcceptableExtraDistance();
             }
         }
@@ -70,11 +82,8 @@
 
     private void RecalculateAcceptableExtraDistance()
     {
-        details.AcceptableExtraDistance = jumpRange * acceptableExtraJumps;
+        details.AcceptableExtraDistance = State.ShipJumpRange * acceptableExtraJumps;
     }
 
-    protected override void OnInit()
-    {
-        RecalculateAcceptableExtraDistance();
-    }
+
 }

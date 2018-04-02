@@ -31,7 +31,9 @@ namespace EDScenicRouteCore
             var suggestions = POIs.
                 Where(p => p.DistanceFromSol > 200f). // Ignore the "bubble" of near-Earth POIs TODO
                 Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
-                Where(ss => ss.ExtraDistance <= acceptableExtraDistance).ToList();
+                Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
+                OrderBy(ss => ss.ExtraDistance).
+                ToList();
 
             return new ScenicSuggestionResults(){StraightLineDistance = originalDistance, Suggestions = suggestions};
         }
