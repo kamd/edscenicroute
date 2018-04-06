@@ -21,7 +21,7 @@ namespace EDScenicRouteCore.DataUpdates
             {
                 try
                 {
-                    if(!Enum.TryParse<GalacticPOIType>(r.type, out GalacticPOIType poiType))
+                    if(!Enum.TryParse((string)r.type, out GalacticPOIType poiType))
                     {
                         continue;
                     }

@@ -25,7 +25,9 @@ namespace EDScenicRouteWeb.Server.Services
 
         public async Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details)
         {
-            return await EDGalaxy.GenerateSuggestions(details);
+            var results = await EDGalaxy.GenerateSuggestions(details);
+            EDGalaxy.SaveSystems(); //TODO: Put this somewhere more sensible
+            return results;
         }
     }
 }

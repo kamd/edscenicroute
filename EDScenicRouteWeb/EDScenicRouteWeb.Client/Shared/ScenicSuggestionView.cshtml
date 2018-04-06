@@ -8,17 +8,42 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="col-xs-1">
-            <h2><span class="@(IconClass)"></span></h2>
-        </div>
-        <div class="col-xs-11">
-            <ul>
-                <li><strong>@Item.POI.Name</strong>, <i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i></li>
-                <li>@ExtraJumps(Item.ExtraDistance) extra jumps, @Item.ExtraDistance Ly</li>
-                <li>System: <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code>, <a href=@Item.POI.GalMapUrl>EDSM Info</a></li>
-            </ul>
-        </div>
+        <div class="row equal">
 
+       
+            <div class="col-xs-1">
+                <span class="@(IconClass) poi-icon"></span>
+            </div>
+            <div class="col-xs-4">
+                <span class="poi-name">@Item.POI.Name</span>
+                <br />
+                <span><i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i></span>
+            </div>
+            <div class="col-sm-3">
+                <!--<div class="well-sm">-->
+                <div class="row">
+                    <p>@ExtraJumps(Item.ExtraDistance), <span class="text-info">@Item.ExtraDistance.ToString("N") Ly</span></p>
+                </div>
+                <div class="row">
+                    <div class="progress progress-striped poi-jumps-bar">
+                        <div class="progress-bar progress-bar-info" style="width: 20%"></div>
+                    </div>
+                </div>
+                
+
+            </div>
+            <div class="col-sm-4">
+                <div class="row equal">
+                    <div class="col-md-8">
+                        System:<br />
+                        <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-info" role="button" href=@Item.POI.GalMapUrl>EDSM Info</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -30,7 +55,8 @@
 
     private string ExtraJumps(float distance)
     {
-        return Math.Ceiling(distance / ShipJumpRange).ToString();
+        var jumps = Math.Ceiling(distance / ShipJumpRange);
+        return jumps > 1 ? $"{jumps} extra jumps" : "1 extra jump";
     }
 
     private void SelectBox()
