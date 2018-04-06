@@ -56,7 +56,7 @@
 
     private void SelectBox()
     {
-        RegisteredFunction.Invoke<bool>("selectbox", $"item{Item?.POI.Id}");
+        RegisteredFunction.Invoke<bool>("selectbox", $"icon{Item?.POI.Id}");
     }
 
     private string IconClass => Item == null ? "" : GalacticPOIIcons.IconClassForGalacticPOIType(Item.POI.Type);
