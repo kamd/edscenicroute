@@ -18,6 +18,8 @@ namespace EDScenicRouteCore
         private ScenicSuggestionCalculator calculator;
         private bool initialised;
 
+        private static object saveLock = new object();
+
         public Galaxy()
         {
             
@@ -48,7 +50,10 @@ namespace EDScenicRouteCore
                 var json = await downloader.DownloadPOIInfoAsJSON();
                 var converter = new JSONToPOIConverter();
                 POIs = converter.ConvertJSONToPOIs(json);
-                GalacticPOISerialization.SaveToFile(POIs, DefaultPOIFilePath);
+                lock (saveLock)
+                {
+                    GalacticPOISerialization.SaveToFile(POIs, DefaultPOIFilePath);
+                }
             }
         }
 
@@ -66,7 +71,10 @@ namespace EDScenicRouteCore
 
         public void SaveSystems()
         {
-            GalacticSystemSerialization.SaveToFile(Systems, DefaultSystemsFilePath);
+            lock (saveLock)
+            {
+                GalacticSystemSerialization.SaveToFile(Systems, DefaultSystemsFilePath);
+            }
         }
 
         public ScenicSuggestionResults GenerateSuggestions(

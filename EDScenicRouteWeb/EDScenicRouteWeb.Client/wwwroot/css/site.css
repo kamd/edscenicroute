@@ -39,8 +39,15 @@
 
 .poi-jumps-bar {
     margin-bottom: 0;
+}
 
+.poi-icon-column {
+    text-align: center;
+}
 
+code {
+    background: #222;
+    color: #ccf;
 }
 
 @media (max-width: 767px) {

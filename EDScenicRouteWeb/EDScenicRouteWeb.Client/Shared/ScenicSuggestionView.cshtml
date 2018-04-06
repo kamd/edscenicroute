@@ -9,9 +9,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row equal">
-
-       
-            <div class="col-xs-1">
+            <div class="col-xs-1 poi-icon-column">
                 <span class="@(IconClass) poi-icon"></span>
             </div>
             <div class="col-xs-4">
@@ -20,7 +18,6 @@
                 <span><i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i></span>
             </div>
             <div class="col-sm-3">
-                <!--<div class="well-sm">-->
                 <div class="row">
                     <p>@ExtraJumps(Item.ExtraDistance), <span class="text-info">@Item.ExtraDistance.ToString("N") Ly</span></p>
                 </div>
@@ -29,16 +26,14 @@
                         <div class="progress-bar progress-bar-info" style="width: 20%"></div>
                     </div>
                 </div>
-                
-
             </div>
             <div class="col-sm-4">
                 <div class="row equal">
-                    <div class="col-md-8">
+                    <div class="col-lg-8">
                         System:<br />
-                        <code id=@(Item?.POI.Name) @onclick(SelectBox)>@Item.POI.GalMapSearch</code>
+                        <code id="icon@(Item?.POI.Id)" @onclick(SelectBox)>@Item.POI.GalMapSearch</code>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4">
                         <a class="btn btn-info" role="button" href=@Item.POI.GalMapUrl>EDSM Info</a>
                     </div>
                 </div>
