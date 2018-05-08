@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
+@using Microsoft.AspNetCore.Blazor.Components
 
 
     <div class="col-sm-12">
@@ -40,16 +41,22 @@
     
 @functions {
 
-    public bool CurrentlySearching { get; set; }
+    [Parameter]
+    bool CurrentlySearching { get; set; }
 
-    public string ErrorMessage { get; set; }
+    [Parameter]
+    string ErrorMessage { get; set; }
 
-    public string DebugStuff { get; set; }
+    [Parameter]
+    string DebugStuff { get; set; }
 
-    public float StraightLineDistance { get; set; }
+    [Parameter]
+    float StraightLineDistance { get; set; }
 
-    public float ShipJumpRange { get; set; }
+    [Parameter]
+    float ShipJumpRange { get; set; }
 
-    public IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
+    [Parameter]
+    IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
 
 }

@@ -9,8 +9,19 @@
 </head>
 <body>
     <app>Loading...</app>
-
+   <!--<script src="jquery/jquery-3.3.1.min.js"></script>-->
     <script src="css/bootstrap/bootstrap-native.min.js"></script>
-    <script type="blazor-boot"></script>
+<script type="blazor-boot"></script>
+<script>
+    Blazor.registerFunction('selectbox', (id) => {
+        window.getSelection().selectAllChildren(document.getElementById(id));
+        return true;
+    });
+
+    Blazor.registerFunction('togglePoiDropdown',
+        () => {
+            $('.dropdown-toggle').dropdown('toggle');
+        });
+</script>
 </body>
 </html>

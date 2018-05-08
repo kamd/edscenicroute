@@ -1,0 +1,68 @@
+﻿@using System
+@using Microsoft.AspNetCore.Blazor
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+
+
+
+
+<div class="form-group">
+    <label class="control-label">Input addons</label>
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <div class="dropdown @(DropdownState)">
+            <input class="form-control" type="text" onchange="@OnChanged" oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))"/>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+            <span class="input-group-btn">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Button</button>
+            </span>
+        </div>
+        <button>Hello</button>
+        
+        
+    </div>
+</div>
+
+
+@functions
+{
+    private string poi = "";
+
+    public string DropdownState { get; set; } = "bloopy";
+
+    private void UpdatePOI()
+    {
+        ToggleDropdown();
+        //StateHasChanged();
+    }
+
+    public string POI
+    {
+        get { return poi; }
+        set
+        {
+            poi = value;
+            ToggleDropdown();
+        }
+    }
+
+    void OnChanged(UIChangeEventArgs args)
+    {
+        var value = args.Value;
+        poi = (string)value;
+        ToggleDropdown();
+    }
+
+    private void ToggleDropdown()
+    {
+        DropdownState = DropdownState == "bloopy" ? "open bloopo" : "bloopy";
+        StateHasChanged();
+        //RegisteredFunction.Invoke<bool>("togglePoiDropdown");
+
+    }
+}

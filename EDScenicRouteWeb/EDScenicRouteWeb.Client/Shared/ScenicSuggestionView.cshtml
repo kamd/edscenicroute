@@ -5,6 +5,7 @@
 @using EDScenicRouteCoreModels
 @using EDScenicRouteWeb.Client.Shared
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Microsoft.AspNetCore.Blazor.Components
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -31,7 +32,7 @@
                 <div class="row equal">
                     <div class="col-lg-8">
                         System:<br />
-                        <code id="icon@(Item?.POI.Id)" @onclick(SelectBox)>@Item.POI.GalMapSearch</code>
+                        <code id="@(IconId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
                     </div>
                     <div class="col-lg-4">
                         <a class="btn btn-info" role="button" href=@Item.POI.GalMapUrl>EDSM Info</a>
@@ -44,9 +45,11 @@
 
 @functions {
 
-    public ScenicSuggestion Item { get; set; }
+    [Parameter]
+    ScenicSuggestion Item { get; set; }
 
-    public float ShipJumpRange { get; set; }
+    [Parameter]
+    float ShipJumpRange { get; set; }
 
     private string ExtraJumps(float distance)
     {
@@ -60,4 +63,6 @@
     }
 
     private string IconClass => Item == null ? "" : GalacticPOIIcons.IconClassForGalacticPOIType(Item.POI.Type);
+
+    private string IconId => $"icon{Item?.POI.Id}";
 }
