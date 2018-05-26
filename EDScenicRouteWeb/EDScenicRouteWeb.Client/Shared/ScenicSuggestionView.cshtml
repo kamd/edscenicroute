@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     <div class="progress progress-striped poi-jumps-bar">
-                        <div class="progress-bar progress-bar-info" style="width: 20%"></div>
+                        <div class="progress-bar @ProgressBarColour" style="width: @DistancePercent%"></div>
                     </div>
                 </div>
             </div>
@@ -51,10 +51,35 @@
     [Parameter]
     float ShipJumpRange { get; set; }
 
+    [Parameter]
+    float MaxExtraDistance { get; set; }
+
     private string ExtraJumps(float distance)
     {
         var jumps = Math.Ceiling(distance / ShipJumpRange);
         return jumps > 1 ? $"{jumps} extra jumps" : "1 extra jump";
+    }
+
+    private int DistancePercent
+    {
+        get { return (int) Math.Round(100f * (Item.ExtraDistance / MaxExtraDistance)); }
+    }
+
+    private string ProgressBarColour
+    {
+        get
+        {
+            int distancePercent = DistancePercent;
+            if (distancePercent > 80)
+            {
+                return "progress-bar-danger";
+            }
+            if (distancePercent > 50)
+            {
+                return "progress-bar-warning";
+            }
+            return "progress-bar-info";
+        }
     }
 
     private void SelectBox()

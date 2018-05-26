@@ -18,6 +18,7 @@ namespace EDScenicRouteWeb.Client.Services
         public bool CurrentlySearching { get; private set; }
         public string DebugString { get; set; } = "nonono...";
         public string ErrorMessage { get; set; }
+        public float AcceptableExtraDistance { get; set; }
         public event Action OnChanged;
 
         private readonly HttpClient http;
@@ -35,6 +36,7 @@ namespace EDScenicRouteWeb.Client.Services
 
         public async Task GetSuggestions(RouteDetails details)
         {
+            AcceptableExtraDistance = details.AcceptableExtraDistance;
             CurrentlySearching = true;
             NotifyStateChanged();
 

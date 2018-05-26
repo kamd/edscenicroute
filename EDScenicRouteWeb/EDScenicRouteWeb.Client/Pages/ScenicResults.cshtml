@@ -34,7 +34,7 @@
 
         @foreach (var item in ScenicSuggestions)
         {
-            <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange/>
+            <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange MaxExtraDistance=@MaxExtraDistance />
         }
         
     </div>
@@ -55,6 +55,9 @@
 
     [Parameter]
     float ShipJumpRange { get; set; }
+
+    [Parameter]
+    float MaxExtraDistance { get; set; }
 
     [Parameter]
     IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
