@@ -36,8 +36,11 @@ namespace EDScenicRouteWeb.Server.Services
         {
             input = input.ToLower();
             return await Task.Run(() =>
-                EDGalaxy.POIs.Where(p => p.Name.ToLower().Contains(input)).Select(p => p.Name).Take(AUTOCOMPLETE_RESULTS)
-                    .ToList());
+                EDGalaxy.POIs.
+                    Where(p => p.Name.ToLower().Contains(input)).
+                    Select(p => p.Name).
+                    Take(AUTOCOMPLETE_RESULTS).
+                    ToList());
         }
     }
 }

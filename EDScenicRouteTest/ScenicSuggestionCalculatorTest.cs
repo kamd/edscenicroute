@@ -72,8 +72,8 @@ namespace EDScenicRouteTest
                 new List<ScenicSuggestion>()
                 {
                     new ScenicSuggestion(poi1, 0.08541584f),
-                    new ScenicSuggestion(poi2, 16.4832211f),
-                    new ScenicSuggestion(poi3, 0.4010582f)
+                    new ScenicSuggestion(poi3, 0.4010582f),
+                    new ScenicSuggestion(poi2, 16.4832211f)
                 },
                 results.Suggestions);
             Assert.AreEqual(15.5884571f, results.StraightLineDistance);
