@@ -1,68 +1,65 @@
 ﻿@using System
+@using EDScenicRouteWeb.Client.Services
 @using Microsoft.AspNetCore.Blazor
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using Microsoft.AspNetCore.Blazor.Components
 
 
 
 
-<div class="form-group">
-    <label class="control-label">Input addons</label>
-    <div class="input-group">
-        <span class="input-group-addon">$</span>
-        <div class="dropdown @(DropdownState)">
-            <input class="form-control" type="text" onchange="@OnChanged" oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))"/>
-            <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-            </ul>
-            <span class="input-group-btn">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Button</button>
-            </span>
-        </div>
-        <button>Hello</button>
-        
-        
-    </div>
+
+<div class="dropdown @(DropdownState)">
+    <input class="form-control"  placeholder="@Placeholder" type="text" value="@POI" onchange="@OnChanged" oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))" />
+    <ul class="dropdown-menu" role="menu">
+        @foreach (var poi in TypeAheadSuggestions)
+        {
+            <li><a href="#" onclick="@(() => POIClicked(poi))">@poi</a></li>
+        }
+    </ul>
 </div>
-
 
 @functions
 {
-    private string poi = "";
 
-    public string DropdownState { get; set; } = "bloopy";
+    [Parameter]
+    AppState State { get; set; }
 
-    private void UpdatePOI()
+    [Parameter]
+    string Placeholder { get; set; }
+
+    protected override void OnInit()
     {
-        ToggleDropdown();
-        //StateHasChanged();
+        // If AppState is firing OnChanged then the autocomplete dropdown is no longer necessary.
+        State.OnChanged += () => DropdownState = "";
     }
 
-    public string POI
+    public string DropdownState { get; set; } = "";
+
+    private List<string> TypeAheadSuggestions { get; set; } = new List<string>();
+
+    private void POIClicked(string poi)
     {
-        get { return poi; }
-        set
+        POI = poi;
+        DropdownState = "";
+    }
+
+    public string POI { get; set; } = "";
+
+    async void OnChanged(UIChangeEventArgs args)
+    {
+        POI = (string)args.Value;
+        if (POI.Length >= 3)
         {
-            poi = value;
-            ToggleDropdown();
+            StateHasChanged();
+            TypeAheadSuggestions = await State.GetPOITypeaheadSuggestions(POI);
+            DropdownState = TypeAheadSuggestions.Count > 0 ? "open" : "";
+            StateHasChanged();
         }
-    }
-
-    void OnChanged(UIChangeEventArgs args)
-    {
-        var value = args.Value;
-        poi = (string)value;
-        ToggleDropdown();
-    }
-
-    private void ToggleDropdown()
-    {
-        DropdownState = DropdownState == "bloopy" ? "open bloopo" : "bloopy";
-        StateHasChanged();
-        //RegisteredFunction.Invoke<bool>("togglePoiDropdown");
+        else
+        {
+            DropdownState = "";
+        }
 
     }
+
 }

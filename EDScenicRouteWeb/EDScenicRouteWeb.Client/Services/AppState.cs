@@ -58,6 +58,18 @@ namespace EDScenicRouteWeb.Client.Services
             NotifyStateChanged();
         }
 
+        public async Task<List<string>> GetPOITypeaheadSuggestions(string input)
+        {
+            var response = await http.GetAsync($"/api/poitypeahead/{input}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<string>();
+            }
+
+            var results = JsonUtil.Deserialize<List<string>>(await response.Content.ReadAsStringAsync());
+            return results;
+        }
+
         private void NotifyStateChanged()
         {
             OnChanged?.Invoke();

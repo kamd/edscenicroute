@@ -10,6 +10,8 @@ namespace EDScenicRouteWeb.Server.Services
     public class GalaxyManager : IGalaxyManager
     {
 
+        private const int AUTOCOMPLETE_RESULTS = 6;
+
         public GalaxyManager()
         {
             Initialise().Wait(); //TODO Dodgy
@@ -28,6 +30,14 @@ namespace EDScenicRouteWeb.Server.Services
             var results = await EDGalaxy.GenerateSuggestions(details);
             EDGalaxy.SaveSystems(); //TODO: Put this somewhere more sensible
             return results;
+        }
+
+        public async Task<List<string>> AutocompletePOINames(string input)
+        {
+            input = input.ToLower();
+            return await Task.Run(() =>
+                EDGalaxy.POIs.Where(p => p.Name.ToLower().Contains(input)).Select(p => p.Name).Take(AUTOCOMPLETE_RESULTS)
+                    .ToList());
         }
     }
 }

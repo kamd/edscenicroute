@@ -92,14 +92,25 @@ namespace EDScenicRouteCore
         }
 
         public async Task<ScenicSuggestionResults> GenerateSuggestions(
-            string systemNameFrom,
-            string systemNameTo,
+            string placeNameFrom,
+            string placeNameTo,
             float acceptableExtraDistance)
         {
             CheckInitialised();
-            var systemFrom = await ResolveSystemByName(systemNameFrom);
-            var systemTo = await ResolveSystemByName(systemNameTo);
+            var systemFrom = await ResolvePlaceByName(placeNameFrom);
+            var systemTo = await ResolvePlaceByName(placeNameTo);
             return GenerateSuggestions(systemFrom, systemTo, acceptableExtraDistance);
+        }
+
+        private async Task<GalacticSystem> ResolvePlaceByName(string name)
+        {
+            var poi = POIs.FirstOrDefault(p => p.Name == name);
+            if (poi != null)
+            {
+                return await ResolveSystemByName(poi.GalMapSearch);
+            }
+
+            return await ResolveSystemByName(name);
         }
 
         private async Task<GalacticSystem> ResolveSystemByName(string name)
