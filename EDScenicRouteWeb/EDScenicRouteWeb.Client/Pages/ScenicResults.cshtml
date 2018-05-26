@@ -11,7 +11,7 @@
         {
             <div class="alert alert-warning">Searching...</div>
         }
-        else
+        else if (SearchCompleted)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -48,9 +48,6 @@
     string ErrorMessage { get; set; }
 
     [Parameter]
-    string DebugStuff { get; set; }
-
-    [Parameter]
     float StraightLineDistance { get; set; }
 
     [Parameter]
@@ -61,5 +58,8 @@
 
     [Parameter]
     IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
+
+    [Parameter]
+    bool SearchCompleted { get; set; }
 
 }

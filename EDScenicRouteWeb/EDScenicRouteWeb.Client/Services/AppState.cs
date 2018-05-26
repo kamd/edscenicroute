@@ -16,22 +16,16 @@ namespace EDScenicRouteWeb.Client.Services
         public float ShipJumpRange { get; set; } = 30f;
         public IReadOnlyList<ScenicSuggestion> Suggestions { get; private set; } = new List<ScenicSuggestion>();
         public bool CurrentlySearching { get; private set; }
-        public string DebugString { get; set; } = "nonono...";
         public string ErrorMessage { get; set; }
         public float AcceptableExtraDistance { get; set; }
+        public bool SearchCompleted { get; set; } = false;
         public event Action OnChanged;
 
         private readonly HttpClient http;
+
         public AppState(HttpClient httpInstance)
         {
             http = httpInstance;
-        }
-
-        public async Task ChangeDebugString()
-        {
-            await Task.Delay(1000);
-            DebugString = "YESYESYES";
-            NotifyStateChanged();
         }
 
         public async Task GetSuggestions(RouteDetails details)
@@ -39,8 +33,8 @@ namespace EDScenicRouteWeb.Client.Services
             AcceptableExtraDistance = details.AcceptableExtraDistance;
             CurrentlySearching = true;
             NotifyStateChanged();
+            SearchCompleted = true;
 
-            
             var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(JsonUtil.Serialize(details), Encoding.UTF8, "application/json"));
             if (! response.IsSuccessStatusCode)
             {
@@ -54,8 +48,8 @@ namespace EDScenicRouteWeb.Client.Services
             var results = JsonUtil.Deserialize<ScenicSuggestionResults>(await response.Content.ReadAsStringAsync());
             StraightLineDistanceOfTrip = results.StraightLineDistance;
             Suggestions = results.Suggestions;
-            DebugString = "Yes yes yes!";
             CurrentlySearching = false;
+            
             ErrorMessage = null;
             NotifyStateChanged();
         }

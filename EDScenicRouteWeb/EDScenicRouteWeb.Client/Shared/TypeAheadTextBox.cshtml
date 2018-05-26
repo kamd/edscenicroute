@@ -9,7 +9,9 @@
 
 
 <div class="dropdown @(DropdownState)">
-    <input class="form-control"  placeholder="@Placeholder" type="text" value="@POI" onchange="@OnChanged" oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))" />
+    
+    <input class="form-control" placeholder="@Placeholder" type="text" value="@POI"
+           onchange="@OnChanged" oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))"/>
     <ul class="dropdown-menu" role="menu">
         @foreach (var poi in TypeAheadSuggestions)
         {
@@ -30,34 +32,44 @@
     protected override void OnInit()
     {
         // If AppState is firing OnChanged then the autocomplete dropdown is no longer necessary.
-        State.OnChanged += () => DropdownState = "";
+        State.OnChanged += () => DropdownOpen = false;
     }
 
-    public string DropdownState { get; set; } = "";
+    private string DropdownState { get; set; } = "";
+
+    private bool DropdownOpen { set => DropdownState = value ? "open" : ""; }
 
     private List<string> TypeAheadSuggestions { get; set; } = new List<string>();
 
     private void POIClicked(string poi)
     {
         POI = poi;
-        DropdownState = "";
+        DropdownOpen = false;
     }
 
     public string POI { get; set; } = "";
 
+    // Until Blazor properly supports Input event, we must redirect that to Changed and handle that.
+    // This previousValue is to workaround the Changed event firing when you click an autocomplete option.
+    private string previousValue = "";
+
     async void OnChanged(UIChangeEventArgs args)
     {
+        Console.WriteLine("Changed::: " + (string)args.Value);
         POI = (string)args.Value;
+        if (POI == previousValue) return;
+        previousValue = POI;
+
         if (POI.Length >= 3)
         {
             StateHasChanged();
             TypeAheadSuggestions = await State.GetPOITypeaheadSuggestions(POI);
-            DropdownState = TypeAheadSuggestions.Count > 0 ? "open" : "";
+            DropdownOpen = TypeAheadSuggestions.Count > 0;
             StateHasChanged();
         }
         else
         {
-            DropdownState = "";
+            DropdownOpen = false;
         }
 
     }

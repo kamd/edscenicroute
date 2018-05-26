@@ -13,11 +13,11 @@
     <div class="row">
         <ScenicResults CurrentlySearching=@state.CurrentlySearching
                        StraightLineDistance=@state.StraightLineDistanceOfTrip
-                       DebugStuff=@state.DebugString
                        ScenicSuggestions=@state.Suggestions
                        ErrorMessage=@state.ErrorMessage
                        ShipJumpRange=@state.ShipJumpRange
-                       MaxExtraDistance=@state.AcceptableExtraDistance />
+                       MaxExtraDistance=@state.AcceptableExtraDistance
+                       SearchCompleted=@state.SearchCompleted />
     </div>
 
 </div>
@@ -29,14 +29,6 @@ protected override void OnInit()
 {
     state.OnChanged += StateHasChanged;
 }
-
-private void DoClicko()
-{
-    state.DebugString = "Yippity yes!";
-    StateHasChanged();
-}
-
-
 
 }
 
