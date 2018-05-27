@@ -12,13 +12,14 @@ namespace EDScenicRouteCore.DataUpdates
 {
     public class EDSMSystemEnquirer
     {
-        private HttpClient client = new HttpClient();
+        private readonly HttpClient client = new HttpClient();
         private const string DefaultBaseUri = "https://www.edsm.net/api-v1/system";
 
         public EDSMSystemEnquirer(string baseUri = null)
         {
             // Update port # in the following line.
             client.BaseAddress = new Uri(baseUri ?? DefaultBaseUri);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("EDScenicRouteFinder-elite.kamd.me.uk/1.0");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));

@@ -29,7 +29,7 @@ namespace EDScenicRouteWeb.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddOptions();
             // needed to store rate limit counters and ip rules
             services.AddMemoryCache();
 
@@ -53,7 +53,7 @@ namespace EDScenicRouteWeb.Server
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
                 {
                     MediaTypeNames.Application.Octet,
-                    WasmMediaTypeNames.Application.Wasm,
+                    WasmMediaTypeNames.Application.Wasm
                 });
             });
 
@@ -63,6 +63,8 @@ namespace EDScenicRouteWeb.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseIpRateLimiting();
+
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
@@ -77,7 +79,7 @@ namespace EDScenicRouteWeb.Server
 
             app.UseBlazor<Client.Program>();
 
-            app.UseIpRateLimiting();
+            
         }
     }
 }

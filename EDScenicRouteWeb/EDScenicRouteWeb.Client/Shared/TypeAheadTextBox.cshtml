@@ -55,7 +55,6 @@
 
     async void OnChanged(UIChangeEventArgs args)
     {
-        Console.WriteLine("Changed::: " + (string)args.Value);
         POI = (string)args.Value;
         if (POI == previousValue) return;
         previousValue = POI;
