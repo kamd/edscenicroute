@@ -14,21 +14,21 @@ namespace EDScenicRouteWeb.Client.Shared
         {
             icons = new Dictionary<GalacticPOIType, string>
             {
-                {GalacticPOIType.blackHole, "glyphicon glyphicon-exclamation-sign"},
-                {GalacticPOIType.deepSpaceOutpost, "glyphicon glyphicon-stats"},
-                {GalacticPOIType.geyserPOI, "glyphicon glyphicon-cloud-upload"},
-                {GalacticPOIType.historicalLocation, "glyphicon glyphicon-tower"},
-                {GalacticPOIType.minorPOI, "glyphicon glyphicon-pushpin"},
-                {GalacticPOIType.mysteryPOI, "glyphicon glyphicon-question-sign"},
-                {GalacticPOIType.nebula, "glyphicon glyphicon-fire"},
-                {GalacticPOIType.organicPOI, "glyphicon glyphicon-grain"},
-                {GalacticPOIType.planetFeatures, "glyphicon glyphicon-globe"},
-                {GalacticPOIType.planetaryNebula, "glyphicon glyphicon-certificate"},
-                {GalacticPOIType.pulsar, "glyphicon glyphicon-cd"},
-                {GalacticPOIType.regional, "glyphicon glyphicon-move"},
-                {GalacticPOIType.starCluster, "glyphicon glyphicon-option-horizontal"},
-                {GalacticPOIType.stellarRemnant, "glyphicon glyphicon-star-empty"},
-                {GalacticPOIType.surfacePOI, "glyphicon glyphicon-download-alt"}
+                {GalacticPOIType.blackHole, "fas fa-exclamation-circle"},
+                {GalacticPOIType.deepSpaceOutpost, "fas fa-building"},
+                {GalacticPOIType.geyserPOI, "fas fa-cloud-upload-alt"},
+                {GalacticPOIType.historicalLocation, "fas fa-chess-rook"},
+                {GalacticPOIType.minorPOI, "fas fa-map-pin"},
+                {GalacticPOIType.mysteryPOI, "fas fa-question-circle"},
+                {GalacticPOIType.nebula, "fas fa-fire"},
+                {GalacticPOIType.organicPOI, "fas fa-tree"},
+                {GalacticPOIType.planetFeatures, "fas fa-globe"},
+                {GalacticPOIType.planetaryNebula, "fas fa-certificate"},
+                {GalacticPOIType.pulsar, "fas fa-compact-disc"},
+                {GalacticPOIType.regional, "fas fa-arrows-alt"},
+                {GalacticPOIType.starCluster, "fas fa-ellipsis-h"},
+                {GalacticPOIType.stellarRemnant, "far fa-star"},
+                {GalacticPOIType.surfacePOI, "fas fa-download"}
             };
         }
 

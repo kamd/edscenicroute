@@ -6,27 +6,30 @@
 
 
 <p>Enter trip details below.</p>
-<div class="well">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label class="control-label">From:</label><TypeAheadTextBox State=@State Placeholder="Sol" ref="fromTextBox" />
+<div class="card text-white border-secondary mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">From:</label><TypeAheadTextBox State=@State Placeholder="Sol" ref="fromTextBox" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">To:</label><TypeAheadTextBox State=@State Placeholder="Colonia" ref="toTextBox" />
+                </div>
             </div>
-            <div class="form-group">
-                <label class="control-label">To:</label><TypeAheadTextBox State=@State Placeholder="Colonia" ref="toTextBox" />
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label class="control-label">Jump Range of Ship: </label><input class="form-control" bind="@(JumpRange)" type="number" min="10" max="80"/>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Acceptable Extra Jumps:</label><input class="form-control" bind="@(AcceptableExtraJumps)"
-                                                                                   type="number" min="1" max="10000"/>
-            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">Jump Range of Ship: </label><input class="form-control" bind="@(JumpRange)" type="number" min="10" max="80" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Acceptable Extra Jumps:</label>
+                    <input class="form-control" bind="@(AcceptableExtraJumps)"
+                           type="number" min="1" max="10000" />
+                </div>
 
-            <button class="btn btn-primary" onclick="@OnSearchClick">Search for POIs to visit</button>
+                <button class="btn btn-primary" onclick="@OnSearchClick">Search for POIs to visit</button>
 
+            </div>
         </div>
     </div>
 </div>

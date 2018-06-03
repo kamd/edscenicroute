@@ -7,37 +7,41 @@
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Microsoft.AspNetCore.Blazor.Components
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row equal">
-            <div class="col-xs-1 poi-icon-column">
+<div class="card border-primary mb-3">
+    <div class="card-body ssview">
+        <div class="row align-items-center">
+            <div class="col-3 col-sm-1 poi-icon-column">
                 <span class="@(IconClass) poi-icon"></span>
             </div>
-            <div class="col-xs-4">
+            <div class="col-9 col-sm-4">
                 <span class="poi-name">@Item.POI.Name</span>
                 <br />
                 <span><i>@GalacticPOIEnumConverter.ConvertToString(Item.POI.Type)</i></span>
             </div>
-            <div class="col-sm-3">
-                <div class="row">
-                    <p>@ExtraJumps(Item.ExtraDistance), <span class="text-info">@Item.ExtraDistance.ToString("N") Ly</span></p>
+            <div class="col-12 col-sm">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col">
+                        <div class="ssview-info">
+                            <span>@ExtraJumps(Item.ExtraDistance), <span class="text-info">@Item.ExtraDistance.ToString("N") Ly</span></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="progress progress-striped poi-jumps-bar">
-                        <div class="progress-bar @ProgressBarColour" style="width: @DistancePercent%"></div>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col">
+                        <div class="progress poi-jumps-bar">
+                            <div class="progress-bar progress-bar-striped @ProgressBarColour" role="progressbar" style="width: @DistancePercent%" aria-valuenow="@DistancePercent" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="row equal">
-                    <div class="col-lg-8">
-                        System:<br />
-                        <code id="@(IconId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
-                    </div>
-                    <div class="col-lg-4">
-                        <a class="btn btn-info" role="button" href=@Item.POI.GalMapUrl>EDSM Info</a>
-                    </div>
+            <div class="col">
+                <div class="ssview-info">
+                    System:<br />
+                    <code id="@(IconId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
                 </div>
+            </div>
+            <div class="col">
+                <a class="btn btn-info" role="button" href=@Item.POI.GalMapUrl>EDSM Info</a>
             </div>
         </div>
     </div>
@@ -72,13 +76,13 @@
             int distancePercent = DistancePercent;
             if (distancePercent > 80)
             {
-                return "progress-bar-danger";
+                return "bg-danger";
             }
             if (distancePercent > 50)
             {
-                return "progress-bar-warning";
+                return "bg-warning";
             }
-            return "progress-bar-info";
+            return "bg-info";
         }
     }
 
