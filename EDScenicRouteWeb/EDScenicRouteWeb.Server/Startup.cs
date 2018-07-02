@@ -12,6 +12,7 @@ using System.Net.Mime;
 using AspNetCoreRateLimit;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace EDScenicRouteWeb.Server
 {
@@ -57,7 +58,10 @@ namespace EDScenicRouteWeb.Server
                 });
             });
 
-            services.AddSingleton<IGalaxyManager, GalaxyManager>();
+            var galaxyManager = new GalaxyManager();
+            services.AddSingleton<IGalaxyManager, GalaxyManager>(x => galaxyManager);
+            services.AddSingleton<IHostedService, GalaxyManager>(x => galaxyManager);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

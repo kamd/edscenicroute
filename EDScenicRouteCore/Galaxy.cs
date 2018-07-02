@@ -18,12 +18,7 @@ namespace EDScenicRouteCore
         private ScenicSuggestionCalculator calculator;
         private bool initialised;
 
-        private static object saveLock = new object();
-
-        public Galaxy()
-        {
-            
-        }
+        private static readonly object saveLock = new object();
 
         public List<GalacticPOI> POIs { get; private set; }
 
