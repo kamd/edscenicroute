@@ -17,7 +17,6 @@ namespace EDScenicRouteCore.DataUpdates
 
         public EDSMSystemEnquirer(string baseUri = null)
         {
-            // Update port # in the following line.
             client.BaseAddress = new Uri(baseUri ?? DefaultBaseUri);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("EDScenicRouteFinder-elite.kamd.me.uk/1.0");
             client.DefaultRequestHeaders.Accept.Clear();
