@@ -5,6 +5,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace EDScenicRouteWeb.Server
 {
@@ -20,9 +21,13 @@ namespace EDScenicRouteWeb.Server
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseConfiguration(config)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
-                //.UseApplicationInsights()
                 .Build();
 
             host.Run();

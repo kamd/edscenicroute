@@ -10,6 +10,7 @@ using EDScenicRouteCoreModels;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
 
 namespace EDScenicRouteWeb.Server.Controllers
@@ -18,51 +19,46 @@ namespace EDScenicRouteWeb.Server.Controllers
     public class ScenicSuggestionsController : Controller
     {
 
-        public ScenicSuggestionsController(IGalaxyManager galaxyManager)
+        public ScenicSuggestionsController(IGalaxyManager galaxyManager, ILogger<ScenicSuggestionsController> logger)
         {
             Galaxy = galaxyManager;
+            Logger = logger;
         }
 
         private IGalaxyManager Galaxy { get; }
 
+        private ILogger<ScenicSuggestionsController> Logger { get; }
+
         [HttpPost]
         public async Task<IActionResult> GetSuggestions([FromBody] RouteDetails details)
         {
+            Logger.LogInformation(LoggingEvents.GetSuggestions,
+                $"[{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
             try
             {
                 var results = await Galaxy.GenerateSuggestions(details);
+                Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess, $"POIs found: {results.Suggestions.Count}");
                 return Ok(results);
             }
             catch (SystemNotFoundException systemNotFoundException)
             {
+                Logger.LogWarning(LoggingEvents.SystemNotFound, $"Name: {systemNotFoundException.SystemName}");
                 return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(LoggingEvents.UnknownError, ex, "Error in GetSuggestions");
+                throw;
             }
         }
 
-        private List<ScenicSuggestion> TestData => new List<ScenicSuggestion>()
+        public class LoggingEvents
         {
-            new ScenicSuggestion(
-                new GalacticPOI()
-                {
-                    Name = "Funland",
-                    Coordinates = new Vector3(1, 2, 3),
-                    DistanceFromSol = 1f,
-                    GalMapSearch = "asd",
-                    GalMapUrl = "dfg",
-                    Id = "FUNL",
-                    Type = GalacticPOIType.nebula
-                }, 7f),
-            new ScenicSuggestion(
-                new GalacticPOI()
-                {
-                    Name = "Extraland",
-                    Coordinates = new Vector3(2, 3, 3),
-                    DistanceFromSol = 10f,
-                    GalMapSearch = "aasdsd",
-                    GalMapUrl = "dfgdsa",
-                    Id = "EXL",
-                    Type = GalacticPOIType.nebula
-                }, 12f)
-        };
+            public const int GetSuggestions = 1000;
+            public const int GetSuggestionsSuccess = 1001;
+
+            public const int SystemNotFound = 4000;
+            public const int UnknownError = 4001;
+        }
     }
 }
