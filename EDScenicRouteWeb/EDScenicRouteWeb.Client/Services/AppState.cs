@@ -1,27 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using EDScenicRouteCoreModels;
 using Microsoft.AspNetCore.Blazor;
+using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 
 namespace EDScenicRouteWeb.Client.Services
 {
     public class AppState
     {
-        
-        public float StraightLineDistanceOfTrip { get; private set; }
-        public float ShipJumpRange { get; set; } = 30f;
+        private const string SHIP_JUMP_RANGE_STORAGE_KEY = "ShipJumpRange";
+        private const string EXTRA_DISTANCE_STORAGE_KEY = "AcceptableExtraDistance";
+
         public IReadOnlyList<ScenicSuggestion> Suggestions { get; private set; } = new List<ScenicSuggestion>();
         public bool CurrentlySearching { get; private set; }
         public string ErrorMessage { get; set; }
-        public float AcceptableExtraDistance { get; set; }
         public bool SearchCompleted { get; set; } = false;
+        public float StraightLineDistanceOfTrip { get; private set; }
+
+        public float ShipJumpRange
+        {
+            get => shipJumpRange;
+            set
+            {
+                shipJumpRange = value;
+                Storage[SHIP_JUMP_RANGE_STORAGE_KEY] = value.ToString("R", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public float AcceptableExtraDistance
+        {
+            get => acceptableExtraDistance;
+            set
+            {
+                acceptableExtraDistance = value;
+                Storage[EXTRA_DISTANCE_STORAGE_KEY] = value.ToString("R", CultureInfo.InvariantCulture);
+            }
+        }
+        
+        public LocalStorage Storage
+        {
+            get => storage;
+            set
+            {
+                storage = value;
+                LoadValuesFromStorage();
+            }
+        }
+
         public event Action OnChanged;
 
         private readonly HttpClient http;
+        private LocalStorage storage;
+        private float shipJumpRange = 30f;
+        private float acceptableExtraDistance = 150f;
 
         public AppState(HttpClient httpInstance)
         {
@@ -69,6 +105,23 @@ namespace EDScenicRouteWeb.Client.Services
         private void NotifyStateChanged()
         {
             OnChanged?.Invoke();
+        }
+
+        private void LoadValuesFromStorage()
+        {
+            var shipJumpRangeStoredValue = Storage[SHIP_JUMP_RANGE_STORAGE_KEY];
+            if (!string.IsNullOrEmpty(shipJumpRangeStoredValue))
+            {
+                ShipJumpRange = float.Parse(shipJumpRangeStoredValue);
+            }
+
+            var extraDistanceStoredValue = Storage[EXTRA_DISTANCE_STORAGE_KEY];
+            if (!string.IsNullOrEmpty(extraDistanceStoredValue))
+            {
+                AcceptableExtraDistance = float.Parse(extraDistanceStoredValue);
+            }
+
+            NotifyStateChanged();
         }
     }
 }

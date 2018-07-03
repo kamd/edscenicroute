@@ -6,7 +6,7 @@
 
 
 <div class="dropdown">
-    <input class="form-control" placeholder="@Placeholder" type="text" value="@POI"
+    <input class="form-control" placeholder="@Placeholder" type="text" id="@Id" value="@POI"
            onchange="@OnChanged"
            oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))"
            onfocusout="@TextBoxLosingFocus"/>
@@ -26,6 +26,9 @@
 
     [Parameter]
     string Placeholder { get; set; }
+
+    [Parameter]
+    string Id { get; set; }
 
     protected override void OnInit()
     {

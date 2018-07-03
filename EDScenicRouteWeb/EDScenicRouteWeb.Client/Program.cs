@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using System;
+using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using EDScenicRouteWeb.Client.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,8 +13,8 @@ namespace EDScenicRouteWeb.Client
         {
             var serviceProvider = new BrowserServiceProvider(configure =>
             {
-                // Add any custom services here
                 configure.AddSingleton<AppState>();
+                configure.AddStorage();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

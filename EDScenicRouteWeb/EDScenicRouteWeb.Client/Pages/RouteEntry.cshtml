@@ -1,4 +1,5 @@
 ﻿@using System
+@using System.Globalization
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 @using EDScenicRouteWeb.Client.Services
@@ -11,10 +12,16 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="control-label">From:</label><TypeAheadTextBox State=@State Placeholder="Sol" ref="fromTextBox" />
+                    <fieldset>
+                        <label class="control-label" for="fromTextBox">From:</label>
+                        <TypeAheadTextBox State=@State Placeholder="Sol" ref="fromTextBox" Id="fromTextBox" />
+                    </fieldset>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">To:</label><TypeAheadTextBox State=@State Placeholder="Colonia" ref="toTextBox" />
+                    <fieldset>
+                        <label class="control-label" for="toTextBox">To:</label>
+                        <TypeAheadTextBox State=@State Placeholder="Colonia" ref="toTextBox" Id="toTextBox" />
+                    </fieldset>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -56,6 +63,7 @@
         set
         {
             state = value;
+            acceptableExtraJumps = (int) Math.Round(state.AcceptableExtraDistance / state.ShipJumpRange);
             RecalculateAcceptableExtraDistance();
         }
     }
@@ -66,12 +74,12 @@
         ToSystemName = "Colonia"
     };
 
-    private int acceptableExtraJumps = 5;
+    private int acceptableExtraJumps;
     private AppState state;
 
     private string JumpRange
     {
-        get { return State.ShipJumpRange.ToString(); }
+        get { return State.ShipJumpRange.ToString(CultureInfo.InvariantCulture); }
         set
         {
             if (float.TryParse(value, out var result))
