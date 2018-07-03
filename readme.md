@@ -30,10 +30,16 @@ star systems and a maximum deviation from the straight line route, and one that
 returns possible POI names for auto-completing textboxes on the page. Both API
 endpoints return JSON data.
 
-The client pages use [Bootstrap 4](https://getbootstrap.com/) components and
-[Bootswatch](https://bootswatch.com/)'s Darkly theme.
+The client pages use [Bootstrap 4](https://getbootstrap.com/) components,
+[Bootswatch](https://bootswatch.com/)'s Darkly theme, [Font Awesome](https://fontawesome.com/)
+icon font, and [Google Fonts](https://fonts.google.com/) CDN.
 
 ## Testing
 
 There are a handful of unit tests for the core calculations, written in
 the [NUnit](http://nunit.org/) framework.
+
+## External APIs
+
+Elite Dangerous galaxy data is drawn from the [Elite Dangerous Star Map](https://www.edsm.net/)
+project, without which this project would not be possible.
