@@ -37,7 +37,7 @@
             <div class="col">
                 <div class="ssview-info">
                     System:<br />
-                    <code id="@(IconId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
+                    <code id="@(ItemId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
                 </div>
             </div>
             <div class="col">
@@ -88,10 +88,10 @@
 
     private void SelectBox()
     {
-        RegisteredFunction.Invoke<bool>("selectbox", $"icon{Item?.POI.Id}");
+        RegisteredFunction.Invoke<bool>("selectbox", ItemId);
     }
 
     private string IconClass => Item == null ? "" : GalacticPOIIcons.IconClassForGalacticPOIType(Item.POI.Type);
 
-    private string IconId => $"icon{Item?.POI.Id}";
+    private string ItemId => $"item{Item?.POI.Id}";
 }

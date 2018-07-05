@@ -14,7 +14,7 @@ namespace EDScenicRouteWeb.Client.Shared
         {
             icons = new Dictionary<GalacticPOIType, string>
             {
-                {GalacticPOIType.blackHole, "fas fa-exclamation-circle"},
+                {GalacticPOIType.blackHole, "fas fa-genderless"},
                 {GalacticPOIType.deepSpaceOutpost, "fas fa-building"},
                 {GalacticPOIType.geyserPOI, "fas fa-cloud-upload-alt"},
                 {GalacticPOIType.historicalLocation, "fas fa-chess-rook"},
@@ -22,12 +22,12 @@ namespace EDScenicRouteWeb.Client.Shared
                 {GalacticPOIType.mysteryPOI, "fas fa-question-circle"},
                 {GalacticPOIType.nebula, "fas fa-fire"},
                 {GalacticPOIType.organicPOI, "fas fa-tree"},
-                {GalacticPOIType.planetFeatures, "fas fa-globe"},
-                {GalacticPOIType.planetaryNebula, "fas fa-certificate"},
+                {GalacticPOIType.planetFeatures, "fas fa-globe-americas"},
+                {GalacticPOIType.planetaryNebula, "fas fa-sun"},
                 {GalacticPOIType.pulsar, "fas fa-compact-disc"},
                 {GalacticPOIType.regional, "fas fa-arrows-alt"},
                 {GalacticPOIType.starCluster, "fas fa-ellipsis-h"},
-                {GalacticPOIType.stellarRemnant, "far fa-star"},
+                {GalacticPOIType.stellarRemnant, "fas fa-compress"},
                 {GalacticPOIType.surfacePOI, "fas fa-download"}
             };
         }
