@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using EDScenicRouteWeb.Server.Services;
+using EDScenicRouteWeb.Shared.DataValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,12 @@ namespace EDScenicRouteWeb.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> GetSuggestions([FromBody] RouteDetails details)
         {
+            (bool success, string errorMessage) = RouteDetailsValidator.ValidateRouteDetails(details);
+            if (!success)
+            {
+                Logger.LogWarning(LoggingEvents.BadRouteDetails, errorMessage);
+                return BadRequest(errorMessage);
+            }
             Logger.LogInformation(LoggingEvents.GetSuggestions,
                 $"[{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
             try
@@ -59,6 +66,7 @@ namespace EDScenicRouteWeb.Server.Controllers
 
             public const int SystemNotFound = 4000;
             public const int UnknownError = 4001;
+            public const int BadRouteDetails = 4002;
         }
     }
 }

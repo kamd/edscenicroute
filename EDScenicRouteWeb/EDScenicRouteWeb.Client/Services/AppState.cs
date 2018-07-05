@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EDScenicRouteCoreModels;
 using Microsoft.AspNetCore.Blazor;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+using EDScenicRouteWeb.Shared.DataValidation;
 
 namespace EDScenicRouteWeb.Client.Services
 {
@@ -71,6 +72,19 @@ namespace EDScenicRouteWeb.Client.Services
             NotifyStateChanged();
             SearchCompleted = true;
 
+            // Validate locally
+            var (success, errorMessage) = RouteDetailsValidator.ValidateRouteDetails(details);
+            if (!success)
+            {
+                ErrorMessage = errorMessage;
+                StraightLineDistanceOfTrip = 0f;
+                Suggestions = new List<ScenicSuggestion>();
+                CurrentlySearching = false;
+                NotifyStateChanged();
+                return;
+            }
+
+            // Call API
             var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(JsonUtil.Serialize(details), Encoding.UTF8, "application/json"));
             if (! response.IsSuccessStatusCode)
             {
