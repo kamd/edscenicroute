@@ -36,11 +36,11 @@ namespace EDScenicRouteWeb.Server.Controllers
             (bool success, string errorMessage) = RouteDetailsValidator.ValidateRouteDetails(details);
             if (!success)
             {
-                Logger.LogWarning(LoggingEvents.BadRouteDetails, errorMessage);
+                Logger.LogWarning(LoggingEvents.BadRouteDetails, errorMessage, DateTime.Now);
                 return BadRequest(errorMessage);
             }
             Logger.LogInformation(LoggingEvents.GetSuggestions,
-                $"[{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
+                $"[{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}", DateTime.Now);
             try
             {
                 var results = await Galaxy.GenerateSuggestions(details);
@@ -49,12 +49,12 @@ namespace EDScenicRouteWeb.Server.Controllers
             }
             catch (SystemNotFoundException systemNotFoundException)
             {
-                Logger.LogWarning(LoggingEvents.SystemNotFound, $"Name: {systemNotFoundException.SystemName}");
+                Logger.LogWarning(LoggingEvents.SystemNotFound, $"Name: {systemNotFoundException.SystemName}", DateTime.Now);
                 return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
             }
             catch (Exception ex)
             {
-                Logger.LogError(LoggingEvents.UnknownError, ex, "Error in GetSuggestions");
+                Logger.LogError(LoggingEvents.UnknownError, ex, "Error in GetSuggestions", DateTime.Now);
                 throw;
             }
         }
