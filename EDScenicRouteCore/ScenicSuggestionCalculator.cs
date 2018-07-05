@@ -12,6 +12,10 @@ namespace EDScenicRouteCore
 {
     public class ScenicSuggestionCalculator
     {
+
+        public const int MAX_SUGGESTIONS = 50;
+        public const float BUBBLE_IGNORE_RADIUS = 200f;
+
         public ScenicSuggestionCalculator(List<GalacticPOI> pois, List<GalacticSystem> systems)
         {
             POIs = pois;
@@ -29,10 +33,11 @@ namespace EDScenicRouteCore
         {
             var originalDistance = DistanceBetweenPoints(from, to);
             var suggestions = POIs.
-                Where(p => p.DistanceFromSol > 200f). // Ignore the "bubble" of near-Earth POIs TODO
+                Where(p => p.DistanceFromSol > BUBBLE_IGNORE_RADIUS). // Ignore the "bubble" of near-Earth POIs TODO
                 Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
                 Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
                 OrderBy(ss => ss.ExtraDistance).
+                Take(MAX_SUGGESTIONS).
                 ToList();
 
             return new ScenicSuggestionResults(){StraightLineDistance = originalDistance, Suggestions = suggestions};
