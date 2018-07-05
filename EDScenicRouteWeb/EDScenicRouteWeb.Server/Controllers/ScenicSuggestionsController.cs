@@ -40,21 +40,21 @@ namespace EDScenicRouteWeb.Server.Controllers
                 return BadRequest(errorMessage);
             }
             Logger.LogInformation(LoggingEvents.GetSuggestions,
-                $"[{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}", DateTime.Now);
+                $"{DateTime.Now} [{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
             try
             {
                 var results = await Galaxy.GenerateSuggestions(details);
-                Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess, $"POIs found: {results.Suggestions.Count}");
+                Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess, $"{DateTime.Now} POIs found: {results.Suggestions.Count}");
                 return Ok(results);
             }
             catch (SystemNotFoundException systemNotFoundException)
             {
-                Logger.LogWarning(LoggingEvents.SystemNotFound, $"Name: {systemNotFoundException.SystemName}", DateTime.Now);
+                Logger.LogWarning(LoggingEvents.SystemNotFound, $"{DateTime.Now} Name: {systemNotFoundException.SystemName}");
                 return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
             }
             catch (Exception ex)
             {
-                Logger.LogError(LoggingEvents.UnknownError, ex, "Error in GetSuggestions", DateTime.Now);
+                Logger.LogError(LoggingEvents.UnknownError, ex, $"{DateTime.Now} Error in GetSuggestions");
                 throw;
             }
         }
