@@ -13,6 +13,7 @@ using AspNetCoreRateLimit;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace EDScenicRouteWeb.Server
 {
