@@ -38,10 +38,11 @@
                     </label>
                     @foreach (var poiType in POITypes)
                     {
-                        <label class="btn btn-primary @(poiFilters[poiType] ? "active" : "")">
+                        <label class="btn btn-primary @(poiFilters[poiType] ? "active" : "")" data-toggle="tooltip"
+                               title="@(GalacticPOIEnumConverter.ConvertToString(poiType))">
                             <input checked="@(poiFilters[poiType])" autocomplete="off" type="checkbox"
                                    onchange="@(eventArgs => OnFilterClick(poiType, (bool) eventArgs.Value))"
-                                   data-toggle="tooltip" data-placement="bottom" title="" data-original-title="@(GalacticPOIEnumConverter.ConvertToString(poiType))"/>
+                                   />
                             <span class="@(GalacticPOIIcons.IconClassForGalacticPOIType(poiType))"></span>
                         </label>
                     }
