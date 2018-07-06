@@ -38,12 +38,5 @@
     <BlazorGenerate Remove="Shared\ScenicSuggestionView.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <BlazorGenerate Remove="Pages\About.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\About.cshtml" />
-  </ItemGroup>
 
 </Project>
