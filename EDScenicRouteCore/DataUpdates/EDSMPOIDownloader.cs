@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDScenicRouteCore.DataUpdates
 {
-    public class EDSMDownloader
+    public class EDSMPOIDownloader
     {
         public const string EDSMBaseAddress = @"https://www.edsm.net/en/";
         public const string GalacticMappingJSONAddress = @"galactic-mapping/json";
@@ -17,9 +17,10 @@ namespace EDScenicRouteCore.DataUpdates
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(EDSMBaseAddress);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("EDScenicRouteFinder-elite.kamd.me.uk/1.0");
                 client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(new ProductHeaderValue("EDScenicRouteApp")));
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
                 
                 var json = await client.GetStringAsync(GalacticMappingJSONAddress);
                 return json;

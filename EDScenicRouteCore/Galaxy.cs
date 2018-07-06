@@ -41,7 +41,7 @@ namespace EDScenicRouteCore
             if (File.Exists(DefaultPOIFilePath)) {
                 POIs = GalacticPOISerialization.LoadFromFile(DefaultPOIFilePath);
             } else {
-                var downloader = new EDSMDownloader();
+                var downloader = new EDSMPOIDownloader();
                 var json = await downloader.DownloadPOIInfoAsJSON();
                 var converter = new JSONToPOIConverter();
                 POIs = converter.ConvertJSONToPOIs(json);
