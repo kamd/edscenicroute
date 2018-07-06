@@ -5,10 +5,11 @@
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Microsoft.AspNetCore.Blazor.Components
 
+@inherits BlazorComponent
 
 <div class="dropdown">
     <input class="form-control" placeholder="@Placeholder" type="text" id="@Id" value="@POI"
-           maxlength="@RouteDetailsValidator.MAX_NAME_LENGTH"
+           maxlength="@(RouteDetailsValidator.MAX_NAME_LENGTH)"
            onchange="@OnChanged"
            oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))"
            onfocusout="@TextBoxLosingFocus"/>
@@ -32,6 +33,8 @@
     [Parameter]
     string Id { get; set; }
 
+    [Parameter] Action<string> POIChanged { get; set; }
+
     protected override void OnInit()
     {
         // If AppState is firing OnChanged then the autocomplete dropdown is no longer necessary.
@@ -47,6 +50,7 @@
     private void POIClicked(string poi)
     {
         POI = poi;
+        POIChanged(POI);
         DropdownOpen = false;
     }
 
@@ -57,7 +61,8 @@
         //DropdownOpen = false;
     }
 
-    public string POI { get; set; } = "";
+    [Parameter]
+    string POI { get; set; }
 
     // Until Blazor properly supports Input event, we must redirect that to Changed and handle that.
     // This previousValue is to workaround the Changed event firing when you click an autocomplete option.
@@ -66,6 +71,7 @@
     async void OnChanged(UIChangeEventArgs args)
     {
         POI = (string)args.Value;
+        POIChanged(POI);
         if (POI == previousValue) return;
         previousValue = POI;
 

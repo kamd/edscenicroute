@@ -3,8 +3,8 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 @using EDScenicRouteWeb.Client.Services
+@using EDScenicRouteWeb.Client.Shared
 @using Microsoft.AspNetCore.Blazor.Components
-
 
 <p>Enter trip details below.</p>
 <div class="card text-white border-secondary mb-3">
@@ -14,24 +14,24 @@
                 <div class="form-group">
                     <fieldset>
                         <label class="control-label" for="fromTextBox">From:</label>
-                        <TypeAheadTextBox State=@State Placeholder="Sol" ref="fromTextBox" Id="fromTextBox" />
+                        <TypeAheadTextBox State="@State" Placeholder="Sol" Id="fromTextBox" bind-POI="@fromPOI" />
                     </fieldset>
                 </div>
                 <div class="form-group">
                     <fieldset>
                         <label class="control-label" for="toTextBox">To:</label>
-                        <TypeAheadTextBox State=@State Placeholder="Colonia" ref="toTextBox" Id="toTextBox" />
+                        <TypeAheadTextBox State="@State" Placeholder="Colonia" Id="toTextBox" bind-POI="@toPOI" />
                     </fieldset>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="control-label">Jump Range of Ship: </label><input class="form-control" bind="@(JumpRange)" type="number" min="10" max="80" />
+                    <label class="control-label">Jump Range of Ship: </label><input class="form-control" bind="@(JumpRange)" type="number" min="10" max="80"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Acceptable Extra Jumps:</label>
                     <input class="form-control" bind="@(AcceptableExtraJumps)"
-                           type="number" min="1" max="10000" />
+                           type="number" min="1" max="@(MAX_EXTRA_JUMPS)"/>
                 </div>
 
                 <button class="btn btn-primary" onclick="@OnSearchClick">Search for POIs to visit</button>
@@ -43,18 +43,17 @@
 
 @functions {
 
+    private const int MAX_EXTRA_JUMPS = 500;
+
     [Parameter]
     Func<RouteDetails, Task> OnSearch { get; set; }
 
     private async void OnSearchClick()
     {
-        details.FromSystemName = string.IsNullOrEmpty(fromTextBox.POI) ? "Sol" : fromTextBox.POI;
-        details.ToSystemName = string.IsNullOrEmpty(toTextBox.POI) ? "Colonia" : toTextBox.POI;
+        details.FromSystemName = string.IsNullOrEmpty(fromPOI) ? "Sol" : fromPOI;
+        details.ToSystemName = string.IsNullOrEmpty(toPOI) ? "Colonia" : toPOI;
         await OnSearch(details);
     }
-
-    private TypeAheadTextBox fromTextBox;
-    private TypeAheadTextBox toTextBox;
 
     [Parameter]
     AppState State
@@ -76,6 +75,8 @@
 
     private int acceptableExtraJumps;
     private AppState state;
+    private string fromPOI { get; set; }
+    private string toPOI { get; set; }
 
     private string JumpRange
     {
@@ -97,7 +98,7 @@
         {
             if (int.TryParse(value, out var result))
             {
-                acceptableExtraJumps = result;
+                acceptableExtraJumps = Math.Min(result, 500);
                 RecalculateAcceptableExtraDistance();
             }
         }

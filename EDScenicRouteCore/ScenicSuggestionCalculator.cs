@@ -13,7 +13,7 @@ namespace EDScenicRouteCore
     public class ScenicSuggestionCalculator
     {
 
-        public const int MAX_SUGGESTIONS = 50;
+        public const int MAX_SUGGESTIONS = 500;
         public const float BUBBLE_IGNORE_RADIUS = 200f;
 
         public ScenicSuggestionCalculator(List<GalacticPOI> pois, List<GalacticSystem> systems)

@@ -5,38 +5,41 @@
 @using Microsoft.AspNetCore.Blazor.Components
 
 
-    <div class="col">
+<div class="col">
 
-        @if (CurrentlySearching)
+    @if (CurrentlySearching)
+    {
+        <div class="alert alert-warning">Searching...</div>
+    }
+    else if (SearchCompleted)
+    {
+        if (!string.IsNullOrEmpty(ErrorMessage))
         {
-            <div class="alert alert-warning">Searching...</div>
+            <div class="alert alert-danger">@(ErrorMessage)</div>
         }
-        else if (SearchCompleted)
+        else if (ScenicSuggestions.Count > 0)
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
+            <div class="alert alert-primary">
+                Straight line distance of your trip: <strong>@(StraightLineDistance)Ly</strong>
+            </div>
+            <div class="alert alert-info">Consider visiting...</div>
+            <SuggestionsPagination bind-PageNumber="@pageNumber" ScenicSuggestionPages="@ScenicSuggestionPages" />
+            foreach (var item in ScenicSuggestions.Skip(pageNumber * SUGGESTIONS_PER_PAGE).Take(SUGGESTIONS_PER_PAGE))
             {
-                <div class="alert alert-danger">@(ErrorMessage)</div>
-            } else if (ScenicSuggestions.Count > 0)
-            {
-                <div class="alert alert-primary">
-                    Straight line distance of your trip: <strong>@(StraightLineDistance)Ly</strong>
-                </div>
-                <div class="alert alert-success">Consider visiting...</div>
+                <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange MaxExtraDistance=@MaxExtraDistance />
             }
-            else
-            {
-                <div class="alert alert-info">No suggestions.</div>
-            }
+            <SuggestionsPagination bind-PageNumber="@pageNumber" ScenicSuggestionPages="@ScenicSuggestionPages" />
         }
-
-        @foreach (var item in ScenicSuggestions)
+        else
         {
-            <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange MaxExtraDistance=@MaxExtraDistance />
+            <div class="alert alert-info">No suggestions.</div>
         }
-        
-    </div>
+    }
+</div>
     
 @functions {
+
+    private const int SUGGESTIONS_PER_PAGE = 30;
 
     [Parameter]
     bool CurrentlySearching { get; set; }
@@ -57,6 +60,28 @@
     IReadOnlyList<ScenicSuggestion> ScenicSuggestions { get; set; }
 
     [Parameter]
-    bool SearchCompleted { get; set; }
+    bool SearchCompleted
+    {
+        get => searchCompleted;
+        set
+        {
+            searchCompleted = value;
+            pageNumber = 0;
+        }
+    }
 
+    private int ScenicSuggestionPages => (int)Math.Ceiling((ScenicSuggestions?.Count ?? 0) / (float)SUGGESTIONS_PER_PAGE);
+
+    private int pageNumber
+    {
+        get => _pageNumber;
+        set
+        {
+            _pageNumber = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool searchCompleted;
+    private int _pageNumber;
 }

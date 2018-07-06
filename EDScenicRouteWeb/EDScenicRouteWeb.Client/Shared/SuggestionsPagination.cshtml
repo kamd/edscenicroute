@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Blazor.Components
+
+
+<div class="row justify-content-center">
+    <ul class="pagination">
+        <li class="page-item @(PageNumber > 0 ? "" : "disabled")">
+            <a class="page-link" href="#" onclick="@(() => ChangePage(PageNumber - 1))">&laquo;</a>
+        </li>
+        @for (int i = 0; i < ScenicSuggestionPages; i++)
+        {
+            int page = i;
+            <li class="page-item @(PageNumber == i ? "active" : "")">
+                <a class="page-link" href="#" onclick="@(() => ChangePage(page))">@(page + 1)</a>
+            </li>
+        }
+        <li class="page-item @(PageNumber < ScenicSuggestionPages - 1 ? "" : "disabled")">
+            <a class="page-link" href="#" onclick="@(() => ChangePage(PageNumber + 1))">&raquo;</a>
+        </li>
+    </ul>
+</div>
+
+
+@functions{
+
+    [Parameter]
+    Action<int> PageNumberChanged { get; set; }
+
+    [Parameter]
+    int PageNumber { get; set; }
+
+    [Parameter]
+    int ScenicSuggestionPages { get; set; }
+
+    private void ChangePage(int number)
+    {
+        PageNumber = number;
+        PageNumberChanged(number);
+    }
+}

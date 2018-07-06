@@ -22,6 +22,7 @@
     <None Include="Pages\ScenicResults.cshtml" />
     <None Include="Pages\RouteEntry.cshtml" />
     <None Include="Shared\ScenicSuggestionView.cshtml" />
+    <None Include="Shared\SuggestionsPagination.cshtml" />
     <None Include="Shared\TypeAheadTextBox.cshtml" />
   </ItemGroup>
 
@@ -43,14 +44,6 @@
 
   <ItemGroup>
     <Content Remove="Pages\About.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <BlazorGenerate Remove="Shared\TypeAheadTextBox.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Shared\TypeAheadTextBox.cshtml" />
   </ItemGroup>
 
 </Project>
