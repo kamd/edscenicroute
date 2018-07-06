@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
+@using EDScenicRouteWeb.Client.Shared
 @using Microsoft.AspNetCore.Blazor.Components
 
 
@@ -19,12 +20,38 @@
         }
         else if (ScenicSuggestions.Count > 0)
         {
-            <div class="alert alert-primary">
-                Straight line distance of your trip: <strong>@(StraightLineDistance)Ly</strong>
+            <div class="row">
+                <div class="col col-sm-6">
+                    <div class="alert alert-primary">
+                        Straight line distance of your trip: <strong>@(StraightLineDistance)Ly</strong>
+                    </div>
+                </div>
+                <div class="col col-sm-6">
+                    <div class="alert alert-info">Consider visiting...</div>
+                </div>
             </div>
-            <div class="alert alert-info">Consider visiting...</div>
+
+            <div class="row justify-content-center filterbar">
+                <div class="btn-group btn-group-toggle flex-wrap" data-toggle="buttons">
+                    <label class="filterbuttonlabel btn btn-primary">
+                        <button type="button" class="filterbutton btn btn-primary" onclick="@(() => FilterAll(false))">All Off</button>
+                    </label>
+                    @foreach (var poiType in POITypes)
+                    {
+                        <label class="btn btn-primary @(poiFilters[poiType] ? "active" : "")">
+                            <input checked="@(poiFilters[poiType])" autocomplete="off" type="checkbox"
+                                   onchange="@(eventArgs => OnFilterClick(poiType, (bool) eventArgs.Value))"
+                                   data-toggle="tooltip" data-placement="bottom" title="" data-original-title="@(GalacticPOIEnumConverter.ConvertToString(poiType))"/>
+                            <span class="@(GalacticPOIIcons.IconClassForGalacticPOIType(poiType))"></span>
+                        </label>
+                    }
+                    <label class="filterbuttonlabel btn btn-primary">
+                        <button type="button" class="filterbutton btn btn-primary" onclick="@(() => FilterAll(true))">All On</button>
+                    </label>
+                </div>
+            </div>
             <SuggestionsPagination bind-PageNumber="@pageNumber" ScenicSuggestionPages="@ScenicSuggestionPages" />
-            foreach (var item in ScenicSuggestions.Skip(pageNumber * SUGGESTIONS_PER_PAGE).Take(SUGGESTIONS_PER_PAGE))
+            foreach (var item in FilteredSuggestions.Skip(pageNumber * SUGGESTIONS_PER_PAGE).Take(SUGGESTIONS_PER_PAGE))
             {
                 <ScenicSuggestionView Item=@item ShipJumpRange=@ShipJumpRange MaxExtraDistance=@MaxExtraDistance />
             }
@@ -36,7 +63,7 @@
         }
     }
 </div>
-    
+
 @functions {
 
     private const int SUGGESTIONS_PER_PAGE = 30;
@@ -70,7 +97,13 @@
         }
     }
 
-    private int ScenicSuggestionPages => (int)Math.Ceiling((ScenicSuggestions?.Count ?? 0) / (float)SUGGESTIONS_PER_PAGE);
+    private Dictionary<GalacticPOIType, bool> poiFilters;
+
+    private List<GalacticPOIType> POITypes { get; } = Enum.GetValues(typeof(GalacticPOIType)).Cast<GalacticPOIType>().ToList();
+
+    private IReadOnlyList<ScenicSuggestion> FilteredSuggestions => ScenicSuggestions?.Where(s => poiFilters[s.POI.Type]).ToList();
+
+    private int ScenicSuggestionPages => (int)Math.Ceiling((FilteredSuggestions.Count) / (float)SUGGESTIONS_PER_PAGE);
 
     private int pageNumber
     {
@@ -84,4 +117,27 @@
 
     private bool searchCompleted;
     private int _pageNumber;
+
+    protected override void OnInit()
+    {
+        poiFilters = new Dictionary<GalacticPOIType, bool>(POITypes.Count);
+        foreach (var poiType in POITypes)
+        {
+            poiFilters.Add(poiType, true);
+        }
+    }
+
+    private void OnFilterClick(GalacticPOIType type, bool visible)
+    {
+        poiFilters[type] = visible;
+        pageNumber = 0;
+    }
+
+    private void FilterAll(bool visible)
+    {
+        foreach (var type in POITypes)
+        {
+            poiFilters[type] = visible;
+        }
+    }
 }

@@ -38,6 +38,18 @@ code {
     color: #ccf;
 }
 
+.filterbutton {
+    margin-bottom: 0
+}
+
+.filterbuttonlabel {
+    padding: 0
+}
+
+.filterbar {
+    margin-bottom: 0.5rem;
+}
+
 
 /*bootstrap 4 junk underneath here*/
 
