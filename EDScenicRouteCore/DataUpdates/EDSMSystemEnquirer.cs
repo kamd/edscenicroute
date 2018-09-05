@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore.DataUpdates
@@ -18,7 +20,7 @@ namespace EDScenicRouteCore.DataUpdates
         public EDSMSystemEnquirer(string baseUri = null)
         {
             client.BaseAddress = new Uri(baseUri ?? DefaultBaseUri);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("EDScenicRouteFinder-elite.kamd.me.uk/1.0");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent.UserAgentString);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -27,7 +29,10 @@ namespace EDScenicRouteCore.DataUpdates
         public async Task<GalacticSystem> GetSystemAsync(string name)
         {
             GalacticSystem system = null;
-            HttpResponseMessage response = await client.GetAsync($"?systemName={name}&showCoordinates=1");
+            string urlName = HttpUtility.UrlEncode(name.Trim());
+            var cancellationTokenSource = new CancellationTokenSource(5000);
+            HttpResponseMessage response = await client.GetAsync($"?systemName={urlName}&showCoordinates=1",
+                cancellationTokenSource.Token);
             if (response.IsSuccessStatusCode)
             {
                 try

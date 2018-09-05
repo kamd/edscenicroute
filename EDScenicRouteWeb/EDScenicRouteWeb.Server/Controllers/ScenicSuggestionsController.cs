@@ -44,13 +44,20 @@ namespace EDScenicRouteWeb.Server.Controllers
             try
             {
                 var results = await Galaxy.GenerateSuggestions(details);
-                Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess, $"{DateTime.Now} POIs found: {results.Suggestions.Count}");
+                Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess,
+                    $"{DateTime.Now} POIs found: {results.Suggestions.Count}");
                 return Ok(results);
             }
             catch (SystemNotFoundException systemNotFoundException)
             {
-                Logger.LogWarning(LoggingEvents.SystemNotFound, $"{DateTime.Now} Name: {systemNotFoundException.SystemName}");
+                Logger.LogWarning(LoggingEvents.SystemNotFound,
+                    $"{DateTime.Now} Name: {systemNotFoundException.SystemName}");
                 return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.LogError(LoggingEvents.Timeout, $"{DateTime.Now} Timeout in GetSuggestions");
+                return NotFound("Elite Dangerous Star Map could not be consulted, please try again later.");
             }
             catch (Exception ex)
             {
@@ -67,6 +74,7 @@ namespace EDScenicRouteWeb.Server.Controllers
             public const int SystemNotFound = 4000;
             public const int UnknownError = 4001;
             public const int BadRouteDetails = 4002;
+            public const int Timeout = 4003;
         }
     }
 }

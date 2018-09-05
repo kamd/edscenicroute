@@ -17,7 +17,7 @@ namespace EDScenicRouteCore.DataUpdates
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(EDSMBaseAddress);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("EDScenicRouteFinder-elite.kamd.me.uk/1.0");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent.UserAgentString);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
