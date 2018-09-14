@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace EDScenicRouteCoreModels
 {
@@ -7,9 +6,7 @@ namespace EDScenicRouteCoreModels
     public class GalacticPOI : IGalacticPoint
     {
 
-        public GalacticPOI() { }
-
-        public string Id { get; set; }
+        public int Id { get; set; }
         public GalacticPOIType Type { get; set; }
         public string Name { get; set; }
         public string GalMapSearch { get; set; }

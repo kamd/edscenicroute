@@ -1,3 +1,13 @@
 {
-    "server.urls": "http://localhost:6788"
+  "server.urls": "http://localhost:6788",
+  "ConnectionStrings": {
+    "DefaultConnection": "galaxy.db" 
+  },
+  "GalaxyUpdates": {
+    "POIUpdateDirectory": "D:\\edsmdata\\pois",
+    "SystemUpdateDirectory": "D:\\edsmdata\\splitjson"
+  },
+  "GalaxyStore": {
+      "StoreType": "SQLite"
+  }
 }

@@ -16,15 +16,15 @@ namespace EDScenicRouteCore
         public const int MAX_SUGGESTIONS = 500;
         public const float BUBBLE_IGNORE_RADIUS = 200f;
 
-        public ScenicSuggestionCalculator(List<GalacticPOI> pois, List<GalacticSystem> systems)
+        public ScenicSuggestionCalculator(IQueryable<GalacticPOI> pois, IQueryable<GalacticSystem> systems)
         {
             POIs = pois;
             Systems = systems;
         }
 
-        private List<GalacticPOI> POIs { get; set; }
+        private IQueryable<GalacticPOI> POIs { get; }
 
-        private List<GalacticSystem> Systems { get; set; }
+        private IQueryable<GalacticSystem> Systems { get; }
 
         public ScenicSuggestionResults GenerateSuggestions(
             GalacticSystem from,

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Numerics;
+using System.Web;
 
 namespace EDScenicRouteCoreModels
 {
     [Serializable]
     public class GalacticSystem : IGalacticPoint
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public Vector3 Coordinates { get; set; }
-        public string GalMapUrl { get; set; }
+        public string GalMapUrl => $"https://www.edsm.net/en/system/id/{Id}/name/{HttpUtility.UrlEncode(Name)}";
 
 
 

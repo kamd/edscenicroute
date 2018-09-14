@@ -20,7 +20,7 @@ namespace EDScenicRouteTest
             {
                 Coordinates = new Vector3(6, 5, 5),
                 DistanceFromSol = 250,
-                Id = "POI1",
+                Id = 1,
                 Name = "Exciting POI",
                 Type = GalacticPOIType.nebula
             };
@@ -29,7 +29,7 @@ namespace EDScenicRouteTest
             {
                 Coordinates = new Vector3(5, 5, 20),
                 DistanceFromSol = 300,
-                Id = "POI2",
+                Id = 2,
                 Name = "Farawayland",
                 Type = GalacticPOIType.nebula
             };
@@ -38,7 +38,7 @@ namespace EDScenicRouteTest
             {
                 Coordinates = new Vector3(3, 5, 3),
                 DistanceFromSol = 220,
-                Id = "POI3",
+                Id = 3,
                 Name = "On the way POI",
                 Type = GalacticPOIType.nebula
             };
@@ -49,7 +49,7 @@ namespace EDScenicRouteTest
             var system2 = new GalacticSystem() {Coordinates = new Vector3(10, 10, 10), Name = "Destination System"};
             var systems = new List<GalacticSystem>() {system1, system2};
 
-            var calculator = new ScenicSuggestionCalculator(pois, systems);
+            var calculator = new ScenicSuggestionCalculator(pois.AsQueryable(), systems.AsQueryable());
 
             var results = calculator.GenerateSuggestions(system1, system2, 15f);
             Assert.AreEqual(

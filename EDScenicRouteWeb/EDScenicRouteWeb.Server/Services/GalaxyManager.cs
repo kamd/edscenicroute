@@ -5,26 +5,27 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EDScenicRouteCoreModels;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace EDScenicRouteWeb.Server.Services
 {
     public class GalaxyManager : IGalaxyManager, IHostedService
     {
+        public GalaxyManager(IConfiguration configuration, ILogger<GalaxyManager> logger)
+        {
+            EDGalaxy = new Galaxy(configuration, logger);
+        }
 
         private const int AUTOCOMPLETE_RESULTS = 6;
         private readonly TimeSpan SAVE_DELAY = new TimeSpan(0, 5, 0);
 
-        public Galaxy EDGalaxy { get; set; } = new Galaxy();
-
-        public async Task Initialise()
-        {
-            await EDGalaxy.Initialise();
-        }
+        public Galaxy EDGalaxy { get; }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await Initialise();
+            await EDGalaxy.Initialise(cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
@@ -59,8 +60,14 @@ namespace EDScenicRouteWeb.Server.Services
                 EDGalaxy.POIs.
                     Where(p => p.Name.ToLower().Contains(input)).
                     Select(p => p.Name).
+                    Concat(
+                        EDGalaxy.Systems.
+                            Where(p => p.Name.ToLower().Contains(input)).
+                            Select(p => p.Name)).
                     Take(AUTOCOMPLETE_RESULTS).
                     ToList());
         }
+
+        private ILogger<GalaxyManager> Logger { get; }
     }
 }

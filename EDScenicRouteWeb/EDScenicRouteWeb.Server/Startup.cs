@@ -13,6 +13,7 @@ using AspNetCoreRateLimit;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace EDScenicRouteWeb.Server
@@ -59,7 +60,11 @@ namespace EDScenicRouteWeb.Server
                 });
             });
 
-            var galaxyManager = new GalaxyManager();
+            var logger = services
+                .BuildServiceProvider()
+                .GetRequiredService<ILogger<GalaxyManager>>();
+            
+            var galaxyManager = new GalaxyManager(Configuration, logger);
             services.AddSingleton<IGalaxyManager, GalaxyManager>(x => galaxyManager);
             services.AddSingleton<IHostedService, GalaxyManager>(x => galaxyManager);
 

@@ -4,73 +4,61 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using EDScenicRouteCoreModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace EDScenicRouteCore
 {
     public class Galaxy
     {
-        private readonly string DefaultPOIFilePath = Path.GetTempPath() + @"pois.xml";
-        private readonly string DefaultSystemsFilePath = Path.GetTempPath() + @"systems.xml";
-        private readonly EDSMSystemEnquirer systemEnquirer = new EDSMSystemEnquirer();
+
+        
         private ScenicSuggestionCalculator calculator;
+        private IGalaxyStore galaxyStore;
         private bool initialised;
+        private readonly IConfiguration config;
+        private readonly ILogger logger;
 
-        private static readonly object saveLock = new object();
+        public Galaxy(IConfiguration configuration, ILogger logWriter)
+        {
+            config = configuration;
+            logger = logWriter;
+        }
 
-        public List<GalacticPOI> POIs { get; private set; }
+        public IQueryable<GalacticPOI> POIs => galaxyStore.POIs;
 
-        public List<GalacticSystem> Systems { get; private set; }
+        public IQueryable<GalacticSystem> Systems => galaxyStore.Systems;
 
-        public async Task Initialise()
+
+        public Task Initialise(CancellationToken cancellationToken)
         {
             if (initialised)
             {
                 throw new InvalidOperationException("Already initialised.");
             }
-            await LoadPOIs();
-            LoadSystems();
-            calculator = new ScenicSuggestionCalculator(POIs, Systems);
-            initialised = true;
-        }
-
-        private async Task LoadPOIs()
-        {
-            if (File.Exists(DefaultPOIFilePath)) {
-                POIs = GalacticPOISerialization.LoadFromFile(DefaultPOIFilePath);
-            } else {
-                var downloader = new EDSMPOIDownloader();
-                var json = await downloader.DownloadPOIInfoAsJSON();
-                var converter = new JSONToPOIConverter();
-                POIs = converter.ConvertJSONToPOIs(json);
-                lock (saveLock)
-                {
-                    GalacticPOISerialization.SaveToFile(POIs, DefaultPOIFilePath);
-                }
-            }
-        }
-
-        private void LoadSystems()
-        {
-            if (File.Exists(DefaultSystemsFilePath))
+            var updateDir = config.GetSection("GalaxyStore")["StoreType"];
+            if (!string.IsNullOrEmpty(updateDir) && updateDir == "SQLite")
             {
-                Systems = GalacticSystemSerialization.LoadFromFile(DefaultSystemsFilePath);
+                galaxyStore = new DatabaseGalaxyStore(config, logger);
             }
             else
             {
-                Systems = new List<GalacticSystem>();
+                galaxyStore = new ThinGalaxyStore(config);
             }
+
+            galaxyStore.UpdateFromLocalFiles(cancellationToken);
+
+            calculator = new ScenicSuggestionCalculator(POIs, Systems);
+            initialised = true;
+
+            return Task.CompletedTask;
         }
 
-        public void SaveSystems()
-        {
-            lock (saveLock)
-            {
-                GalacticSystemSerialization.SaveToFile(Systems, DefaultSystemsFilePath);
-            }
-        }
 
         public ScenicSuggestionResults GenerateSuggestions(
             GalacticSystem from,
@@ -92,32 +80,15 @@ namespace EDScenicRouteCore
             float acceptableExtraDistance)
         {
             CheckInitialised();
-            var systemFrom = await ResolvePlaceByName(placeNameFrom);
-            var systemTo = await ResolvePlaceByName(placeNameTo);
+            var systemFrom = await galaxyStore.ResolvePlaceByName(placeNameFrom);
+            var systemTo = await galaxyStore.ResolvePlaceByName(placeNameTo);
             return GenerateSuggestions(systemFrom, systemTo, acceptableExtraDistance);
         }
 
-        private async Task<GalacticSystem> ResolvePlaceByName(string name)
+
+        public void SaveSystems()
         {
-            var poi = POIs.FirstOrDefault(p => p.Name == name);
-            if (poi != null)
-            {
-                return await ResolveSystemByName(poi.GalMapSearch);
-            }
-
-            return await ResolveSystemByName(name);
-        }
-
-        private async Task<GalacticSystem> ResolveSystemByName(string name)
-        {
-            var system = Systems.FirstOrDefault(s => s.Name == name);
-            if (system == null)
-            {
-                system = await systemEnquirer.GetSystemAsync(name);
-                Systems.Add(system);
-            }
-
-            return system;
+            galaxyStore.SaveSystems();
         }
 
         private void CheckInitialised()
@@ -126,6 +97,16 @@ namespace EDScenicRouteCore
             {
                 throw new InvalidOperationException("Not yet initialised!");
             }
+        }
+
+        public void UpdateSystemsFromFile(string s, CancellationToken cancellationToken)
+        {
+            galaxyStore.UpdateSystemsFromFile(s, cancellationToken);
+        }
+
+        public void UpdatePOIsFromFile(string s)
+        {
+            galaxyStore.UpdatePOIsFromFile(s);
         }
     }
 }
