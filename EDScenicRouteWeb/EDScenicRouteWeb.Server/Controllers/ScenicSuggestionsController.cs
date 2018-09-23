@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using EDScenicRouteCore;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using EDScenicRouteWeb.Server.Services;
@@ -59,6 +60,11 @@ namespace EDScenicRouteWeb.Server.Controllers
                 Logger.LogError(LoggingEvents.Timeout, $"{DateTime.Now} Timeout in GetSuggestions");
                 return NotFound("Elite Dangerous Star Map could not be consulted, please try again later.");
             }
+            catch (GalaxyNotInitialisedException)
+            {
+                Logger.LogError(LoggingEvents.NotYetInitialised, $"{DateTime.Now} Request received before galaxy initialised!");
+                return NotFound("Galaxy data server is busy initialising, please try again later.");
+            }
             catch (Exception ex)
             {
                 Logger.LogError(LoggingEvents.UnknownError, ex, $"{DateTime.Now} Error in GetSuggestions");
@@ -75,6 +81,7 @@ namespace EDScenicRouteWeb.Server.Controllers
             public const int UnknownError = 4001;
             public const int BadRouteDetails = 4002;
             public const int Timeout = 4003;
+            public const int NotYetInitialised = 4004;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace EDScenicRouteCore
         public IQueryable<GalacticSystem> Systems => galaxyStore.Systems;
 
 
-        public Task Initialise(CancellationToken cancellationToken)
+        public async Task Initialise(CancellationToken cancellationToken)
         {
             if (initialised)
             {
@@ -48,15 +48,13 @@ namespace EDScenicRouteCore
             }
             else
             {
-                galaxyStore = new ThinGalaxyStore(config);
+                galaxyStore = new ThinGalaxyStore(config, logger);
             }
 
-            galaxyStore.UpdateFromLocalFiles(cancellationToken);
+            await galaxyStore.UpdateFromLocalFiles(cancellationToken);
 
             calculator = new ScenicSuggestionCalculator(POIs, Systems);
             initialised = true;
-
-            return Task.CompletedTask;
         }
 
 
@@ -88,25 +86,16 @@ namespace EDScenicRouteCore
 
         public void SaveSystems()
         {
-            galaxyStore.SaveSystems();
+            galaxyStore.Save();
         }
 
         private void CheckInitialised()
         {
             if (!initialised)
             {
-                throw new InvalidOperationException("Not yet initialised!");
+                throw new GalaxyNotInitialisedException();
             }
         }
 
-        public void UpdateSystemsFromFile(string s, CancellationToken cancellationToken)
-        {
-            galaxyStore.UpdateSystemsFromFile(s, cancellationToken);
-        }
-
-        public void UpdatePOIsFromFile(string s)
-        {
-            galaxyStore.UpdatePOIsFromFile(s);
-        }
     }
 }

@@ -22,6 +22,7 @@ namespace EDScenicRouteCore.Data
         {
             config = configuration;
             logger = logWriter;
+            logger.Log(LogLevel.Information, "Using SQLite backing store.");
             var optionsBuilder = new DbContextOptionsBuilder<GalacticSystemContext>();
             optionsBuilder.UseSqlite(config.GetConnectionString("DefaultConnection"));
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
@@ -33,11 +34,11 @@ namespace EDScenicRouteCore.Data
             POIs = Context.GalacticPOIs.Include(x => x.Coordinates).ToList().AsQueryable();
         }
 
-        public void UpdateFromLocalFiles(CancellationToken cancellationToken)
+        public async Task UpdateFromLocalFiles(CancellationToken cancellationToken)
         {
             
-            ConsumeJSONFiles("POIUpdateDirectory", UpdatePOIsFromFile);
-            ConsumeJSONFiles("SystemUpdateDirectory", x => UpdateSystemsFromFile(x, cancellationToken));
+            await Task.Run(() => ConsumeJSONFiles("POIUpdateDirectory", UpdatePOIsFromFile));
+            await Task.Run(() => ConsumeJSONFiles("SystemUpdateDirectory", x => UpdateSystemsFromFile(x, cancellationToken)));
 
             void ConsumeJSONFiles(string configKey, Action<string> consumeAction)
             {
@@ -85,19 +86,19 @@ namespace EDScenicRouteCore.Data
             return system;
         }
 
-        public void UpdateSystemsFromFile(string filename, CancellationToken cancellationToken)
+        private void UpdateSystemsFromFile(string filename, CancellationToken cancellationToken)
         {
             DatabaseUpdater.UpdateSystemsFromFile(Context, filename, cancellationToken, logger);
         }
 
-        public void UpdatePOIsFromFile(string filename)
+        private void UpdatePOIsFromFile(string filename)
         {
             DatabaseUpdater.UpdatePOIsFromFile(Context, filename, logger);
         }
 
-        public void SaveSystems()
+        public void Save()
         {
-            Context.SaveChanges(true);
+            ;
         }
 
     }

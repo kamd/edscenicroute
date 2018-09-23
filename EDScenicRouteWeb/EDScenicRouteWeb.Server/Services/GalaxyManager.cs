@@ -19,26 +19,12 @@ namespace EDScenicRouteWeb.Server.Services
         }
 
         private const int AUTOCOMPLETE_RESULTS = 6;
-        private readonly TimeSpan SAVE_DELAY = new TimeSpan(0, 5, 0);
 
         public Galaxy EDGalaxy { get; }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await EDGalaxy.Initialise(cancellationToken);
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    await Task.Delay(SAVE_DELAY, cancellationToken);
-                }
-                catch (TaskCanceledException)
-                {
-                    return;
-                }
-
-                EDGalaxy.SaveSystems();
-            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

@@ -23,16 +23,7 @@ namespace EDSRConsole
             
             var galaxy = new Galaxy(config, new ConsoleLogger("Console", (s, level) => true, true));
             galaxy.Initialise(CancellationToken.None).Wait();
-
-            if (args.Contains("--updatesystems"))
-            {
-                Console.WriteLine(DateTime.Now);
-                galaxy.UpdateSystemsFromFile(args[1], CancellationToken.None);
-                Console.WriteLine(DateTime.Now);
-            }
-
-
-            
+         
             Console.WriteLine("System you are travelling from:");
             var fromName = Console.ReadLine();
             Console.WriteLine("System you are travelling to:");

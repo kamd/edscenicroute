@@ -14,9 +14,7 @@ namespace EDScenicRouteCore.Data
         IQueryable<GalacticPOI> POIs { get;  }
         Task<GalacticSystem> ResolvePlaceByName(string name);
         Task<GalacticSystem> ResolveSystemByName(string name);
-        void SaveSystems();
-        void UpdateSystemsFromFile(string s, CancellationToken cancellationToken);
-        void UpdatePOIsFromFile(string s);
-        void UpdateFromLocalFiles(CancellationToken cancellationToken);
+        void Save();
+        Task UpdateFromLocalFiles(CancellationToken cancellationToken);
     }
 }

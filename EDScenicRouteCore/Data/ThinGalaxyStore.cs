@@ -8,30 +8,35 @@ using System.Threading.Tasks;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace EDScenicRouteCore.Data
 {
     public class ThinGalaxyStore : IGalaxyStore
     {
+
+        private const int MAX_CACHED_SYSTEMS = 1000;
         private readonly EDSMSystemEnquirer systemEnquirer = new EDSMSystemEnquirer();
         private static readonly object saveLock = new object();
         private readonly string DefaultPOIFilePath = Path.GetTempPath() + @"pois.xml";
         private readonly string DefaultSystemsFilePath = Path.GetTempPath() + @"systems.xml";
-        private List<GalacticSystem> systems;
+        private readonly List<GalacticSystem> systems;
         private List<GalacticPOI> pois;
+        private readonly Random random = new Random();
 
         public IQueryable<GalacticSystem> Systems => systems.AsQueryable();
 
         public IQueryable<GalacticPOI> POIs => pois.AsQueryable();
 
-        public ThinGalaxyStore(IConfiguration configuration)
+        public ThinGalaxyStore(IConfiguration configuration, ILogger logger)
         {
-            
+            systems = new List<GalacticSystem>(MAX_CACHED_SYSTEMS);
+            logger.Log(LogLevel.Information, $"Using thin backing store. (Passthrough with cache of {MAX_CACHED_SYSTEMS})");
         }
 
-        public void UpdateFromLocalFiles(CancellationToken cancellationToken)
+        public async Task UpdateFromLocalFiles(CancellationToken cancellationToken)
         {
-            LoadPOIs().Wait(cancellationToken);
+            await LoadPOIs();
             LoadSystems();
         }
 
@@ -60,15 +65,11 @@ namespace EDScenicRouteCore.Data
         {
             if (File.Exists(DefaultSystemsFilePath))
             {
-                systems = GalacticSystemSerialization.LoadFromFile(DefaultSystemsFilePath);
-            }
-            else
-            {
-                systems = new List<GalacticSystem>();
+                systems.AddRange(GalacticSystemSerialization.LoadFromFile(DefaultSystemsFilePath));
             }
         }
 
-        public void SaveSystems()
+        public void Save()
         {
             lock (saveLock)
             {
@@ -93,20 +94,18 @@ namespace EDScenicRouteCore.Data
             if (system == null)
             {
                 system = await systemEnquirer.GetSystemAsync(name);
-                systems.Add(system);
+                if (systems.Count >= MAX_CACHED_SYSTEMS)
+                {
+                    systems[random.Next(MAX_CACHED_SYSTEMS)] = system;
+                }
+                else
+                {
+                    systems.Add(system);
+                }
             }
 
             return system;
         }
 
-        public void UpdateSystemsFromFile(string s, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdatePOIsFromFile(string s)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
