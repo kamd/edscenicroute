@@ -38,9 +38,16 @@ namespace EDScenicRouteCore.DataUpdates
             int x = 10000;
             foreach (var batch in systemsFromFile.Batch(x))
             {
-                var systemBatch = batch.Where(a => !context.GalacticSystems.Any(b => b.Id == a.Id)).ToImmutableList();
-                logger.Log(LogLevel.Debug, $"{systemBatch.Count} new systems in this batch of {x}");
-                context.GalacticSystems.AddRange(systemBatch);
+                var systemsInBatch = batch.ToList();
+                var newSystems = systemsInBatch.Where(a => !context.GalacticSystems.Any(b => b.Id == a.Id)).ToList();
+                var updatedSystems = systemsInBatch.Except(newSystems).ToList();
+
+                logger.Log(LogLevel.Debug, $"{updatedSystems.Count} updated systems in this batch of {x}");
+                context.GalacticSystems.UpdateRange(updatedSystems);
+
+                logger.Log(LogLevel.Debug, $"{newSystems.Count} new systems in this batch of {x}");
+                context.GalacticSystems.AddRange(newSystems);
+
                 context.SaveChanges();
                 i += x;
                 logger.Log(LogLevel.Debug, $"Processed {i} systems from file.");
