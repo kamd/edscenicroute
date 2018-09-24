@@ -9,5 +9,16 @@
   },
   "GalaxyStore": {
       "StoreType": "SQLite"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "System": "Warning",
+      "Microsoft": "Warning"
+    },
+    "Console":
+    {
+      "IncludeScopes": true
+    }
   }
 }
