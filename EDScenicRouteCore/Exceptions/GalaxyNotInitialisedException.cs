@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace EDScenicRouteCore
+namespace EDScenicRouteCore.Exceptions
 {
     public class GalaxyNotInitialisedException : Exception
     {

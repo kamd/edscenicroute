@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using EDScenicRouteCore.Exceptions;
 using EDScenicRouteCoreModels;
 
 using Vector3 = EDScenicRouteCoreModels.Vector3;
@@ -31,6 +32,11 @@ namespace EDScenicRouteCore
             GalacticSystem to,
             float acceptableExtraDistance)
         {
+            if (DistanceFromSol(to) < BUBBLE_IGNORE_RADIUS && DistanceFromSol(from) < BUBBLE_IGNORE_RADIUS)
+            {
+                // Warn user that their trip is very close to Earth and we won't have any useful POI suggestions!
+                throw new TripWithinBubbleException();
+            }
             var originalDistance = DistanceBetweenPoints(from, to);
             var suggestions = POIs.
                 Where(p => p.DistanceFromSol > BUBBLE_IGNORE_RADIUS). // Ignore the "bubble" of near-Earth POIs TODO

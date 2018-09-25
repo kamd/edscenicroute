@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using EDScenicRouteCore;
 using EDScenicRouteCore.DataUpdates;
+using EDScenicRouteCore.Exceptions;
 using EDScenicRouteCoreModels;
 using EDScenicRouteWeb.Server.Services;
 using EDScenicRouteWeb.Shared.DataValidation;
@@ -55,6 +56,13 @@ namespace EDScenicRouteWeb.Server.Controllers
                     $"{DateTime.Now} Name: {systemNotFoundException.SystemName}");
                 return NotFound($"System '{systemNotFoundException.SystemName}' was not found in the galaxy.");
             }
+            catch (TripWithinBubbleException)
+            {
+                Logger.LogWarning(LoggingEvents.TripWithinBubble,
+                    $"{DateTime.Now} Trip within bubble.");
+                return NotFound("Your trip is entirely within the 'bubble' of near-Earth systems, whose nearby POIs are excluded from this search."
+                + " Try setting your sights further afield!");
+            }
             catch (OperationCanceledException)
             {
                 Logger.LogError(LoggingEvents.Timeout, $"{DateTime.Now} Timeout in GetSuggestions");
@@ -82,6 +90,7 @@ namespace EDScenicRouteWeb.Server.Controllers
             public const int BadRouteDetails = 4002;
             public const int Timeout = 4003;
             public const int NotYetInitialised = 4004;
+            public const int TripWithinBubble = 4005;
         }
     }
 }
