@@ -17,9 +17,6 @@ namespace EDScenicRouteCore
 {
     public class Galaxy
     {
-
-        
-        private ScenicSuggestionCalculator calculator;
         private IGalaxyStore galaxyStore;
         private bool initialised;
         private readonly IConfiguration config;
@@ -31,10 +28,11 @@ namespace EDScenicRouteCore
             logger = logWriter;
         }
 
-        public IQueryable<GalacticPOI> POIs => galaxyStore.POIs;
-
-        public IQueryable<GalacticSystem> Systems => galaxyStore.Systems;
-
+        public GalaxyAgent GetAgent()
+        {
+            CheckInitialised();
+            return new GalaxyAgent(galaxyStore.GetAgent());
+        }
 
         public async Task Initialise(CancellationToken cancellationToken)
         {
@@ -53,37 +51,9 @@ namespace EDScenicRouteCore
             }
 
             await galaxyStore.UpdateFromLocalFiles(cancellationToken);
-
-            calculator = new ScenicSuggestionCalculator(POIs, Systems);
+            
             initialised = true;
         }
-
-
-        public ScenicSuggestionResults GenerateSuggestions(
-            GalacticSystem from,
-            GalacticSystem to,
-            float acceptableExtraDistance)
-        {
-            CheckInitialised();
-            return calculator.GenerateSuggestions(from, to, acceptableExtraDistance);
-        }
-
-        public async Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details)
-        {
-            return await GenerateSuggestions(details.FromSystemName, details.ToSystemName, details.AcceptableExtraDistance);
-        }
-
-        public async Task<ScenicSuggestionResults> GenerateSuggestions(
-            string placeNameFrom,
-            string placeNameTo,
-            float acceptableExtraDistance)
-        {
-            CheckInitialised();
-            var systemFrom = await galaxyStore.ResolvePlaceByName(placeNameFrom);
-            var systemTo = await galaxyStore.ResolvePlaceByName(placeNameTo);
-            return GenerateSuggestions(systemFrom, systemTo, acceptableExtraDistance);
-        }
-
 
         public void SaveSystems()
         {

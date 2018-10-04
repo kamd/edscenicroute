@@ -8,12 +8,9 @@ using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore.Data
 {
-    interface IGalaxyStore
+    internal interface IGalaxyStore
     {
-        IQueryable<GalacticSystem> Systems { get;  }
-        IQueryable<GalacticPOI> POIs { get;  }
-        Task<GalacticSystem> ResolvePlaceByName(string name);
-        Task<GalacticSystem> ResolveSystemByName(string name);
+        IGalaxyStoreAgent GetAgent();
         void Save();
         Task UpdateFromLocalFiles(CancellationToken cancellationToken);
     }

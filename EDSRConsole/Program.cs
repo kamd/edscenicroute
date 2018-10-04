@@ -23,6 +23,7 @@ namespace EDSRConsole
             
             var galaxy = new Galaxy(config, new ConsoleLogger("Console", (s, level) => true, true));
             galaxy.Initialise(CancellationToken.None).Wait();
+            var agent = galaxy.GetAgent();
          
             Console.WriteLine("System you are travelling from:");
             var fromName = Console.ReadLine();
@@ -38,7 +39,7 @@ namespace EDSRConsole
                         Console.WriteLine("Extra distance should be 500Ly or less.");
                         return;
                     }
-                    var results = galaxy.GenerateSuggestions(fromName, toName, extraDistance).Result;
+                    var results = agent.GenerateSuggestions(fromName, toName, extraDistance).Result;
                     Console.WriteLine($"Direct distance: {results.StraightLineDistance} Ly");
                     if (!results.Suggestions.Any())
                     {

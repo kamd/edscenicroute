@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EDScenicRouteCore.Data.Database;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using Microsoft.EntityFrameworkCore;
@@ -17,21 +18,23 @@ namespace EDScenicRouteCore.Data
     {
         private readonly IConfiguration config;
         private readonly ILogger logger;
+        private readonly DbContextOptionsBuilder<GalacticSystemContext> optionsBuilder;
+        private readonly IEnumerable<GalacticPOI> pois;
+        private readonly GalacticSystemContext context;
 
         public DatabaseGalaxyStore(IConfiguration configuration, ILogger logWriter)
         {
             config = configuration;
             logger = logWriter;
             logger.Log(LogLevel.Information, "Using SQLite backing store.");
-            var optionsBuilder = new DbContextOptionsBuilder<GalacticSystemContext>();
+            optionsBuilder = new DbContextOptionsBuilder<GalacticSystemContext>();
             optionsBuilder.UseSqlite(config.GetConnectionString("DefaultConnection"));
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
-            Context = new GalacticSystemContext(optionsBuilder.Options);
-            Context.ChangeTracker.AutoDetectChangesEnabled = false;
-
+            context = new GalacticSystemContext(optionsBuilder.Options);
+            
             // We need to examine every POI for each query, so read and cache the entire collection.
-            POIs = Context.GalacticPOIs.Include(x => x.Coordinates).ToList().AsQueryable();
+            pois = context.GalacticPOIs.Include(x => x.Coordinates).ToList();
         }
 
         public async Task UpdateFromLocalFiles(CancellationToken cancellationToken)
@@ -59,41 +62,22 @@ namespace EDScenicRouteCore.Data
             }
         }
 
-        public IQueryable<GalacticSystem> Systems => Context.GalacticSystems;
-
-        public IQueryable<GalacticPOI> POIs { get; }
-
-        private GalacticSystemContext Context { get; }
-
-        public async Task<GalacticSystem> ResolvePlaceByName(string name)
+        IGalaxyStoreAgent IGalaxyStore.GetAgent()
         {
-            var poi = POIs.FirstOrDefault(p => p.Name == name);
-            if (poi != null)
-            {
-                return await ResolveSystemByName(poi.GalMapSearch);
-            }
-
-            return await ResolveSystemByName(name);
+            var context = new GalacticSystemContext(optionsBuilder.Options);
+            context.ChangeTracker.AutoDetectChangesEnabled = false;
+            return new DatabaseGalaxyStoreAgent(context, pois);
         }
-
-        public async Task<GalacticSystem> ResolveSystemByName(string name)
-        {
-            var system = await Systems.FirstOrDefaultAsync(s => s.Name == name);
-            if (system == null)
-            {
-                throw new SystemNotFoundException() {SystemName = name};
-            }
-            return system;
-        }
+        
 
         private void UpdateSystemsFromFile(string filename, CancellationToken cancellationToken)
         {
-            DatabaseUpdater.UpdateSystemsFromFile(Context, filename, cancellationToken, logger);
+            DatabaseUpdater.UpdateSystemsFromFile(context, filename, cancellationToken, logger);
         }
 
         private void UpdatePOIsFromFile(string filename)
         {
-            DatabaseUpdater.UpdatePOIsFromFile(Context, filename, logger);
+            DatabaseUpdater.UpdatePOIsFromFile(context, filename, logger);
         }
 
         public void Save()

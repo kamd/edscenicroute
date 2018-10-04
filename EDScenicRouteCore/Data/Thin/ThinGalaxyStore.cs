@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EDScenicRouteCore.Data.Thin;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
 using Microsoft.Extensions.Configuration;
@@ -61,6 +62,11 @@ namespace EDScenicRouteCore.Data
             }
         }
 
+        IGalaxyStoreAgent IGalaxyStore.GetAgent()
+        {
+            return new ThinGalaxyStoreAgent(systems, pois, random, MAX_CACHED_SYSTEMS);
+        }
+
         private void LoadSystems()
         {
             if (File.Exists(DefaultSystemsFilePath))
@@ -77,35 +83,7 @@ namespace EDScenicRouteCore.Data
             }
         }
 
-        public async Task<GalacticSystem> ResolvePlaceByName(string name)
-        {
-            var poi = POIs.FirstOrDefault(p => p.Name == name);
-            if (poi != null)
-            {
-                return await ResolveSystemByName(poi.GalMapSearch);
-            }
-
-            return await ResolveSystemByName(name);
-        }
-
-        public async Task<GalacticSystem> ResolveSystemByName(string name)
-        {
-            var system = Systems.FirstOrDefault(s => s.Name == name);
-            if (system == null)
-            {
-                system = await systemEnquirer.GetSystemAsync(name);
-                if (systems.Count >= MAX_CACHED_SYSTEMS)
-                {
-                    systems[random.Next(MAX_CACHED_SYSTEMS)] = system;
-                }
-                else
-                {
-                    systems.Add(system);
-                }
-            }
-
-            return system;
-        }
+        
 
     }
 }

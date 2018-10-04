@@ -21,14 +21,14 @@ namespace EDScenicRouteWeb.Server.Controllers
     [Route("api/[controller]")]
     public class ScenicSuggestionsController : Controller
     {
+        private readonly IGalaxyManager manager;
+        private GalaxyAgent galaxy;
 
         public ScenicSuggestionsController(IGalaxyManager galaxyManager, ILogger<ScenicSuggestionsController> logger)
         {
-            Galaxy = galaxyManager;
+            manager = galaxyManager;
             Logger = logger;
         }
-
-        private IGalaxyManager Galaxy { get; }
 
         private ILogger<ScenicSuggestionsController> Logger { get; }
 
@@ -41,11 +41,13 @@ namespace EDScenicRouteWeb.Server.Controllers
                 Logger.LogWarning(LoggingEvents.BadRouteDetails, errorMessage, DateTime.Now);
                 return BadRequest(errorMessage);
             }
+
             Logger.LogInformation(LoggingEvents.GetSuggestions,
                 $"{DateTime.Now} [{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
             try
             {
-                var results = await Galaxy.GenerateSuggestions(details);
+                galaxy = manager.GetAgent();
+                var results = await galaxy.GenerateSuggestions(details);
                 Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess,
                     $"{DateTime.Now} POIs found: {results.Suggestions.Count}");
                 return Ok(results);

@@ -88,7 +88,7 @@ namespace EDScenicRouteWeb.Client.Services
             var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(JsonUtil.Serialize(details), Encoding.UTF8, "application/json"));
             if (! response.IsSuccessStatusCode)
             {
-                ErrorMessage = $"Terrible error: {await response.Content.ReadAsStringAsync()}";
+                ErrorMessage = await response.Content.ReadAsStringAsync();
                 StraightLineDistanceOfTrip = 0f;
                 Suggestions = new List<ScenicSuggestion>();
                 CurrentlySearching = false;

@@ -13,46 +13,30 @@ namespace EDScenicRouteWeb.Server.Services
 {
     public class GalaxyManager : IGalaxyManager, IHostedService
     {
+        private readonly Galaxy galaxy;
+
         public GalaxyManager(IConfiguration configuration, ILogger<GalaxyManager> logger)
         {
-            EDGalaxy = new Galaxy(configuration, logger);
+            galaxy = new Galaxy(configuration, logger);
         }
-
-        private const int AUTOCOMPLETE_RESULTS = 6;
-
-        public Galaxy EDGalaxy { get; }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await EDGalaxy.Initialise(cancellationToken);
+            await galaxy.Initialise(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            EDGalaxy.SaveSystems();
+            galaxy.SaveSystems();
             return Task.CompletedTask;
         }
 
-        public async Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details)
+        public EDScenicRouteCore.GalaxyAgent GetAgent()
         {
-            var results = await EDGalaxy.GenerateSuggestions(details);
-            return results;
+            return galaxy.GetAgent();
         }
 
-        public async Task<List<string>> AutocompletePOINames(string input)
-        {
-            input = input.ToLower();
-            return await Task.Run(() =>
-                EDGalaxy.POIs.
-                    Where(p => p.Name.ToLower().Contains(input)).
-                    Select(p => p.Name).
-                    Concat(
-                        EDGalaxy.Systems.
-                            Where(p => p.Name.ToLower().Contains(input)).
-                            Select(p => p.Name)).
-                    Take(AUTOCOMPLETE_RESULTS).
-                    ToList());
-        }
+
 
         private ILogger<GalaxyManager> Logger { get; }
     }

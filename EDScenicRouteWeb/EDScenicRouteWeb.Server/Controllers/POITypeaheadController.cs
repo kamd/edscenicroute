@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDScenicRouteCore;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +13,15 @@ namespace EDScenicRouteWeb.Server.Controllers
     {
         public POITypeaheadController(IGalaxyManager galaxyManager)
         {
-            Galaxy = galaxyManager;
+            Galaxy = galaxyManager.GetAgent();
         }
 
-        private IGalaxyManager Galaxy { get; }
+        private GalaxyAgent Galaxy { get; }
 
         [HttpGet("{input}", Name = "Get")]
         public async Task<List<string>> Get(string input)
         {
-            return await Galaxy.AutocompletePOINames(input);
+            return await Galaxy.PlaceNamesContainingString(input);
         }
     }
 }

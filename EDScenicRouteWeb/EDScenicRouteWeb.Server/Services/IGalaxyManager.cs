@@ -8,7 +8,6 @@ namespace EDScenicRouteWeb.Server.Services
 {
     public interface IGalaxyManager
     {
-        Task<ScenicSuggestionResults> GenerateSuggestions(RouteDetails details);
-        Task<List<string>> AutocompletePOINames(string input);
+        EDScenicRouteCore.GalaxyAgent GetAgent();
     }
 }
