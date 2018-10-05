@@ -49,7 +49,7 @@ namespace EDScenicRouteTest
             var system2 = new GalacticSystem() {Coordinates = new Vector3(10, 10, 10), Name = "Destination System"};
             var systems = new List<GalacticSystem>() {system1, system2};
 
-            var calculator = new ScenicSuggestionCalculator(pois.AsQueryable(), systems.AsQueryable());
+            var calculator = new ScenicSuggestionCalculator(pois.AsQueryable(), systems.AsQueryable(), 5f);
 
             var results = calculator.GenerateSuggestions(system1, system2, 15f);
             Assert.AreEqual(

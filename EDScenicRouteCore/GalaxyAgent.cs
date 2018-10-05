@@ -11,13 +11,14 @@ namespace EDScenicRouteCore
     public class GalaxyAgent
     {
         private const int PLACE_NAME_RESULTS_COUNT = 6;
+        private const float BUBBLE_IGNORE_RADIUS = 200f;
 
         private readonly ScenicSuggestionCalculator calculator;
         private readonly IGalaxyStoreAgent store;
 
         internal GalaxyAgent(IGalaxyStoreAgent galaxyStore)
         {
-            calculator = new ScenicSuggestionCalculator(galaxyStore.POIs, galaxyStore.Systems);
+            calculator = new ScenicSuggestionCalculator(galaxyStore.POIs, galaxyStore.Systems, BUBBLE_IGNORE_RADIUS);
             store = galaxyStore;
         }
 

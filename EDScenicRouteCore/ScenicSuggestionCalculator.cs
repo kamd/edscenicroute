@@ -15,10 +15,11 @@ namespace EDScenicRouteCore
     {
 
         public const int MAX_SUGGESTIONS = 500;
-        public const float BUBBLE_IGNORE_RADIUS = 200f;
+        public readonly float bubbleIgnoreRadius;
 
-        public ScenicSuggestionCalculator(IQueryable<GalacticPOI> pois, IQueryable<GalacticSystem> systems)
+        public ScenicSuggestionCalculator(IQueryable<GalacticPOI> pois, IQueryable<GalacticSystem> systems, float bubbleIgnoreRadius)
         {
+            this.bubbleIgnoreRadius = bubbleIgnoreRadius;
             POIs = pois;
             Systems = systems;
         }
@@ -32,14 +33,14 @@ namespace EDScenicRouteCore
             GalacticSystem to,
             float acceptableExtraDistance)
         {
-            if (DistanceFromSol(to) < BUBBLE_IGNORE_RADIUS && DistanceFromSol(from) < BUBBLE_IGNORE_RADIUS)
+            if (DistanceFromSol(to) < bubbleIgnoreRadius && DistanceFromSol(from) < bubbleIgnoreRadius)
             {
                 // Warn user that their trip is very close to Earth and we won't have any useful POI suggestions!
                 throw new TripWithinBubbleException();
             }
             var originalDistance = DistanceBetweenPoints(from, to);
             var suggestions = POIs.
-                Where(p => p.DistanceFromSol > BUBBLE_IGNORE_RADIUS). // Ignore the "bubble" of near-Earth POIs TODO
+                Where(p => p.DistanceFromSol > bubbleIgnoreRadius). // Ignore the "bubble" of near-Earth POIs
                 Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
                 Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
                 OrderBy(ss => ss.ExtraDistance).
