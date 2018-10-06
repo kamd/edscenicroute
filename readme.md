@@ -11,12 +11,12 @@ intended route.
 
 ## Frameworks and Build Requirements
 
-The server side runs on [ASP.NET Core 2.0](https://github.com/aspnet/Home), on
+The server side runs on [ASP.NET Core](https://github.com/aspnet/Home), on
 top of .NET Core 2.1.
 
 The client side uses the new and experimental [Blazor](https://blazor.net/) framework,
- C# running on WebAssembly. Currently this project uses Blazor 0.3,
-requirements to build are listed on the [Blazor blog](https://blogs.msdn.microsoft.com/webdev/2018/05/02/blazor-0-3-0-experimental-release-now-available/).
+ C# running on WebAssembly. Currently this project uses Blazor 0.6,
+requirements to build are listed on the [Blazor website](https://blazor.net/docs/get-started.html).
 
 ## Live Version
 
