@@ -4,8 +4,8 @@
 @using System.Threading.Tasks
 @using EDScenicRouteCoreModels
 @using EDScenicRouteWeb.Client.Shared
-@using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using Microsoft.AspNetCore.Blazor.Components
+@using Microsoft.JSInterop
 
 <div class="card border-primary mb-3">
     <div class="card-body ssview">
@@ -86,9 +86,9 @@
         }
     }
 
-    private void SelectBox()
+    private async Task SelectBox()
     {
-        RegisteredFunction.Invoke<bool>("selectbox", ItemId);
+        await JSRuntime.Current.InvokeAsync<string>("extraJsFunctions.selectid", ItemId);
     }
 
     private string IconClass => Item == null ? "" : GalacticPOIIcons.IconClassForGalacticPOIType(Item.POI.Type);

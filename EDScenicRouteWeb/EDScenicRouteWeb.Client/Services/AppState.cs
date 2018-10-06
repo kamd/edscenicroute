@@ -9,6 +9,7 @@ using EDScenicRouteCoreModels;
 using Microsoft.AspNetCore.Blazor;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using EDScenicRouteWeb.Shared.DataValidation;
+using Microsoft.JSInterop;
 
 namespace EDScenicRouteWeb.Client.Services
 {
@@ -85,7 +86,7 @@ namespace EDScenicRouteWeb.Client.Services
             }
 
             // Call API
-            var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(JsonUtil.Serialize(details), Encoding.UTF8, "application/json"));
+            var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(Json.Serialize(details), Encoding.UTF8, "application/json"));
             if (! response.IsSuccessStatusCode)
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
@@ -95,7 +96,7 @@ namespace EDScenicRouteWeb.Client.Services
                 NotifyStateChanged();
                 return;
             }
-            var results = JsonUtil.Deserialize<ScenicSuggestionResults>(await response.Content.ReadAsStringAsync());
+            var results = Json.Deserialize<ScenicSuggestionResults>(await response.Content.ReadAsStringAsync());
             StraightLineDistanceOfTrip = results.StraightLineDistance;
             Suggestions = results.Suggestions;
             CurrentlySearching = false;
@@ -112,7 +113,7 @@ namespace EDScenicRouteWeb.Client.Services
                 return new List<string>();
             }
 
-            var results = JsonUtil.Deserialize<List<string>>(await response.Content.ReadAsStringAsync());
+            var results = Json.Deserialize<List<string>>(await response.Content.ReadAsStringAsync());
             return results;
         }
 

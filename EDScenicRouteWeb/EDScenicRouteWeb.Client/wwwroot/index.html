@@ -12,12 +12,7 @@
 <body>
     <app>Loading...</app>
     <script src="css/bootstrap/bootstrap-native-v4.min.js"></script>
-<script type="blazor-boot"></script>
-<script>
-    Blazor.registerFunction('selectbox', (id) => {
-        window.getSelection().selectAllChildren(document.getElementById(id));
-        return true;
-    });
-</script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="JSFunctions.js"></script>
 </body>
 </html>
