@@ -14,12 +14,17 @@ namespace EDScenicRouteCore.Data
             
         }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GalacticSystem>()
                 .Ignore(s => s.GalMapUrl);
             modelBuilder.Entity<GalacticPOI>().OwnsOne(x => x.Coordinates);
             modelBuilder.Entity<GalacticSystem>().OwnsOne(x => x.Coordinates);
+            modelBuilder.Entity<GalacticPOI>().Property(x => x.Name).
+                HasColumnType("TEXT COLLATE NOCASE");
+            modelBuilder.Entity<GalacticSystem>().Property(x => x.Name).
+                HasColumnType("TEXT COLLATE NOCASE");
             modelBuilder.Entity<GalacticPOI>().HasIndex(x => x.Name);
             modelBuilder.Entity<GalacticSystem>().HasIndex(x => x.Name);
         }

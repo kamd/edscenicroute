@@ -55,7 +55,7 @@ namespace EDScenicRouteCore
                     Select(p => p.Name).
                     Concat(
                         store.Systems.
-                            Where(p => p.Name.ToLower().Contains(input)).
+                            Where(p => p.Name.StartsWith(input)).
                             Select(p => p.Name)).
                     Take(PLACE_NAME_RESULTS_COUNT).
                     ToList());
