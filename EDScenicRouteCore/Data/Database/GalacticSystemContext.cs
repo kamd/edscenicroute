@@ -20,6 +20,8 @@ namespace EDScenicRouteCore.Data
                 .Ignore(s => s.GalMapUrl);
             modelBuilder.Entity<GalacticPOI>().OwnsOne(x => x.Coordinates);
             modelBuilder.Entity<GalacticSystem>().OwnsOne(x => x.Coordinates);
+            modelBuilder.Entity<GalacticPOI>().HasIndex(x => x.Name);
+            modelBuilder.Entity<GalacticSystem>().HasIndex(x => x.Name);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

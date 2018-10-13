@@ -2,14 +2,16 @@
 using EDScenicRouteCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EDScenicRouteCore.Migrations
 {
     [DbContext(typeof(GalacticSystemContext))]
-    partial class GalacticSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20181010162405_IndexNames")]
+    partial class IndexNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
