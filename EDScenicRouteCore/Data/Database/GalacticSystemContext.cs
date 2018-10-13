@@ -31,7 +31,6 @@ namespace EDScenicRouteCore.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=galaxy.db");
         }
 
         public DbSet<GalacticSystem> GalacticSystems { get; set; }

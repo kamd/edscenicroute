@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -21,9 +22,9 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<GalacticSy
 
         var builder = new DbContextOptionsBuilder<GalacticSystemContext>();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-        builder.UseSqlite(connectionString);
+        var connectionStringBuilder =
+            new SqliteConnectionStringBuilder { DataSource = configuration.GetConnectionString("DefaultConnection") };
+        builder.UseSqlite(connectionStringBuilder.ToString());
 
         return new GalacticSystemContext(builder.Options);
     }

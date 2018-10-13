@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EDScenicRouteCore.Data.Database;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,9 @@ namespace EDScenicRouteCore.Data
 {
     public class DatabaseGalaxyStore : IGalaxyStore
     {
+        // With use of indices, no SQL command should take longer than this:
+        private const int DATABASE_TIMEOUT_SECONDS = 3;
+
         private readonly IConfiguration config;
         private readonly ILogger logger;
         private readonly DbContextOptionsBuilder<GalacticSystemContext> optionsBuilder;
@@ -28,7 +32,9 @@ namespace EDScenicRouteCore.Data
             logger = logWriter;
             logger.Log(LogLevel.Information, "Using SQLite backing store.");
             optionsBuilder = new DbContextOptionsBuilder<GalacticSystemContext>();
-            optionsBuilder.UseSqlite(config.GetConnectionString("DefaultConnection"));
+            var connectionStringBuilder =
+                new SqliteConnectionStringBuilder {DataSource = config.GetConnectionString("DefaultConnection")};
+            optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             context = new GalacticSystemContext(optionsBuilder.Options);
@@ -66,6 +72,7 @@ namespace EDScenicRouteCore.Data
         {
             var context = new GalacticSystemContext(optionsBuilder.Options);
             context.ChangeTracker.AutoDetectChangesEnabled = false;
+            context.Database.SetCommandTimeout(DATABASE_TIMEOUT_SECONDS);
             return new DatabaseGalaxyStoreAgent(context, pois);
         }
         
