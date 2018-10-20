@@ -16,7 +16,7 @@ namespace EDScenicRouteCore.Data.Database
         public DatabaseGalaxyStoreAgent(GalacticSystemContext galacticSystemContext, IEnumerable<GalacticPOI> pois)
         {
             context = galacticSystemContext;
-            POIs = pois.AsQueryable();
+            POIs = pois;
         }
 
         public async Task<GalacticSystem> ResolvePlaceByName(string name)
@@ -41,6 +41,6 @@ namespace EDScenicRouteCore.Data.Database
         }
 
         public IQueryable<GalacticSystem> Systems => context.GalacticSystems;
-        public IQueryable<GalacticPOI> POIs { get; }
+        public IEnumerable<GalacticPOI> POIs { get; }
     }
 }

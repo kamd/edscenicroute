@@ -53,13 +53,13 @@ namespace EDScenicRouteTest
 
             var results = calculator.GenerateSuggestions(system1, system2, 15f);
             Assert.AreEqual(
-                new List<ScenicSuggestion>() {new ScenicSuggestion(poi1, 0.08541584f), new ScenicSuggestion(poi3, 0.4010582f) },
+                new List<ScenicSuggestion>() {new ScenicSuggestion(poi1, 0.08541584f, 48.1481476f), new ScenicSuggestion(poi3, 0.4010582f, 29.62963f) },
                 results.Suggestions);
             Assert.AreEqual(15.5884571f, results.StraightLineDistance);
 
             results = calculator.GenerateSuggestions(system1, system2, 0.2f);
             Assert.AreEqual(
-                new List<ScenicSuggestion>() { new ScenicSuggestion(poi1, 0.08541584f) }, results.Suggestions);
+                new List<ScenicSuggestion>() { new ScenicSuggestion(poi1, 0.08541584f, 48.1481476f) }, results.Suggestions);
             Assert.AreEqual(15.5884571f, results.StraightLineDistance);
 
             results = calculator.GenerateSuggestions(system1, system2, 0f);
@@ -71,9 +71,9 @@ namespace EDScenicRouteTest
             Assert.AreEqual(
                 new List<ScenicSuggestion>()
                 {
-                    new ScenicSuggestion(poi1, 0.08541584f),
-                    new ScenicSuggestion(poi3, 0.4010582f),
-                    new ScenicSuggestion(poi2, 16.4832211f)
+                    new ScenicSuggestion(poi1, 0.08541584f, 48.1481476f),
+                    new ScenicSuggestion(poi3, 0.4010582f, 29.62963f),
+                    new ScenicSuggestion(poi2, 16.4832211f, 100f)
                 },
                 results.Suggestions);
             Assert.AreEqual(15.5884571f, results.StraightLineDistance);

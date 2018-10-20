@@ -17,14 +17,14 @@ namespace EDScenicRouteCore
         public const int MAX_SUGGESTIONS = 500;
         public readonly float bubbleIgnoreRadius;
 
-        public ScenicSuggestionCalculator(IQueryable<GalacticPOI> pois, IQueryable<GalacticSystem> systems, float bubbleIgnoreRadius)
+        public ScenicSuggestionCalculator(IEnumerable<GalacticPOI> pois, IQueryable<GalacticSystem> systems, float bubbleIgnoreRadius)
         {
             this.bubbleIgnoreRadius = bubbleIgnoreRadius;
             POIs = pois;
             Systems = systems;
         }
 
-        private IQueryable<GalacticPOI> POIs { get; }
+        private IEnumerable<GalacticPOI> POIs { get; }
 
         private IQueryable<GalacticSystem> Systems { get; }
 
@@ -41,7 +41,11 @@ namespace EDScenicRouteCore
             var originalDistance = DistanceBetweenPoints(from, to);
             var suggestions = POIs.
                 Where(p => p.DistanceFromSol > bubbleIgnoreRadius). // Ignore the "bubble" of near-Earth POIs
-                Select(p => new ScenicSuggestion(p, ExtraDistanceIncurred(from, to, p, originalDistance))).
+                Select(p =>
+                {
+                    var result = ExtraDistanceIncurred(@from, to, p, originalDistance);
+                    return new ScenicSuggestion(p, result.extraDistance, result.percentageAlongRoute);
+                }).
                 Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
                 OrderBy(ss => ss.ExtraDistance).
                 Take(MAX_SUGGESTIONS).
@@ -60,10 +64,29 @@ namespace EDScenicRouteCore
             return System.Numerics.Vector3.Distance(ToNumericsVector3(point), System.Numerics.Vector3.Zero);
         }
 
-        private static float ExtraDistanceIncurred(GalacticSystem a, GalacticSystem b, GalacticPOI poi, float originalDistance)
+        private static (float extraDistance, float percentageAlongRoute) ExtraDistanceIncurred(
+            GalacticSystem systemA, GalacticSystem systemB, GalacticPOI poi, float originalDistance)
         {
-            var distanceViaPOI = DistanceBetweenPoints(a, poi) + DistanceBetweenPoints(poi, b);
-            return distanceViaPOI - originalDistance;
+            var a = ToNumericsVector3(systemA.Coordinates);
+            var b = ToNumericsVector3(systemB.Coordinates);
+            var p = ToNumericsVector3(poi.Coordinates);
+
+            var aToPOI = System.Numerics.Vector3.Distance(a, p);
+
+            if (a == b)
+            {
+                return (aToPOI, 0f);
+            }
+
+            // Find the closest point to the POI along the straight line route, expressed as 0 (closest to a) to 1 (closest to b).
+            float distanceSquared = originalDistance * originalDistance;
+            float distanceAlongRoute = Math.Max(0f, Math.Min(1f, System.Numerics.Vector3.Dot(p - a, b - a) / distanceSquared));
+
+            var bToPOI = System.Numerics.Vector3.Distance(b, p);
+            var distanceViaPOI = aToPOI + bToPOI;
+            var extraDistance = distanceViaPOI - originalDistance;
+            var approxPercentageAlongRoute = distanceAlongRoute * 100f;
+            return (extraDistance, approxPercentageAlongRoute);
         }
 
         private static float DistanceBetweenPoints(IGalacticPoint a, IGalacticPoint b)

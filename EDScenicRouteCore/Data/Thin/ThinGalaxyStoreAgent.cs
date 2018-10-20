@@ -59,6 +59,6 @@ namespace EDScenicRouteCore.Data.Thin
         }
 
         public IQueryable<GalacticSystem> Systems => systems.AsQueryable();
-        public IQueryable<GalacticPOI> POIs => pois.AsQueryable();
+        public IEnumerable<GalacticPOI> POIs => pois;
     }
 }
