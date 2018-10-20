@@ -24,7 +24,26 @@
     padding: 0.75rem;
 }
 
+.ssview-col {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+.ssview-faralong-left {
+    padding-right: 0;
+}
+
+.ssview-faralong-right {
+    padding-left: 0;
+}
+
 .ssview-info {
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: small;
+}
+
+.ssview-system {
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -48,6 +67,10 @@ code {
 
 .filterbar {
     margin-bottom: 0.5rem;
+}
+
+.filtergroup {
+    width: initial;
 }
 
 

@@ -6,6 +6,6 @@ namespace EDScenicRouteCoreModels
 {
     public static class VersionInfo
     {
-        public static Version Version { get; } = new Version(1, 1, 2);
+        public static Version Version { get; } = new Version(1, 1, 3);
     }
 }

@@ -32,7 +32,10 @@
             </div>
 
             <div class="row justify-content-center filterbar">
-                <div class="btn-group btn-group-toggle flex-wrap" data-toggle="buttons">
+                <div class="btn-group input-group filtergroup btn-group-toggle flex-wrap" data-toggle="buttons">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Filter POIs:</span>
+                    </div>
                     <label class="filterbuttonlabel btn btn-primary">
                         <button type="button" class="filterbutton btn btn-primary" onclick="@(() => FilterAll(false))">All Off</button>
                     </label>
@@ -41,8 +44,7 @@
                         <label class="btn btn-primary @(poiFilters[poiType] ? "active" : "")" data-toggle="tooltip"
                                title="@(GalacticPOIEnumConverter.ConvertToString(poiType))">
                             <input checked="@(poiFilters[poiType])" autocomplete="off" type="checkbox"
-                                   onchange="@(eventArgs => OnFilterClick(poiType, (bool) eventArgs.Value))"
-                                   />
+                                   onchange="@(eventArgs => OnFilterClick(poiType, (bool) eventArgs.Value))" />
                             <span class="@(GalacticPOIIcons.IconClassForGalacticPOIType(poiType))"></span>
                         </label>
                     }
@@ -51,6 +53,23 @@
                     </label>
                 </div>
             </div>
+
+            <div class="row justify-content-center filterbar">
+                <div class="btn-group input-group filtergroup btn-group-toggle" data-toggle="buttons">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Sort by:</span>
+                    </div>
+                    <label class="btn btn-primary @(SortByExtraJumps ? "active" : "")">
+                        <input name="sortby" id="sortby-extradistance" autocomplete="off" checked="" type="checkbox"
+                               bind="@SortByExtraJumps"/>Extra Jumps
+                    </label>
+                    <label class="btn btn-primary @(SortByDistanceAlongRoute ? "active" : "")">
+                        <input name="sortby" id="sortby-distancealongroute" autocomplete="off" type="checkbox"
+                               bind="@SortByDistanceAlongRoute"/>Distance Along Route
+                    </label>
+                </div>
+            </div>
+
             <SuggestionsPagination bind-PageNumber="@pageNumber" ScenicSuggestionPages="@ScenicSuggestionPages" />
             foreach (var item in FilteredSuggestions.Skip(pageNumber * SUGGESTIONS_PER_PAGE).Take(SUGGESTIONS_PER_PAGE))
             {
@@ -67,7 +86,7 @@
 
 @functions {
 
-    private const int SUGGESTIONS_PER_PAGE = 30;
+    private const int SUGGESTIONS_PER_PAGE = 25;
 
     [Parameter]
     bool CurrentlySearching { get; set; }
@@ -102,7 +121,11 @@
 
     private List<GalacticPOIType> POITypes { get; } = Enum.GetValues(typeof(GalacticPOIType)).Cast<GalacticPOIType>().ToList();
 
-    private IReadOnlyList<ScenicSuggestion> FilteredSuggestions => ScenicSuggestions?.Where(s => poiFilters[s.POI.Type]).ToList();
+    private IReadOnlyList<ScenicSuggestion> FilteredSuggestions =>
+        ScenicSuggestions?.
+            Where(s => poiFilters[s.POI.Type]).
+            OrderBy(s => SortByExtraJumps ? s.ExtraDistance : s.PercentageAlongRoute).
+            ToList();
 
     private int ScenicSuggestionPages => (int)Math.Ceiling((FilteredSuggestions.Count) / (float)SUGGESTIONS_PER_PAGE);
 
@@ -118,6 +141,14 @@
 
     private bool searchCompleted;
     private int _pageNumber;
+
+    private bool SortByExtraJumps { get; set; }
+
+    private bool SortByDistanceAlongRoute
+    {
+        get => !SortByExtraJumps;
+        set => SortByExtraJumps = !value;
+    }
 
     protected override void OnInit()
     {

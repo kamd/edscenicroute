@@ -20,22 +20,38 @@
             </div>
             <div class="col-12 col-sm">
                 <div class="row align-items-center justify-content-center">
-                    <div class="col">
+                    <div class="col ssview-col">
                         <div class="ssview-info">
                             <span>@ExtraJumps(Item.ExtraDistance), <span class="text-info">@Item.ExtraDistance.ToString("N") Ly</span></span>
                         </div>
                     </div>
                 </div>
                 <div class="row align-items-center justify-content-center">
-                    <div class="col">
+                    <div class="col ssview-col">
                         <div class="progress poi-jumps-bar">
-                            <div class="progress-bar progress-bar-striped @ProgressBarColour" role="progressbar" style="width: @DistancePercent%" aria-valuenow="@DistancePercent" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar progress-bar @ProgressBarColour" role="progressbar" 
+                                 style="width: @DistancePercent%" aria-valuenow="@DistancePercent" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row align-items-center justify-content-center">
+                   <div class="col-xl-4 col-lg-5 col-md-6 col-sm-7 ssview-col ssview-faralong-left">
+                        <div class="ssview-info">
+                            <span>@Item.PercentageAlongRoute.ToString("##0")% <i class="fas fa-angle-double-right"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 col-lg-7 col-md-6 col-sm-5 ssview-col ssview-faralong-right">
+                        <div class="progress poi-jumps-bar">
+                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: @Item.PercentageAlongRoute%" 
+                                 aria-valuenow="@Item.PercentageAlongRoute" aria-valuemin="0" aria-valuemax="100"  data-toggle="tooltip"
+                                 title="@Item.PercentageAlongRoute.ToString("##0")% along the route"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col">
-                <div class="ssview-info">
+                <div class="ssview-system">
                     System:<br />
                     <code id="@(ItemId)" onclick="@(SelectBox)">@Item.POI.GalMapSearch</code>
                 </div>
