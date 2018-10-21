@@ -23,6 +23,7 @@ namespace EDScenicRouteWeb.Client.Services
         public string ErrorMessage { get; set; }
         public bool SearchCompleted { get; set; } = false;
         public float StraightLineDistanceOfTrip { get; private set; }
+        public RouteDetails RouteDetails { get; set; } = new RouteDetails();
 
         public float ShipJumpRange
         {
@@ -66,15 +67,15 @@ namespace EDScenicRouteWeb.Client.Services
             http = httpInstance;
         }
 
-        public async Task GetSuggestions(RouteDetails details)
+        public async Task GetSuggestions()
         {
-            AcceptableExtraDistance = details.AcceptableExtraDistance;
+            AcceptableExtraDistance = RouteDetails.AcceptableExtraDistance;
             CurrentlySearching = true;
             NotifyStateChanged();
             SearchCompleted = true;
 
             // Validate locally
-            var (success, errorMessage) = RouteDetailsValidator.ValidateRouteDetails(details);
+            var (success, errorMessage) = RouteDetailsValidator.ValidateRouteDetails(RouteDetails);
             if (!success)
             {
                 ErrorMessage = errorMessage;
@@ -86,7 +87,9 @@ namespace EDScenicRouteWeb.Client.Services
             }
 
             // Call API
-            var response = await http.PostAsync("/api/scenicsuggestions", new StringContent(Json.Serialize(details), Encoding.UTF8, "application/json"));
+            var response = await http.PostAsync("/api/scenicsuggestions",
+                new StringContent(Json.Serialize(RouteDetails), Encoding.UTF8, "application/json"));
+
             if (! response.IsSuccessStatusCode)
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();

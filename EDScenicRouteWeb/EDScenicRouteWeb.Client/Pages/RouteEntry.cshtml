@@ -14,13 +14,13 @@
                 <div class="form-group">
                     <fieldset>
                         <label class="control-label" for="fromTextBox">From:</label>
-                        <TypeAheadTextBox State="@State" Placeholder="Sol" Id="fromTextBox" bind-POI="@fromPOI" />
+                        <TypeAheadTextBox State="@State" Placeholder="@DEFAULT_FROM" Id="fromTextBox" bind-POI="@fromPOI" />
                     </fieldset>
                 </div>
                 <div class="form-group">
                     <fieldset>
                         <label class="control-label" for="toTextBox">To:</label>
-                        <TypeAheadTextBox State="@State" Placeholder="Colonia" Id="toTextBox" bind-POI="@toPOI" />
+                        <TypeAheadTextBox State="@State" Placeholder="@DEFAULT_TO" Id="toTextBox" bind-POI="@toPOI" />
                     </fieldset>
                 </div>
             </div>
@@ -44,15 +44,14 @@
 @functions {
 
     private const int MAX_EXTRA_JUMPS = 500;
-
-    [Parameter]
-    Func<RouteDetails, Task> OnSearch { get; set; }
+    private const string DEFAULT_FROM = "Sol";
+    private const string DEFAULT_TO = "Colonia";
 
     private async void OnSearchClick()
     {
-        details.FromSystemName = string.IsNullOrEmpty(fromPOI) ? "Sol" : fromPOI;
-        details.ToSystemName = string.IsNullOrEmpty(toPOI) ? "Colonia" : toPOI;
-        await OnSearch(details);
+        State.RouteDetails.FromSystemName = string.IsNullOrEmpty(fromPOI) ? DEFAULT_FROM : fromPOI;
+        State.RouteDetails.ToSystemName = string.IsNullOrEmpty(toPOI) ? DEFAULT_TO : toPOI;
+        await State.GetSuggestions();
     }
 
     [Parameter]
@@ -66,12 +65,6 @@
             RecalculateAcceptableExtraDistance();
         }
     }
-
-    private readonly RouteDetails details = new RouteDetails()
-    {
-        FromSystemName = "Sol",
-        ToSystemName = "Colonia"
-    };
 
     private int acceptableExtraJumps;
     private AppState state;
@@ -106,7 +99,19 @@
 
     private void RecalculateAcceptableExtraDistance()
     {
-        details.AcceptableExtraDistance = State.ShipJumpRange * acceptableExtraJumps;
+        State.RouteDetails.AcceptableExtraDistance = State.ShipJumpRange * acceptableExtraJumps;
+    }
+
+    protected override void OnInit()
+    {
+        if (state.RouteDetails.FromSystemName != DEFAULT_FROM && !string.IsNullOrEmpty(state.RouteDetails.FromSystemName))
+        {
+            fromPOI = state.RouteDetails.FromSystemName;
+        }
+        if (state.RouteDetails.ToSystemName != DEFAULT_TO && !string.IsNullOrEmpty(state.RouteDetails.ToSystemName))
+        {
+            toPOI = state.RouteDetails.ToSystemName;
+        }
     }
 
 }
