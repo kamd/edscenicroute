@@ -12,11 +12,10 @@ intended route.
 ## Frameworks and Build Requirements
 
 The server side runs on [ASP.NET Core](https://github.com/aspnet/Home), on
-top of .NET Core 2.1.
+top of .NET Core 2.2.
 
-The client side uses the new and experimental [Blazor](https://blazor.net/) framework,
- C# running on WebAssembly. Currently this project uses Blazor 0.6,
-requirements to build are listed on the [Blazor website](https://blazor.net/docs/get-started.html).
+The client side is written in [TypeScript](https://www.typescriptlang.org/), using the [React](https://reactjs.org/) framework,
+with the help of [Create React App](https://facebook.github.io/create-react-app/). See the latter for build requirements, namely npm.
 
 ## Live Version
 

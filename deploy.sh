@@ -4,13 +4,13 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd $DIR
 pushd EDScenicRouteWeb/EDScenicRouteWeb.Server/
 rm -rf bin/Release
-mkdir -p bin/Release/netcoreapp2.1
-ln -s $PUBLISHDIR bin/Release/netcoreapp2.1/publish
+mkdir -p bin/Release/netcoreapp2.2
+ln -s $PUBLISHDIR bin/Release/netcoreapp2.2/publish
 dotnet publish -c Release -p:PublishWithAspNetCoreTargetManifest=false
-cp EDScenicRouteWeb.Client.blazor.config $PUBLISHDIR
 popd
-pushd EDScenicRouteWeb/EDScenicRouteWeb.Client
-rsync -vra --delete wwwroot $PUBLISHDIR
+pushd EDScenicRouteWeb/EDScenicRouteWeb.Server/edclientapp
+npm run build
+rsync -vra --delete build $PUBLISHDIR
 popd
 exit 0
 

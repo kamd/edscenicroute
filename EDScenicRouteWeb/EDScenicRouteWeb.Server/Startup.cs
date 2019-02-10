@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -11,9 +10,11 @@ using System.Linq;
 using System.Net.Mime;
 using AspNetCoreRateLimit;
 using EDScenicRouteWeb.Server.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace EDScenicRouteWeb.Server
@@ -51,15 +52,6 @@ namespace EDScenicRouteWeb.Server
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
-            services.AddResponseCompression(options =>
-            {
-                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                {
-                    MediaTypeNames.Application.Octet,
-                    WasmMediaTypeNames.Application.Wasm
-                });
-            });
-
             var logger = services
                 .BuildServiceProvider()
                 .GetRequiredService<ILogger<GalaxyManager>>();
@@ -67,15 +59,17 @@ namespace EDScenicRouteWeb.Server
             var galaxyManager = new GalaxyManager(Configuration, logger);
             services.AddSingleton<IGalaxyManager, GalaxyManager>(x => galaxyManager);
             services.AddSingleton<IHostedService, GalaxyManager>(x => galaxyManager);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "build"; });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseIpRateLimiting();
-
-            app.UseResponseCompression();
 
             if (env.IsDevelopment())
             {
@@ -87,8 +81,17 @@ namespace EDScenicRouteWeb.Server
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
 
-            app.UseBlazor<Client.Program>();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "edclientapp";
 
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
             
         }
     }
