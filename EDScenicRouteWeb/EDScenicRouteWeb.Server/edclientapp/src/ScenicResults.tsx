@@ -52,6 +52,7 @@ export class ScenicResults extends Component<Props, State> {
     
     FilterAll = (filter: boolean) => {
         this.setState({POIFilters: this.state.POIFilters.map(f => new POIFilter(f.Type, filter))});
+        this.props.OnPageChanged(0);
     };
     
     FilterClick = (filter: POIFilter) => {
@@ -61,6 +62,7 @@ export class ScenicResults extends Component<Props, State> {
             newFilter.Show = !newFilter.Show;    
         }
         this.setState({POIFilters: newFilters});
+        this.props.OnPageChanged(0);
     };
     
     FilteredSuggestions = () => {
