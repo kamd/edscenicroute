@@ -22,21 +22,22 @@
     text-align: center;
 }
 
+@media (min-width: 576px) {
+    .ssview-col {
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
+    }
+    .ssview-faralong-left {
+        padding-right: 0;
+    }
+
+    .ssview-faralong-right {
+        padding-left: 0;
+    }
+}
+
 .ssview {
     padding: 0.75rem;
-}
-
-.ssview-col {
-    padding-left: 0.4rem;
-    padding-right: 0.4rem;
-}
-
-.ssview-faralong-left {
-    padding-right: 0;
-}
-
-.ssview-faralong-right {
-    padding-left: 0;
 }
 
 .ssview-info {
