@@ -4,18 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDScenicRouteCore.Migrations
 {
     [DbContext(typeof(GalacticSystemContext))]
-    [Migration("20180923154435_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20191124225907_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("EDScenicRouteCoreModels.GalacticPOI", b =>
                 {
@@ -24,11 +27,15 @@ namespace EDScenicRouteCore.Migrations
 
                     b.Property<float>("DistanceFromSol");
 
-                    b.Property<string>("GalMapSearch");
+                    b.Property<string>("GalMapSearch")
+                        .HasMaxLength(600);
 
-                    b.Property<string>("GalMapUrl");
+                    b.Property<string>("GalMapUrl")
+                        .HasMaxLength(1000);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(200) UNIQUE")
+                        .HasMaxLength(200);
 
                     b.Property<int>("Type");
 
@@ -42,7 +49,9 @@ namespace EDScenicRouteCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(200) UNIQUE")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -60,6 +69,8 @@ namespace EDScenicRouteCore.Migrations
                             b1.Property<float>("Y");
 
                             b1.Property<float>("Z");
+
+                            b1.HasKey("GalacticPOIId");
 
                             b1.ToTable("GalacticPOIs");
 
@@ -81,6 +92,8 @@ namespace EDScenicRouteCore.Migrations
                             b1.Property<float>("Y");
 
                             b1.Property<float>("Z");
+
+                            b1.HasKey("GalacticSystemId");
 
                             b1.ToTable("GalacticSystems");
 

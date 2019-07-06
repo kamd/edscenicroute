@@ -1,14 +1,14 @@
 {
-  "server.urls": "http://localhost:6788",
+  "urls": "http://0.0.0.0:6788",
   "ConnectionStrings": {
     "DefaultConnection": "galaxy.db" 
   },
   "GalaxyUpdates": {
-    "POIUpdateDirectory": "D:\\edsmdata\\pois",
-    "SystemUpdateDirectory": "D:\\edsmdata\\splitjson"
+    "POIUpdateDirectory": "/tmp/pois",
+    "SystemUpdateDirectory": "/tmp/systems"
   },
   "GalaxyStore": {
-      "StoreType": "SQLite"
+      "StoreType": "PostgreSQL"
   },
   "Logging": {
     "LogLevel": {

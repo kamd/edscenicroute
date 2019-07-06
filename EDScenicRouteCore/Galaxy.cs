@@ -40,10 +40,22 @@ namespace EDScenicRouteCore
             {
                 throw new InvalidOperationException("Already initialised.");
             }
-            var updateDir = config.GetSection("GalaxyStore")["StoreType"];
-            if (!string.IsNullOrEmpty(updateDir) && updateDir == "SQLite")
+            var storeType = config.GetSection("GalaxyStore")["StoreType"];
+            BackingStoreType dbType;
+            switch (storeType)
             {
-                galaxyStore = new DatabaseGalaxyStore(config, logger);
+                case "Thin":
+                    dbType = BackingStoreType.Thin;
+                    break;
+                case "PostgreSQL":
+                    dbType = BackingStoreType.PostgreSQL;
+                    break;
+                default:
+                    throw new ArgumentException("Wrong backing type in configuration.");
+            }
+            if (dbType == BackingStoreType.PostgreSQL)
+            {
+                galaxyStore = new DatabaseGalaxyStore(config, logger, dbType);
             }
             else
             {

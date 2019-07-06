@@ -48,8 +48,7 @@ namespace EDScenicRouteCore
 
         public async Task<List<string>> PlaceNamesContainingString(string input)
         {
-            input = input.ToLower();
-            string likeInput = input + "%";
+            string likeInput = $"%{input}%";
             return await Task.Run(() =>
             {
                 var pois = store.POIs.Where(p => p.Name.ToLower().
@@ -58,10 +57,7 @@ namespace EDScenicRouteCore
                     OrderBy(p => p)
                     .Take(PLACE_NAME_RESULTS_COUNT);
 
-                // Effectively Systems.Where(p => p.Name.StartsWith(input)), but the translated SQL is bad and doesn't use the database 
-                // index where appropriate, so we explicitly invoke the Like function.
-                // Contains() cannot use a database index and is therefore too slow to use here.
-                var systems = store.Systems.Where(s => EF.Functions.Like(s.Name, likeInput)).
+                var systems = store.Systems.Where(s => EF.Functions.ILike(s.Name, likeInput)).
                     Select(s => s.Name).
                     OrderBy(s => s).
                     Take(PLACE_NAME_RESULTS_COUNT);

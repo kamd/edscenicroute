@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using EDScenicRouteCore.Data.Database;
 using EDScenicRouteCore.DataUpdates;
 using EDScenicRouteCoreModels;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,19 +24,41 @@ namespace EDScenicRouteCore.Data
         private readonly DbContextOptionsBuilder<GalacticSystemContext> optionsBuilder;
         private readonly IEnumerable<GalacticPOI> pois;
         private readonly GalacticSystemContext context;
+        private static bool _ensureExists;
 
-        public DatabaseGalaxyStore(IConfiguration configuration, ILogger logWriter)
+        public DatabaseGalaxyStore(IConfiguration configuration, ILogger logWriter, BackingStoreType dbType)
         {
             config = configuration;
             logger = logWriter;
-            logger.Log(LogLevel.Information, "Using SQLite backing store.");
+            
             optionsBuilder = new DbContextOptionsBuilder<GalacticSystemContext>();
-            var connectionStringBuilder =
-                new SqliteConnectionStringBuilder {DataSource = config.GetConnectionString("DefaultConnection")};
-            optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
+            
+            if (dbType == BackingStoreType.PostgreSQL)
+            {
+                logger.Log(LogLevel.Information, "Using Postgres backing store.");
+                optionsBuilder.UseNpgsql(new Npgsql.NpgsqlConnectionStringBuilder()
+                {
+                    Host = Environment.GetEnvironmentVariable("DBHOST"),
+                    Port = int.Parse(Environment.GetEnvironmentVariable("DBPORT")),
+                    Database = Environment.GetEnvironmentVariable("DBDATABASE"),
+                    Username = Environment.GetEnvironmentVariable("DBUSER"),
+                    Password = Environment.GetEnvironmentVariable("DBPASS")
+                }.ToString());
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported backing type.");
+            }
+            
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             context = new GalacticSystemContext(optionsBuilder.Options);
+
+            if (!_ensureExists)
+            {
+                context.Database.Migrate();
+                _ensureExists = true;
+            }
             
             // We need to examine every POI for each query, so read and cache the entire collection.
             pois = context.GalacticPOIs.Include(x => x.Coordinates).ToList();

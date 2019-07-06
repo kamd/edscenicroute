@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  edscenicroute:
+    build:
+      context: .
+      dockerfile: ./EDScenicRouteWeb/EDScenicRouteWeb.Server/Dockerfile
+    ports:
+      - "6788:6788"
+    network_mode: "host"
+    image: edscenicroute:latest
+    environment:
+     - DBHOST=${DBHOST}
+     - DBPORT=${DBPORT}
+     - DBDATABASE=${DBDATABASE}
+     - DBUSER=${DBUSER}
+     - DBPASS=${DBPASS}

@@ -3,6 +3,7 @@ using EDScenicRouteCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDScenicRouteCore.Migrations
 {
@@ -13,7 +14,9 @@ namespace EDScenicRouteCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("EDScenicRouteCoreModels.GalacticPOI", b =>
                 {
@@ -22,18 +25,19 @@ namespace EDScenicRouteCore.Migrations
 
                     b.Property<float>("DistanceFromSol");
 
-                    b.Property<string>("GalMapSearch");
+                    b.Property<string>("GalMapSearch")
+                        .HasMaxLength(600);
 
-                    b.Property<string>("GalMapUrl");
+                    b.Property<string>("GalMapUrl")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("VARCHAR(200) UNIQUE")
+                        .HasMaxLength(200);
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name");
 
                     b.ToTable("GalacticPOIs");
                 });
@@ -44,11 +48,10 @@ namespace EDScenicRouteCore.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT COLLATE NOCASE");
+                        .HasColumnType("VARCHAR(200) UNIQUE")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name");
 
                     b.ToTable("GalacticSystems");
                 });
@@ -64,6 +67,8 @@ namespace EDScenicRouteCore.Migrations
                             b1.Property<float>("Y");
 
                             b1.Property<float>("Z");
+
+                            b1.HasKey("GalacticPOIId");
 
                             b1.ToTable("GalacticPOIs");
 
@@ -85,6 +90,8 @@ namespace EDScenicRouteCore.Migrations
                             b1.Property<float>("Y");
 
                             b1.Property<float>("Z");
+
+                            b1.HasKey("GalacticSystemId");
 
                             b1.ToTable("GalacticSystems");
 

@@ -21,12 +21,16 @@ namespace EDScenicRouteCore.Data
                 .Ignore(s => s.GalMapUrl);
             modelBuilder.Entity<GalacticPOI>().OwnsOne(x => x.Coordinates);
             modelBuilder.Entity<GalacticSystem>().OwnsOne(x => x.Coordinates);
-            modelBuilder.Entity<GalacticPOI>().Property(x => x.Name).
-                HasColumnType("TEXT COLLATE NOCASE");
-            modelBuilder.Entity<GalacticSystem>().Property(x => x.Name).
-                HasColumnType("TEXT COLLATE NOCASE");
-            modelBuilder.Entity<GalacticPOI>().HasIndex(x => x.Name);
-            modelBuilder.Entity<GalacticSystem>().HasIndex(x => x.Name);
+            modelBuilder.Entity<GalacticPOI>().Property(x => x.Name)
+                .HasColumnType("VARCHAR(200) UNIQUE")
+                .HasMaxLength(200);
+            modelBuilder.Entity<GalacticPOI>().Property(x => x.GalMapUrl)
+                .HasMaxLength(1000);
+            modelBuilder.Entity<GalacticPOI>().Property(x => x.GalMapSearch)
+                .HasMaxLength(600);
+            modelBuilder.Entity<GalacticSystem>().Property(x => x.Name)
+                .HasColumnType("VARCHAR(200) UNIQUE")
+                .HasMaxLength(200);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

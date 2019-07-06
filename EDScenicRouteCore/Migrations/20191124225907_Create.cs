@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDScenicRouteCore.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,11 +12,11 @@ namespace EDScenicRouteCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Type = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    GalMapSearch = table.Column<string>(nullable: true),
-                    GalMapUrl = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(type: "VARCHAR(200) UNIQUE", maxLength: 200, nullable: true),
+                    GalMapSearch = table.Column<string>(maxLength: 600, nullable: true),
+                    GalMapUrl = table.Column<string>(maxLength: 1000, nullable: true),
                     Coordinates_X = table.Column<float>(nullable: false),
                     Coordinates_Y = table.Column<float>(nullable: false),
                     Coordinates_Z = table.Column<float>(nullable: false),
@@ -31,8 +32,8 @@ namespace EDScenicRouteCore.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(type: "VARCHAR(200) UNIQUE", maxLength: 200, nullable: true),
                     Coordinates_X = table.Column<float>(nullable: false),
                     Coordinates_Y = table.Column<float>(nullable: false),
                     Coordinates_Z = table.Column<float>(nullable: false)
@@ -41,6 +42,9 @@ namespace EDScenicRouteCore.Migrations
                 {
                     table.PrimaryKey("PK_GalacticSystems", x => x.Id);
                 });
+            
+            migrationBuilder.Sql("CREATE INDEX \"TRGM_IX_GalacticSystems_Name\" ON \"public\".\"GalacticSystems\" USING gin (\"Name\" gin_trgm_ops);");
+            migrationBuilder.Sql("CREATE INDEX \"TRGM_IX_GalacticPOIs_Name\" ON \"public\".\"GalacticPOIs\" USING gin (\"Name\" gin_trgm_ops);");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

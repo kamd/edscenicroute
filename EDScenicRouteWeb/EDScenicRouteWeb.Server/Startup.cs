@@ -42,6 +42,7 @@ namespace EDScenicRouteWeb.Server
 
             //load ip rules from appsettings.json
             services.Configure<IpRateLimitPolicies>(Configuration.GetSection("IpRateLimitPolicies"));
+            
 
             // inject counter and rules stores
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
@@ -62,14 +63,14 @@ namespace EDScenicRouteWeb.Server
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "build"; });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "edclientapp"; });
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseIpRateLimiting();
+           // app.UseIpRateLimiting();
 
             if (env.IsDevelopment())
             {
