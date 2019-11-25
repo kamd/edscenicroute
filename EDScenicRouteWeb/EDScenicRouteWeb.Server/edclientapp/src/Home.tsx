@@ -64,12 +64,13 @@ export class Home extends Component<Props, State> {
                 },
                 body: JSON.stringify({FromSystemName: from, ToSystemName: to, AcceptableExtraDistance: acceptableExtraDistance})
             });
-        
+
+        const content = await response.json();
         if (!response.ok){
-            this.setState({ErrorMessage: "Error", StraightLineDistanceOfTrip: 0, Suggestions: [], CurrentlySearching: false});
+            this.setState({ErrorMessage: "Error: " + content, StraightLineDistanceOfTrip: 0, Suggestions: [], CurrentlySearching: false});
             return;
         } 
-        const content = await response.json();
+        
         this.setState({
             StraightLineDistanceOfTrip: content.StraightLineDistance,
             Suggestions: content.Suggestions,
