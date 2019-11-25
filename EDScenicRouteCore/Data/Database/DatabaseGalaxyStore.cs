@@ -66,9 +66,7 @@ namespace EDScenicRouteCore.Data
 
         public async Task UpdateFromLocalFiles(CancellationToken cancellationToken)
         {
-            
             await Task.Run(() => ConsumeJSONFiles("POIUpdateDirectory", UpdatePOIsFromFile));
-            await Task.Run(() => ConsumeJSONFiles("SystemUpdateDirectory", x => UpdateSystemsFromFile(x, cancellationToken)));
 
             void ConsumeJSONFiles(string configKey, Action<string> consumeAction)
             {
@@ -95,12 +93,6 @@ namespace EDScenicRouteCore.Data
             context.ChangeTracker.AutoDetectChangesEnabled = false;
             context.Database.SetCommandTimeout(DATABASE_TIMEOUT_SECONDS);
             return new DatabaseGalaxyStoreAgent(context, pois);
-        }
-        
-
-        private void UpdateSystemsFromFile(string filename, CancellationToken cancellationToken)
-        {
-            DatabaseUpdater.UpdateSystemsFromFile(context, filename, cancellationToken, logger);
         }
 
         private void UpdatePOIsFromFile(string filename)
