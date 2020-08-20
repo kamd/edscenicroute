@@ -59,7 +59,6 @@ namespace EDScenicRouteWeb.Server.Services
 
                 var systems = repository.Systems.Where(s => EF.Functions.ILike(s.Name, likeInput)).
                     Select(s => s.Name).
-                    OrderBy(s => s).
                     Take(PLACE_NAME_RESULTS_COUNT);
 
                 return pois.Concat(systems).Distinct().Take(PLACE_NAME_RESULTS_COUNT).ToList();

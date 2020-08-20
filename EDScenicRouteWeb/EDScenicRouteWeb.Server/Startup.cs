@@ -121,6 +121,7 @@ namespace EDScenicRouteWeb.Server
             if (!Directory.Exists(updateDir))
             {
                 logger.Log(LogLevel.Information, $"POI folder {updateDir} did not exist, skipping import.");
+                return;
             }
             if (!string.IsNullOrEmpty(updateDir))
             {
