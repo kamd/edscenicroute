@@ -1,10 +1,10 @@
-﻿using EDScenicRouteCore.DataUpdates;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using EDScenicRouteCoreModels;
+using EDScenicRouteWeb.Server.Data.DataUpdates;
+using EDScenicRouteWeb.Server.Models;
 
 namespace EDScenicRouteCoreTests.DataUpdates
 {

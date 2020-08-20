@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EDScenicRouteCore;
-using EDScenicRouteCore.Data;
-using EDScenicRouteCoreModels;
+using EDScenicRouteWeb.Server.Models;
+using EDScenicRouteWeb.Server.Services;
 using NUnit.Framework;
 
 namespace EDScenicRouteTest

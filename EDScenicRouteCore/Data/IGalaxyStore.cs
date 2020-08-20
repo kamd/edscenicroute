@@ -8,7 +8,7 @@ using EDScenicRouteCoreModels;
 
 namespace EDScenicRouteCore.Data
 {
-    internal interface IGalaxyStore
+    public interface IGalaxyStore
     {
         IGalaxyStoreAgent GetAgent();
         void Save();

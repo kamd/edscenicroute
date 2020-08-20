@@ -1,6 +1,8 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -8,13 +10,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading;
+using System.Threading.Tasks;
 using AspNetCoreRateLimit;
+using EDScenicRouteWeb.Server.Data;
+using EDScenicRouteWeb.Server.Data.DataUpdates.Database;
+using EDScenicRouteWeb.Server.Repositories;
 using EDScenicRouteWeb.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace EDScenicRouteWeb.Server
@@ -53,13 +60,18 @@ namespace EDScenicRouteWeb.Server
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
-            var logger = services
-                .BuildServiceProvider()
-                .GetRequiredService<ILogger<GalaxyManager>>();
+            services.AddScoped<IGalaxyService, GalaxyService>();
+            services.AddScoped<IGalaxyRepository, DatabaseGalaxyRepository>();
+            services.AddDbContext<GalacticSystemContext>(options => options.UseNpgsql(new Npgsql.NpgsqlConnectionStringBuilder()
+            {
+                Host = Environment.GetEnvironmentVariable("DBHOST"),
+                Port = int.Parse(Environment.GetEnvironmentVariable("DBPORT")),
+                Database = Environment.GetEnvironmentVariable("DBDATABASE"),
+                Username = Environment.GetEnvironmentVariable("DBUSER"),
+                Password = Environment.GetEnvironmentVariable("DBPASS"),
+                Timeout = int.Parse(Environment.GetEnvironmentVariable("DBTIMEOUT"))
+            }.ToString()));
             
-            var galaxyManager = new GalaxyManager(Configuration, logger);
-            services.AddSingleton<IGalaxyManager, GalaxyManager>(x => galaxyManager);
-            services.AddSingleton<IHostedService, GalaxyManager>(x => galaxyManager);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
@@ -93,7 +105,32 @@ namespace EDScenicRouteWeb.Server
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
+
+            var context = app.ApplicationServices.GetRequiredService<GalacticSystemContext>();
+            context.Database.Migrate();
+
+            var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+            var config = app.ApplicationServices.GetRequiredService<IConfiguration>();
+            ConsumePoisFromJsonFile(context, logger, config);
+        }
+
+        private void ConsumePoisFromJsonFile(GalacticSystemContext context, ILogger logger, IConfiguration config)
+        {
+            const string configKey = "POIUpdateDirectory";
+            var updateDir = config.GetSection("GalaxyUpdates")[configKey];
+            if (!Directory.Exists(updateDir))
+            {
+                logger.Log(LogLevel.Information, $"POI folder {updateDir} did not exist, skipping import.");
+            }
+            if (!string.IsNullOrEmpty(updateDir))
+            {
+                logger.Log(LogLevel.Information, $"Checking {configKey} {updateDir}...");
+                foreach (var jsonFile in Directory.GetFiles(updateDir, "*.json"))
+                {
+                    DatabaseUpdater.UpdatePOIsFromFile(context, jsonFile, logger);
+                    File.Delete(jsonFile);
+                }
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ export class TypeAheadTextBox extends Component<Props, State>{
     TextChanged = async (e: React.FormEvent<HTMLInputElement>) => {
         const input = e.currentTarget.value;
         this.props.OnInputChange(input);
-        if (input.length >= 3){
+        if (input.length >= 4){
            const response = await fetch(`${this.props.ApiUrl}${input}`, 
                {
                    headers: {
@@ -56,7 +56,6 @@ export class TypeAheadTextBox extends Component<Props, State>{
                 <Input id={this.props.Id} type="text" placeholder={this.props.Placeholder}
                        value={this.props.Value} 
                        onInput={this.TextChanged}
-                       onChange={this.TextChanged}
                 />
                 <div className={"dropdown-menu" + (this.state.Suggestions.length > 0 ? " show" : undefined)}>
                     {this.state.Suggestions.map((x, i) =>

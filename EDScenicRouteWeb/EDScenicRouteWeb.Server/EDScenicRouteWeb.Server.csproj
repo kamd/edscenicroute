@@ -9,11 +9,8 @@
     <PackageReference Include="AspNetCoreRateLimit" Version="3.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\EDScenicRouteCore\EDScenicRouteCore.csproj" />
-    <ProjectReference Include="..\EDScenicRouteWeb.Shared\EDScenicRouteWeb.Shared.csproj" />
+    <PackageReference Include="Npgsql" Version="4.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
   </ItemGroup>
 
   <ItemGroup>

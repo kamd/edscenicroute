@@ -15,13 +15,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 # Copy csprojs and restore from nuget
 COPY EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj ./EDScenicRouteWeb/EDScenicRouteWeb.Server/
-COPY EDScenicRouteWeb/EDScenicRouteWeb.Shared/EDScenicRouteWeb.Shared.csproj ./EDScenicRouteWeb/EDScenicRouteWeb.Shared/
-COPY EDScenicRouteCore/EDScenicRouteCore.csproj ./EDScenicRouteCore/
-COPY EDScenicRouteCoreModels/EDScenicRouteCoreModels.csproj ./EDScenicRouteCoreModels/
-COPY EDScenicRouteTest/EDScenicRouteTest.csproj ./EDScenicRouteTest/
-COPY EDScenicRouteCore.sln ./
 RUN export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
-RUN dotnet restore
+RUN dotnet restore EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj
 # Copy everything else and build
 COPY . ./
 RUN dotnet publish EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj -c Release -o /app/out

@@ -5,28 +5,25 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using EDScenicRouteCore;
-using EDScenicRouteCore.DataUpdates;
-using EDScenicRouteCore.Exceptions;
-using EDScenicRouteCoreModels;
+using EDScenicRouteWeb.Server.Exceptions;
 using EDScenicRouteWeb.Server.Services;
-using EDScenicRouteWeb.Shared.DataValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
+using RouteDetails = EDScenicRouteWeb.Server.Models.RouteDetails;
+using RouteDetailsValidator = EDScenicRouteWeb.Server.Services.RouteDetailsValidator;
 
 namespace EDScenicRouteWeb.Server.Controllers
 {
     [Route("api/[controller]")]
     public class ScenicSuggestionsController : Controller
     {
-        private readonly IGalaxyManager manager;
-        private GalaxyAgent galaxy;
+        private readonly IGalaxyService galaxy;
 
-        public ScenicSuggestionsController(IGalaxyManager galaxyManager, ILogger<ScenicSuggestionsController> logger)
+        public ScenicSuggestionsController(IGalaxyService galaxyService, ILogger<ScenicSuggestionsController> logger)
         {
-            manager = galaxyManager;
+            galaxy = galaxyService;
             Logger = logger;
         }
 
@@ -46,7 +43,6 @@ namespace EDScenicRouteWeb.Server.Controllers
                 $"{DateTime.Now} [{details.FromSystemName}] - [{details.ToSystemName}] : {details.AcceptableExtraDistance}");
             try
             {
-                galaxy = manager.GetAgent();
                 var results = await galaxy.GenerateSuggestions(details);
                 Logger.LogInformation(LoggingEvents.GetSuggestionsSuccess,
                     $"{DateTime.Now} POIs found: {results.Suggestions.Count}");
