@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using EDScenicRouteWeb.Server.Models;
@@ -17,7 +18,9 @@ namespace EDScenicRouteTest
         {
             var poi1 = new GalacticPOI()
             {
-                Coordinates = new Vector3(6, 5, 5),
+                X = 6,
+                Y = 5,
+                Z = 5,
                 DistanceFromSol = 250,
                 Id = 1,
                 Name = "Exciting POI",
@@ -26,7 +29,9 @@ namespace EDScenicRouteTest
 
             var poi2 = new GalacticPOI()
             {
-                Coordinates = new Vector3(5, 5, 20),
+                X = 5,
+                Y = 5,
+                Z = 20,
                 DistanceFromSol = 300,
                 Id = 2,
                 Name = "Farawayland",
@@ -35,7 +40,9 @@ namespace EDScenicRouteTest
 
             var poi3 = new GalacticPOI()
             {
-                Coordinates = new Vector3(3, 5, 3),
+                X = 3,
+                Y = 5,
+                Z = 3,
                 DistanceFromSol = 220,
                 Id = 3,
                 Name = "On the way POI",
@@ -44,8 +51,8 @@ namespace EDScenicRouteTest
 
             var pois = new List<GalacticPOI>() {poi1, poi2, poi3};
 
-            var system1 = new GalacticSystem() {Coordinates = new Vector3(1, 1, 1), Name = "Home System"};
-            var system2 = new GalacticSystem() {Coordinates = new Vector3(10, 10, 10), Name = "Destination System"};
+            var system1 = new GalacticSystem() {X = 1, Y = 1, Z = 1, Name = "Home System"};
+            var system2 = new GalacticSystem() {X = 10, Y = 10, Z = 10, Name = "Destination System"};
             var systems = new List<GalacticSystem>() {system1, system2};
 
             var calculator = new ScenicSuggestionCalculator(pois.AsQueryable(), systems.AsQueryable(), 5f);

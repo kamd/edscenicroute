@@ -1,22 +1,18 @@
 export class GalacticPOI {
 
-    constructor(Id: number, Type: GalacticPOITypeEnum, Name: string, GalMapSearch: string, GalMapUrl: string, Coordinates: Vector3, DistanceFromSol: number) {
-        this.Id = Id;
-        this.Type = Type;
-        this.Name = Name;
-        this.GalMapSearch = GalMapSearch;
-        this.GalMapUrl = GalMapUrl;
-        this.Coordinates = Coordinates;
-        this.DistanceFromSol = DistanceFromSol;
-    }
-
-    Id: number;
-    Type: GalacticPOITypeEnum;
-    Name: string;
-    GalMapSearch: string;
-    GalMapUrl: string;
-    Coordinates: Vector3;
-    DistanceFromSol: number;
+    constructor(
+        public Id: number,
+        public Type: GalacticPOITypeEnum,
+        public Name: string,
+        public GalMapSearch: string,
+        public GalMapUrl: string,
+        public X: number,
+        public Y: number,
+        public Z: number,
+        public Body: string,
+        public Latitude: number,
+        public Longitude: number,
+        public DistanceFromSol: number) { }
 }
 
 export enum GalacticPOITypeEnum
@@ -35,19 +31,17 @@ export enum GalacticPOITypeEnum
     deepSpaceOutpost,
     mysteryPOI,
     organicPOI,
-    geyserPOI
+    geyserPOI,
+    alienCivStructure = 101,
+    organicStructure,
+    geologyAnomalies
 }
 
 export class GalacticPOIType {
-    Type: GalacticPOITypeEnum;
-    Name: string;
-    DisplayClass: string;
-
-    constructor(Type: GalacticPOITypeEnum, Name: string, DisplayClass: string) {
-        this.Type = Type;
-        this.Name = Name;
-        this.DisplayClass = DisplayClass;
-    }
+    constructor(
+        public Type: GalacticPOITypeEnum,
+        public Name: string,
+        public DisplayClass: string) { }
 }
 
 export class GalacticPOIHelper {
@@ -67,7 +61,10 @@ export class GalacticPOIHelper {
             {Type: GalacticPOITypeEnum.deepSpaceOutpost, Name: "Deep Space Outpost", DisplayClass: "fas fa-building"},
             {Type: GalacticPOITypeEnum.mysteryPOI, Name: "Mystery POI", DisplayClass: "fas fa-question-circle"},
             {Type: GalacticPOITypeEnum.organicPOI, Name: "Organic POI", DisplayClass: "fas fa-tree"},
-            {Type: GalacticPOITypeEnum.geyserPOI, Name: "Geyser POI", DisplayClass: "fas fa-cloud-upload-alt"}
+            {Type: GalacticPOITypeEnum.geyserPOI, Name: "Geyser POI", DisplayClass: "fas fa-cloud-upload-alt"},
+            {Type: GalacticPOITypeEnum.alienCivStructure, Name: "Alien Civilisation Structure", DisplayClass: "fas fa-robot"},
+            {Type: GalacticPOITypeEnum.organicStructure, Name: "Organic Codex Entry", DisplayClass: "fas fa-seedling"},
+            {Type: GalacticPOITypeEnum.geologyAnomalies, Name: "Geological/Anomalous Codex Entry", DisplayClass: "fas fa-mountain"}
         ];
         return alltypes;
     };
@@ -75,17 +72,4 @@ export class GalacticPOIHelper {
     NullType = () => {
         return {Name: "Unknown", Type: GalacticPOITypeEnum.mysteryPOI, DisplayClass: ""}
     };
-}
-
-export class Vector3{
-
-    constructor(X: number, Y: number, Z: number) {
-        this.X = X;
-        this.Y = Y;
-        this.Z = Z;
-    }
-
-    X: number;
-    Y: number;
-    Z: number;
 }

@@ -76,6 +76,9 @@ code {
     width: initial;
 }
 
+.progress {
+    height: 0.625rem;
+}
 
 /*bootstrap 4 junk underneath here*/
 

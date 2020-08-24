@@ -3,15 +3,17 @@ using System;
 using EDScenicRouteWeb.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDScenicRouteWeb.Server.Data.Migrations
 {
     [DbContext(typeof(GalacticSystemContext))]
-    partial class GalacticSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20200831103707_PoiBodyLatLong")]
+    partial class PoiBodyLatLong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,7 +1,7 @@
 import {Component} from "react";
 import React from "react";
-import {ScenicSuggestionViewModel} from "./ScenicSuggestionViewModel";
-import {GalacticPOIHelper, GalacticPOIType} from "./GalacticPOI";
+import {ScenicSuggestionViewModel} from "./models/ScenicSuggestionViewModel";
+import {GalacticPOIHelper, GalacticPOIType, GalacticPOITypeEnum} from "./models/GalacticPOI";
 import {SuggestionsPagination} from "./SuggestionsPagination";
 import {ScenicSuggestionView} from "./ScenicSuggestionView";
 import {Alert, Button, ButtonGroup, InputGroupAddon} from "reactstrap";
@@ -42,11 +42,14 @@ export class ScenicResults extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
         const allPOITypes = new GalacticPOIHelper().AllGalacticPOITypes();
+        const poiFilters = allPOITypes.map(t => new POIFilter(t, this.ShouldShowByDefault(t.Type)));
         this.state = {
             SortByExtraJumps: true,
-            POIFilters: allPOITypes.map(t => new POIFilter(t, true))
+            POIFilters: poiFilters
         }
     }
+    
+    ShouldShowByDefault = (type: GalacticPOITypeEnum) => ![GalacticPOITypeEnum.organicStructure, GalacticPOITypeEnum.geologyAnomalies].includes(type);
     
     SuggestionsPerPage = 25;
     

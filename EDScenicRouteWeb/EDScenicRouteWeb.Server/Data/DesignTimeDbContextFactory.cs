@@ -21,7 +21,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<GalacticSy
         var builder = new DbContextOptionsBuilder<GalacticSystemContext>();
 
         var connectionStringBuilder =
-            new NpgsqlConnectionStringBuilder { Host = "localhost", Port = 5432, Database = "", Username = "", Password = ""};
+            new NpgsqlConnectionStringBuilder { Host = "localhost", Port = 5432, Database = "elite2", Username = "keir", Password = "apple2banana"};
         
         builder.UseNpgsql(connectionStringBuilder.ToString());
 

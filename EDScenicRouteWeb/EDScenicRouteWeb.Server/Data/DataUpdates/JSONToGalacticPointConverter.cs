@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using EDScenicRouteWeb.Server.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,7 +10,6 @@ using GalacticPOI = EDScenicRouteWeb.Server.Models.GalacticPOI;
 using GalacticPOIType = EDScenicRouteWeb.Server.Models.GalacticPOIType;
 using GalacticSystem = EDScenicRouteWeb.Server.Models.GalacticSystem;
 using IGalacticPoint = EDScenicRouteWeb.Server.Models.IGalacticPoint;
-using Vector3 = EDScenicRouteWeb.Server.Models.Vector3;
 
 namespace EDScenicRouteWeb.Server.Data.DataUpdates
 {
@@ -77,7 +77,9 @@ namespace EDScenicRouteWeb.Server.Data.DataUpdates
                 Name = r.name,
                 GalMapSearch = r.galMapSearch,
                 GalMapUrl = r.galMapUrl,
-                Coordinates = coordsVector,
+                X = coordsVector.X,
+                Y = coordsVector.Y,
+                Z = coordsVector.Z,
                 Type = poiType,
                 DistanceFromSol = ScenicSuggestionCalculator.DistanceFromSol(coordsVector)
             };
@@ -85,7 +87,6 @@ namespace EDScenicRouteWeb.Server.Data.DataUpdates
 
         private GalacticSystem SystemFromJSON(dynamic r)
         {
-            //var coords = (r.coords as JArray).Select(c => (float) c).ToArray();
             if (r.coords == null)
             {
                 return null;
@@ -97,12 +98,14 @@ namespace EDScenicRouteWeb.Server.Data.DataUpdates
                 {
                     Id = r.id,
                     Name = r.name,
-                    Coordinates = coordsVector
+                    X = coordsVector.X,
+                    Y = coordsVector.Y,
+                    Z = coordsVector.Z,
                 };
             }
-            catch (Exception exxx)
+            catch (Exception exception)
             {
-                Console.WriteLine(exxx);
+                Console.WriteLine(exception);
                 throw;
             }
         }

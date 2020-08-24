@@ -6,7 +6,7 @@ namespace EDScenicRouteWeb.Server.Services
 {
     public interface IGalaxyService
     {
-        ScenicSuggestionResults GenerateSuggestions(
+        Task<ScenicSuggestionResults> GenerateSuggestions(
             GalacticSystem from,
             GalacticSystem to,
             float acceptableExtraDistance);

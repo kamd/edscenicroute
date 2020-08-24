@@ -7,15 +7,13 @@ using GalacticSystem = EDScenicRouteWeb.Server.Models.GalacticSystem;
 using IGalacticPoint = EDScenicRouteWeb.Server.Models.IGalacticPoint;
 using ScenicSuggestion = EDScenicRouteWeb.Server.Models.ScenicSuggestion;
 using ScenicSuggestionResults = EDScenicRouteWeb.Server.Models.ScenicSuggestionResults;
-using Vector3 = EDScenicRouteWeb.Server.Models.Vector3;
 
 namespace EDScenicRouteWeb.Server.Services
 {
     public class ScenicSuggestionCalculator
     {
-
-        public const int MAX_SUGGESTIONS = 500;
-        public readonly float bubbleIgnoreRadius;
+        private const int MAX_SUGGESTIONS = 500;
+        private readonly float bubbleIgnoreRadius;
 
         public ScenicSuggestionCalculator(IEnumerable<GalacticPOI> pois, IQueryable<GalacticSystem> systems, float bubbleIgnoreRadius)
         {
@@ -33,43 +31,45 @@ namespace EDScenicRouteWeb.Server.Services
             GalacticSystem to,
             float acceptableExtraDistance)
         {
-            if (DistanceFromSol(to) < bubbleIgnoreRadius && DistanceFromSol(from) < bubbleIgnoreRadius)
+            if (DistanceFromSol(to.Coordinates) < bubbleIgnoreRadius && DistanceFromSol(from.Coordinates) < bubbleIgnoreRadius)
             {
                 // Warn user that their trip is very close to Earth and we won't have any useful POI suggestions!
                 throw new TripWithinBubbleException();
             }
             var originalDistance = DistanceBetweenPoints(from, to);
-            var suggestions = POIs.
-                Where(p => p.DistanceFromSol > bubbleIgnoreRadius). // Ignore the "bubble" of near-Earth POIs
-                Select(p =>
-                {
-                    var result = ExtraDistanceIncurred(@from, to, p, originalDistance);
-                    return new ScenicSuggestion(p, result.extraDistance, result.percentageAlongRoute);
-                }).
-                Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
-                OrderBy(ss => ss.ExtraDistance).
-                Take(MAX_SUGGESTIONS).
-                ToList();
-
-            return new ScenicSuggestionResults(){StraightLineDistance = originalDistance, Suggestions = suggestions};
+            var edsmSuggestions = SuggestionsForList(POIs.Where(p => (int)p.Type < 100));
+            var codexSuggestions = SuggestionsForList(POIs.Where(p => (int) p.Type >= 100));
+            
+            return new ScenicSuggestionResults()
+            {
+                StraightLineDistance = originalDistance,
+                Suggestions = edsmSuggestions.Concat(codexSuggestions).ToList()
+            };
+            
+            List<ScenicSuggestion> SuggestionsForList(IEnumerable<GalacticPOI> pois)
+            {
+                return pois.
+                    Where(p => p.DistanceFromSol > bubbleIgnoreRadius). // Ignore the "bubble" of near-Earth POIs
+                    Select(p =>
+                    {
+                        var result = ExtraDistanceIncurred(@from, to, p, originalDistance);
+                        return new ScenicSuggestion(p, result.extraDistance, result.percentageAlongRoute);
+                    }).
+                    Where(ss => ss.ExtraDistance <= acceptableExtraDistance && ss.ExtraDistance > 0f).
+                    OrderBy(ss => ss.ExtraDistance).
+                    Take(MAX_SUGGESTIONS / 2).
+                    ToList();
+            }
         }
 
-        public static float DistanceFromSol(IGalacticPoint point)
-        {
-            return DistanceFromSol(point.Coordinates);
-        }
-
-        public static float DistanceFromSol(Vector3 point)
-        {
-            return System.Numerics.Vector3.Distance(ToNumericsVector3(point), System.Numerics.Vector3.Zero);
-        }
+        public static float DistanceFromSol(System.Numerics.Vector3 point) => point.Length();
 
         private static (float extraDistance, float percentageAlongRoute) ExtraDistanceIncurred(
             GalacticSystem systemA, GalacticSystem systemB, GalacticPOI poi, float originalDistance)
         {
-            var a = ToNumericsVector3(systemA.Coordinates);
-            var b = ToNumericsVector3(systemB.Coordinates);
-            var p = ToNumericsVector3(poi.Coordinates);
+            var a = systemA.Coordinates;
+            var b = systemB.Coordinates;
+            var p = poi.Coordinates;
 
             var aToPOI = System.Numerics.Vector3.Distance(a, p);
 
@@ -91,14 +91,7 @@ namespace EDScenicRouteWeb.Server.Services
 
         private static float DistanceBetweenPoints(IGalacticPoint a, IGalacticPoint b)
         {
-            return System.Numerics.Vector3.Distance(ToNumericsVector3(a.Coordinates), ToNumericsVector3(b.Coordinates));
+            return System.Numerics.Vector3.Distance(a.Coordinates, b.Coordinates);
         }
-
-        private static System.Numerics.Vector3 ToNumericsVector3(Vector3 vector)
-        {
-            return new System.Numerics.Vector3(vector.X, vector.Y, vector.Z);
-        }
-
-
     }
 }

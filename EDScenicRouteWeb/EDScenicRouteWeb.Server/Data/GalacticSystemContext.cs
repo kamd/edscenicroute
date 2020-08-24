@@ -17,22 +17,38 @@ namespace EDScenicRouteWeb.Server.Data
         {
             modelBuilder.Entity<GalacticSystem>()
                 .Ignore(s => s.GalMapUrl);
-            modelBuilder.Entity<GalacticPOI>().OwnsOne(x => x.Coordinates);
-            modelBuilder.Entity<GalacticSystem>().OwnsOne(x => x.Coordinates);
-            modelBuilder.Entity<GalacticPOI>().Property(x => x.Name)
-                .HasColumnType("VARCHAR(200) UNIQUE")
-                .HasMaxLength(200);
-            modelBuilder.Entity<GalacticPOI>().Property(x => x.GalMapUrl)
-                .HasMaxLength(1000);
-            modelBuilder.Entity<GalacticPOI>().Property(x => x.GalMapSearch)
-                .HasMaxLength(600);
-            modelBuilder.Entity<GalacticSystem>().Property(x => x.Name)
-                .HasColumnType("VARCHAR(200) UNIQUE")
-                .HasMaxLength(200);
+            modelBuilder.Entity<GalacticPOI>(e =>
+            {
+                e.Property(x => x.Name)
+                    .HasColumnType("VARCHAR(200)")
+                    .HasMaxLength(200);
+
+                e.Property(x => x.GalMapUrl).HasMaxLength(1000);
+                e.Property(x => x.GalMapSearch).HasMaxLength(600);
+                e.Property(x => x.X).HasColumnName("Coordinates_X");
+                e.Property(x => x.Y).HasColumnName("Coordinates_Y");
+                e.Property(x => x.Z).HasColumnName("Coordinates_Z");
+                e.Ignore(x => x.Coordinates);
+                e.Property(x => x.Body).HasMaxLength(150);
+            });
+            modelBuilder.Entity<GalacticSystem>(e =>
+            {
+                e.Ignore(s => s.GalMapUrl);
+                e.Property(x => x.Name)
+                    .HasColumnType("VARCHAR(200) UNIQUE")
+                    .HasMaxLength(200);
+                e.Property(x => x.X).HasColumnName("Coordinates_X");
+                e.Property(x => x.Y).HasColumnName("Coordinates_Y");
+                e.Property(x => x.Z).HasColumnName("Coordinates_Z");
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                
+            }
         }
 
         public DbSet<GalacticSystem> GalacticSystems { get; set; }

@@ -60,6 +60,7 @@ namespace EDScenicRouteWeb.Server
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
+            services.AddSingleton<PoiCache>();
             services.AddScoped<IGalaxyService, GalaxyService>();
             services.AddScoped<IGalaxyRepository, DatabaseGalaxyRepository>();
             services.AddDbContext<GalacticSystemContext>(options => options.UseNpgsql(new Npgsql.NpgsqlConnectionStringBuilder()

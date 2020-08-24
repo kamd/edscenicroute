@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {ScenicSuggestionViewModel} from "./ScenicSuggestionViewModel";
+import {ScenicSuggestionViewModel} from "./models/ScenicSuggestionViewModel";
 import {RouteDetails} from "./RouteDetails";
 import {RouteEntry} from "./RouteEntry"
 import {ScenicResults} from "./ScenicResults";
@@ -47,7 +47,7 @@ export class Home extends Component<Props, State> {
             AcceptableExtraJumps: extraDistance / jumpRange,
             ShipJumpRange: jumpRange,
             ResultsPageNumber: 0
-        };
+        } as State;
     }
     
     OnSearchClick = async (from: string, to: string) => {

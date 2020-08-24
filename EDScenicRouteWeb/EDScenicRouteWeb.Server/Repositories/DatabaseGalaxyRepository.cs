@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDScenicRouteWeb.Server.Data;
 using EDScenicRouteWeb.Server.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using GalacticPOI = EDScenicRouteWeb.Server.Models.GalacticPOI;
 using GalacticSystem = EDScenicRouteWeb.Server.Models.GalacticSystem;
 
@@ -12,16 +11,17 @@ namespace EDScenicRouteWeb.Server.Repositories
     public class DatabaseGalaxyRepository : IGalaxyRepository
     {
         private readonly GalacticSystemContext context;
+        private readonly PoiCache poiCache;
 
-        public DatabaseGalaxyRepository(GalacticSystemContext galacticSystemContext)
+        public DatabaseGalaxyRepository(GalacticSystemContext galacticSystemContext, PoiCache poiCache)
         {
             context = galacticSystemContext;
-            POIs = context.GalacticPOIs.AsNoTracking().ToList();
+            this.poiCache = poiCache;
         }
 
         public async Task<GalacticSystem> ResolvePlaceByName(string name)
         {
-            var poi = POIs.FirstOrDefault(p => p.Name == name);
+            var poi = (await GetPOIs()).FirstOrDefault(p => p.Name == name);
             if (poi != null)
             {
                 return await ResolveSystemByName(poi.GalMapSearch);
@@ -41,6 +41,6 @@ namespace EDScenicRouteWeb.Server.Repositories
         }
 
         public IQueryable<GalacticSystem> Systems => context.GalacticSystems;
-        public IEnumerable<GalacticPOI> POIs { get; }
+        public async Task<IEnumerable<GalacticPOI>> GetPOIs() => await poiCache.GetPOIs(context);
     }
 }

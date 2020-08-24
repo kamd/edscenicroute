@@ -11,6 +11,6 @@ namespace EDScenicRouteWeb.Server.Repositories
         Task<GalacticSystem> ResolvePlaceByName(string name);
         Task<GalacticSystem> ResolveSystemByName(string name);
         IQueryable<GalacticSystem> Systems { get; }
-        IEnumerable<GalacticPOI> POIs { get; }
+        Task<IEnumerable<GalacticPOI>> GetPOIs();
     }
 }

@@ -1,8 +1,10 @@
 import {Component} from "react";
 import * as React from "react";
-import {ScenicSuggestionViewModel} from "./ScenicSuggestionViewModel";
-import {GalacticPOIType} from "./GalacticPOI";
+import {ScenicSuggestionViewModel} from "./models/ScenicSuggestionViewModel";
+import {GalacticPOIType} from "./models/GalacticPOI";
 import {Card, CardBody, Progress} from "reactstrap";
+import LocationInfo from "./LocationInfo";
+import PlanetaryLocationAddon from "./PlanetaryLocationAddon";
 
 export interface Props {
     Item: ScenicSuggestionViewModel;
@@ -16,8 +18,7 @@ interface State {
 }
 
 export class ScenicSuggestionView extends Component<Props, State>{
-
-
+    
     constructor(props: Readonly<Props>) {
         super(props);
         
@@ -41,7 +42,7 @@ export class ScenicSuggestionView extends Component<Props, State>{
     SelectBox = (e: React.MouseEvent) => {
         const node = document.getElementById(e.currentTarget.id);
         if (node != null) {
-            window.getSelection().selectAllChildren(node);
+            window.getSelection()?.selectAllChildren(node);
         }
     };
 
@@ -91,13 +92,19 @@ export class ScenicSuggestionView extends Component<Props, State>{
                             </div>
                         </div>
                         <div className="col">
-                            <div className="ssview-system">
-                                System:<br />
-                                <code id={"item-" + this.props.Item.POI.Id} onClick={this.SelectBox}>{this.props.Item.POI.GalMapSearch}</code>
-                            </div>
+                            <LocationInfo Item={this.props.Item} Type={this.props.Type} />
                         </div>
                         <div className="col">
-                            <a className="btn btn-info" role="button" href={this.props.Item.POI.GalMapUrl}>EDSM Info</a>
+                            <div className="row">
+                                <div className="col">
+                                    <a className="btn btn-info" role="button" href={this.props.Item.POI.GalMapUrl}>EDSM Info</a>
+                                </div>
+                            {this.props?.Item?.POI?.Body != null ?
+                                <div className="col">
+                                    <PlanetaryLocationAddon Item={this.props.Item} Type={this.props.Type} />
+                                </div>
+                                : null}
+                            </div>
                         </div>
                     </div>
                 </CardBody>

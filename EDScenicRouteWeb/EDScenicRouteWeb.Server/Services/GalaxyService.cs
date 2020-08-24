@@ -14,20 +14,19 @@ namespace EDScenicRouteWeb.Server.Services
         private const int PLACE_NAME_RESULTS_COUNT = 6;
         private const float BUBBLE_IGNORE_RADIUS = 200f;
 
-        private readonly ScenicSuggestionCalculator calculator;
         private readonly IGalaxyRepository repository;
 
         public GalaxyService(IGalaxyRepository galaxyRepository)
         {
-            calculator = new ScenicSuggestionCalculator(galaxyRepository.POIs, galaxyRepository.Systems, BUBBLE_IGNORE_RADIUS);
             repository = galaxyRepository;
         }
 
-        public ScenicSuggestionResults GenerateSuggestions(
+        public async Task<ScenicSuggestionResults> GenerateSuggestions(
             GalacticSystem from,
             GalacticSystem to,
             float acceptableExtraDistance)
         {
+            var calculator = new ScenicSuggestionCalculator(await repository.GetPOIs(), repository.Systems, BUBBLE_IGNORE_RADIUS);
             return calculator.GenerateSuggestions(from, to, acceptableExtraDistance);
         }
 
@@ -43,27 +42,30 @@ namespace EDScenicRouteWeb.Server.Services
         {
             var systemFrom = await repository.ResolvePlaceByName(placeNameFrom);
             var systemTo = await repository.ResolvePlaceByName(placeNameTo);
-            return GenerateSuggestions(systemFrom, systemTo, acceptableExtraDistance);
+            return await GenerateSuggestions(systemFrom, systemTo, acceptableExtraDistance);
         }
 
         public async Task<List<string>> PlaceNamesContainingString(string input)
         {
             string likeInput = $"%{input}%";
-            return await Task.Run(() =>
-            {
-                var pois = repository.POIs.Where(p => p.Name.ToLower().
-                    Contains(input)).
-                    Select(p => p.Name).
-                    OrderBy(p => p)
-                    .Take(PLACE_NAME_RESULTS_COUNT);
 
-                var systems = repository.Systems.Where(s => EF.Functions.ILike(s.Name, likeInput)).
-                    Select(s => s.Name).
-                    Take(PLACE_NAME_RESULTS_COUNT);
+            var pois = (await repository.GetPOIs())
+                .Where(p => (int)p.Type < 100 && p.Name.ToLower().Contains(input))
+                .Select(p => p.Name)
+                .OrderBy(p => p)
+                .Take(PLACE_NAME_RESULTS_COUNT);
 
-                return pois.Concat(systems).Distinct().Take(PLACE_NAME_RESULTS_COUNT).ToList();
-            });
-                
+            var systems = await repository.Systems
+                .Where(s => EF.Functions.ILike(s.Name, likeInput))
+                .Select(s => s.Name)
+                .Take(PLACE_NAME_RESULTS_COUNT)
+                .ToListAsync();
+
+            return pois
+                .Concat(systems)
+                .Distinct()
+                .Take(PLACE_NAME_RESULTS_COUNT)
+                .ToList();
         }
 
     }
