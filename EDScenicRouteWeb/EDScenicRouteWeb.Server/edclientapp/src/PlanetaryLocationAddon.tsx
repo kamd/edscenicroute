@@ -28,14 +28,14 @@ export class PlanetaryLocationAddon extends Component<Props, State>{
     render() {
         return (
             <div>
-                <Button id={"planetary-popover-" + this.props.Item.POI.Id} type="button">
+                <Button id={"planetary-popover-" + this.props.Item.poi.id} type="button">
                     <i className="fas fa-globe"></i>
                 </Button>
-                <Popover placement="bottom" isOpen={this.state.popoverVisible} target={"planetary-popover-" + this.props.Item.POI.Id} toggle={this.Toggle}>
+                <Popover placement="bottom" isOpen={this.state.popoverVisible} target={"planetary-popover-" + this.props.Item.poi.id} toggle={this.Toggle}>
                     <PopoverHeader>Planetary POI</PopoverHeader>
-                    <PopoverBody><div>Body: <strong>{this.props.Item.POI.Body}</strong><br/>
-                        Lat: <strong>{this.props.Item.POI.Latitude}</strong> <br/>
-                        Long: <strong>{this.props.Item.POI.Longitude}</strong></div></PopoverBody>
+                    <PopoverBody><div>Body: <strong>{this.props.Item.poi.body}</strong><br/>
+                        Lat: <strong>{this.props.Item.poi.latitude}</strong> <br/>
+                        Long: <strong>{this.props.Item.poi.longitude}</strong></div></PopoverBody>
                 </Popover>
             </div>
         );

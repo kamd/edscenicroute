@@ -37,7 +37,7 @@ export class ScenicSuggestionView extends Component<Props, State>{
         return "info";
     };
     
-    DistancePercent = () => Math.round(100 * (this.props.Item.ExtraDistance / this.props.MaxExtraDistance));
+    DistancePercent = () => Math.round(100 * (this.props.Item.extraDistance / this.props.MaxExtraDistance));
     
     SelectBox = (e: React.MouseEvent) => {
         const node = document.getElementById(e.currentTarget.id);
@@ -61,7 +61,7 @@ export class ScenicSuggestionView extends Component<Props, State>{
                             <span className={this.props.Type.DisplayClass + " poi-icon"}></span>
                         </div>
                         <div className="col-9 col-sm-4">
-                            <span className="poi-name">{this.props.Item.POI.Name}</span>
+                            <span className="poi-name">{this.props.Item.poi.name}</span>
                             <br />
                             <span><i>{this.props.Type.Name}</i></span>
                         </div>
@@ -69,7 +69,7 @@ export class ScenicSuggestionView extends Component<Props, State>{
                             <div className="row align-items-center justify-content-center">
                                 <div className="col ssview-col">
                                     <div className="ssview-info">
-                                        <span>{this.ExtraJumps(this.props.Item.ExtraDistance)}, <span className="text-info">{this.props.Item.ExtraDistance.toFixed(2)} Ly</span></span>
+                                        <span>{this.ExtraJumps(this.props.Item.extraDistance)}, <span className="text-info">{this.props.Item.extraDistance.toFixed(2)} Ly</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -82,12 +82,12 @@ export class ScenicSuggestionView extends Component<Props, State>{
                             <div className="row align-items-center justify-content-center">
                                <div className="col-xl-4 col-lg-5 col-md-6 col-sm-7 ssview-col ssview-faralong-left">
                                     <div className="ssview-info">
-                                        <span>{this.props.Item.PercentageAlongRoute.toFixed(0)}% <i className="fas fa-angle-double-right"></i></span>
+                                        <span>{this.props.Item.percentageAlongRoute.toFixed(0)}% <i className="fas fa-angle-double-right"></i></span>
                                     </div>
                                 </div>
                                 <div className="col-xl-8 col-lg-7 col-md-6 col-sm-5 ssview-col ssview-faralong-right">
-                                    <Progress className="poi-jumps-bar" barClassName="progress-bar-striped" value={this.props.Item.PercentageAlongRoute}
-                                              data-toggle="tooltip" title={this.props.Item.PercentageAlongRoute.toFixed(0) + "% along the route"} />
+                                    <Progress className="poi-jumps-bar" barClassName="progress-bar-striped" value={this.props.Item.percentageAlongRoute}
+                                              data-toggle="tooltip" title={this.props.Item.percentageAlongRoute.toFixed(0) + "% along the route"} />
                                 </div>
                             </div>
                         </div>
@@ -97,9 +97,9 @@ export class ScenicSuggestionView extends Component<Props, State>{
                         <div className="col">
                             <div className="row">
                                 <div className="col">
-                                    <a className="btn btn-info" role="button" href={this.props.Item.POI.GalMapUrl}>EDSM Info</a>
+                                    <a className="btn btn-info" role="button" href={this.props.Item.poi.galMapUrl}>EDSM Info</a>
                                 </div>
-                            {this.props?.Item?.POI?.Body != null ?
+                            {this.props?.Item?.poi?.body != null ?
                                 <div className="col">
                                     <PlanetaryLocationAddon Item={this.props.Item} Type={this.props.Type} />
                                 </div>

@@ -70,10 +70,10 @@ export class ScenicResults extends Component<Props, State> {
     
     FilteredSuggestions = () => {
         return this.props.ScenicSuggestions
-            .filter(s => this.state.POIFilters.some(f => f.Type.Type == s.POI.Type && f.Show))
+            .filter(s => this.state.POIFilters.some(f => f.Type.Type == s.poi.type && f.Show))
             .sort((a, b) => this.state.SortByExtraJumps ? 
-                        (a.ExtraDistance - b.ExtraDistance) : 
-                        (a.PercentageAlongRoute - b.PercentageAlongRoute));
+                        (a.extraDistance - b.extraDistance) : 
+                        (a.percentageAlongRoute - b.percentageAlongRoute));
     };
     
     CurrentPageOfFilteredSuggestions = () => {
@@ -84,7 +84,7 @@ export class ScenicResults extends Component<Props, State> {
     ScenicSuggestionPages = () => Math.ceil((this.FilteredSuggestions().length) / this.SuggestionsPerPage);
     
     SuggestionType = (s : ScenicSuggestionViewModel) => {
-        const filter = this.state.POIFilters.find(f => f.Type.Type == s.POI.Type);
+        const filter = this.state.POIFilters.find(f => f.Type.Type == s.poi.type);
         if (filter == null){
            return new GalacticPOIHelper().NullType(); 
         } else {
@@ -155,7 +155,7 @@ export class ScenicResults extends Component<Props, State> {
                         PageNumberChanged={this.props.OnPageChanged}/>
                     {this.CurrentPageOfFilteredSuggestions().map((x, i) =>
                         <ScenicSuggestionView
-                            key={x.POI.Id}
+                            key={x.poi.id}
                             Item={x}
                             ShipJumpRange={this.props.ShipJumpRange}
                             MaxExtraDistance={this.props.MaxExtraDistance}

@@ -30,7 +30,7 @@ export class LocationInfo extends Component<Props, State>{
     render(){
         return (
             <div className="ssview-system">
-                System: <br/><code id={"item-" + this.props.Item.POI.Id} onClick={this.SelectBox}>{this.props.Item.POI.GalMapSearch}</code>
+                System: <br/><code id={"item-" + this.props.Item.poi.id} onClick={this.SelectBox}>{this.props.Item.poi.galMapSearch}</code>
             </div>
         );
     }

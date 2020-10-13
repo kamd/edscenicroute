@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using EDScenicRouteWeb.Server.Exceptions;
 using EDScenicRouteWeb.Server.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Rest;
 using RouteDetails = EDScenicRouteWeb.Server.Models.RouteDetails;
 using RouteDetailsValidator = EDScenicRouteWeb.Server.Services.RouteDetailsValidator;
 
 namespace EDScenicRouteWeb.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/scenicsuggestions")]
     public class ScenicSuggestionsController : Controller
     {
         private readonly IGalaxyService galaxy;

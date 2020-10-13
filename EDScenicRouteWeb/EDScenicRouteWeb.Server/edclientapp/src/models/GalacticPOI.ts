@@ -1,18 +1,18 @@
 export class GalacticPOI {
 
     constructor(
-        public Id: number,
-        public Type: GalacticPOITypeEnum,
-        public Name: string,
-        public GalMapSearch: string,
-        public GalMapUrl: string,
-        public X: number,
-        public Y: number,
-        public Z: number,
-        public Body: string,
-        public Latitude: number,
-        public Longitude: number,
-        public DistanceFromSol: number) { }
+        public id: number,
+        public type: GalacticPOITypeEnum,
+        public name: string,
+        public galMapSearch: string,
+        public galMapUrl: string,
+        public x: number,
+        public y: number,
+        public z: number,
+        public body: string,
+        public latitude: number,
+        public longitude: number,
+        public distanceFromSol: number) { }
 }
 
 export enum GalacticPOITypeEnum

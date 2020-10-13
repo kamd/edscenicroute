@@ -4,6 +4,7 @@ import {ScenicSuggestionViewModel} from "./models/ScenicSuggestionViewModel";
 import {RouteDetails} from "./RouteDetails";
 import {RouteEntry} from "./RouteEntry"
 import {ScenicResults} from "./ScenicResults";
+import {ScenicSuggestionsResponse} from "./models/ScenicSuggestionsResponse";
 
 export interface Props {
 
@@ -65,15 +66,15 @@ export class Home extends Component<Props, State> {
                 body: JSON.stringify({FromSystemName: from, ToSystemName: to, AcceptableExtraDistance: acceptableExtraDistance})
             });
 
-        const content = await response.json();
+        const content: ScenicSuggestionsResponse = await response.json();
         if (!response.ok){
             this.setState({ErrorMessage: "Error: " + content, StraightLineDistanceOfTrip: 0, Suggestions: [], CurrentlySearching: false});
             return;
         } 
         
         this.setState({
-            StraightLineDistanceOfTrip: content.StraightLineDistance,
-            Suggestions: content.Suggestions,
+            StraightLineDistanceOfTrip: content.straightLineDistance,
+            Suggestions: content.suggestions,
             CurrentlySearching: false,
             ErrorMessage: undefined,
             ResultsPageNumber: 0

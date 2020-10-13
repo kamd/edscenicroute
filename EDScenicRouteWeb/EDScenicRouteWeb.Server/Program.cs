@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace EDScenicRouteWeb.Server
