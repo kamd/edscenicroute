@@ -19,7 +19,7 @@ export class About extends Component<Props, State>{
                 <p>This is a tool for players of <a href="https://www.elitedangerous.com/">Elite Dangerous</a>, explorers traversing the galaxy.</p>
                 
                 <Alert color="primary">
-                    <strong>Elite Dangerous Scenic Route Finder v1.2.2</strong>
+                    <strong>Elite Dangerous Scenic Route Finder v1.3.0</strong>
                 </Alert>
                 
                 <h3>What does it do?</h3>

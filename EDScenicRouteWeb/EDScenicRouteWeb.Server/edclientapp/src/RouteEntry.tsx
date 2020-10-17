@@ -36,8 +36,8 @@ export class RouteEntry extends Component<Props, State>{
     }
     
     OnSearch = () => this.props.OnSearchClick(
-        this.state.From != "" ? this.state.From : this.state.DefaultFrom, 
-        this.state.To != "" ? this.state.To : this.state.DefaultTo,
+        this.state.From !== "" ? this.state.From : this.state.DefaultFrom, 
+        this.state.To !== "" ? this.state.To : this.state.DefaultTo,
         this.props.JumpRange,
         this.props.AcceptableExtraJumps);
 

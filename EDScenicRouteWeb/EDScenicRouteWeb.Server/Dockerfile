@@ -11,18 +11,17 @@ COPY EDScenicRouteWeb/EDScenicRouteWeb.Server/edclientapp/tsconfig.json .
 RUN npm run build  
 
 # Build ASP.NET Core backend
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 # Copy csprojs and restore from nuget
 COPY EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj ./EDScenicRouteWeb/EDScenicRouteWeb.Server/
-RUN export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 RUN dotnet restore EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj
 # Copy everything else and build
 COPY . ./
 RUN dotnet publish EDScenicRouteWeb/EDScenicRouteWeb.Server/EDScenicRouteWeb.Server.csproj -c Release -o /app/out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build-env /app/out .
 COPY --from=build-node /app/build ./edclientapp/

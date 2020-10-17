@@ -22,25 +22,25 @@ export class SuggestionsPagination extends Component<Props, State>{
                 <div className="SuggestionsPagination row justify-content-center">
                     <ul className="pagination flex-wrap">
                         <li className={"page-item " + (this.props.PageNumber > 0 ? "" : "disabled")}>
-                            <a className="page-link" href="#" onClick={e => {
+                            <button className="page-link" onClick={e => {
                                 this.props.PageNumberChanged(this.props.PageNumber - 1);
                                 e.preventDefault();
-                            }}>&laquo;</a>
+                            }}>&laquo;</button>
                         </li>
                         {Array.from(Array(this.props.ScenicSuggestionPages).keys()).map((x, i) =>
 
-                            <li className={"page-item" + (this.props.PageNumber == i ? " active" : "")} key={i}>
-                                <a className="page-link" href="#" onClick={e => {
+                            <li className={"page-item" + (this.props.PageNumber === i ? " active" : "")} key={i}>
+                                <button className="page-link" onClick={e => {
                                     this.props.PageNumberChanged(i);
                                     e.preventDefault();
-                                }}>{i + 1}</a>
+                                }}>{i + 1}</button>
                             </li>
                         )}
                         <li className={"page-item " + ((this.props.PageNumber < (this.props.ScenicSuggestionPages - 1)) ? "" : "disabled")}>
-                            <a className="page-link" href="#" onClick={e => {
+                            <button className="page-link" onClick={e => {
                                 this.props.PageNumberChanged(this.props.PageNumber + 1);
                                 e.preventDefault();
-                            }}>&raquo;</a>
+                            }}>&raquo;</button>
                         </li>
                     </ul>
                 </div>

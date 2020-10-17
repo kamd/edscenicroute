@@ -14,10 +14,6 @@ interface State {
 
 class App extends Component<Props, State> {
 
-    constructor(props: Readonly<Props>) {
-        super(props);
-    }
-
     render() {
     return (
           <div className="App">

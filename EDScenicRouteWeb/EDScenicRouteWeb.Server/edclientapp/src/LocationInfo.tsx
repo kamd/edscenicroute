@@ -14,12 +14,6 @@ interface State {
 
 export class LocationInfo extends Component<Props, State>{
 
-
-    constructor(props: Readonly<Props>) {
-        super(props);
-
-    }
-
     SelectBox = (e: React.MouseEvent) => {
         const node = document.getElementById(e.currentTarget.id);
         if (node != null) {

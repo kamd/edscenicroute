@@ -55,13 +55,14 @@ export class TypeAheadTextBox extends Component<Props, State>{
             <div className="dropdown" onBlur={() => this.setState({Suggestions: []})}>
                 <Input id={this.props.Id} type="text" placeholder={this.props.Placeholder}
                        value={this.props.Value} 
-                       onInput={this.TextChanged}
+                       onChange={this.TextChanged}
                 />
                 <div className={"dropdown-menu" + (this.state.Suggestions.length > 0 ? " show" : undefined)}>
                     {this.state.Suggestions.map((x, i) =>
-                        <a key={i} className="dropdown-item" onMouseDown={() => this.ItemClicked(x)}>
+                        <button key={i} className="dropdown-item" onMouseDown={() => this.ItemClicked(x)}>
                             {x}
-                        </a>
+                        </button>
+                        
                     )}
                 </div>
             </div>

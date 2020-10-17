@@ -70,7 +70,7 @@ export class ScenicResults extends Component<Props, State> {
     
     FilteredSuggestions = () => {
         return this.props.ScenicSuggestions
-            .filter(s => this.state.POIFilters.some(f => f.Type.Type == s.poi.type && f.Show))
+            .filter(s => this.state.POIFilters.some(f => f.Type.Type === s.poi.type && f.Show))
             .sort((a, b) => this.state.SortByExtraJumps ? 
                         (a.extraDistance - b.extraDistance) : 
                         (a.percentageAlongRoute - b.percentageAlongRoute));
@@ -84,7 +84,7 @@ export class ScenicResults extends Component<Props, State> {
     ScenicSuggestionPages = () => Math.ceil((this.FilteredSuggestions().length) / this.SuggestionsPerPage);
     
     SuggestionType = (s : ScenicSuggestionViewModel) => {
-        const filter = this.state.POIFilters.find(f => f.Type.Type == s.poi.type);
+        const filter = this.state.POIFilters.find(f => f.Type.Type === s.poi.type);
         if (filter == null){
            return new GalacticPOIHelper().NullType(); 
         } else {
@@ -99,7 +99,7 @@ export class ScenicResults extends Component<Props, State> {
                     <Alert color="warning">Searching...</Alert>
                 </div>
             );
-        } else if (this.props.ErrorMessage != undefined) {
+        } else if (this.props.ErrorMessage !== undefined) {
             return (
                 <div className="ScenicResults">
                     <Alert color="danger">{this.props.ErrorMessage}</Alert>

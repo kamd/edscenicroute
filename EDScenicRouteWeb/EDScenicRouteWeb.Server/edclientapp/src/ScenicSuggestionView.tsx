@@ -18,11 +18,6 @@ interface State {
 }
 
 export class ScenicSuggestionView extends Component<Props, State>{
-    
-    constructor(props: Readonly<Props>) {
-        super(props);
-        
-    }
 
     ProgressBarColour = () => {
         const distancePercent = this.DistancePercent();
