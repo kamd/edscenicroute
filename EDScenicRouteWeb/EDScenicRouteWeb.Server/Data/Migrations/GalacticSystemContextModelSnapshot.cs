@@ -25,25 +25,29 @@ namespace EDScenicRouteWeb.Server.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Body")
-                        .HasMaxLength(150);
+                        .HasColumnType("VARCHAR(50)")
+                        .HasMaxLength(50);
 
                     b.Property<float>("DistanceFromSol");
 
                     b.Property<string>("GalMapSearch")
-                        .HasMaxLength(600);
+                        .HasColumnType("VARCHAR(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("GalMapUrl")
-                        .HasMaxLength(1000);
+                        .HasColumnType("VARCHAR(100)")
+                        .HasMaxLength(100);
 
                     b.Property<float?>("Latitude");
 
                     b.Property<float?>("Longitude");
 
                     b.Property<string>("Name")
-                        .HasColumnType("VARCHAR(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("VARCHAR(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<int>("Type");
+                    b.Property<short>("Type")
+                        .HasColumnType("SMALLINT");
 
                     b.Property<float>("X")
                         .HasColumnName("Coordinates_X");
@@ -65,8 +69,8 @@ namespace EDScenicRouteWeb.Server.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .HasColumnType("VARCHAR(200) UNIQUE")
-                        .HasMaxLength(200);
+                        .HasColumnType("VARCHAR(50) UNIQUE")
+                        .HasMaxLength(50);
 
                     b.Property<float>("X")
                         .HasColumnName("Coordinates_X");

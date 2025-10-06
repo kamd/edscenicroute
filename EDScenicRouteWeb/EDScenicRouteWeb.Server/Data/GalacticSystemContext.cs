@@ -20,23 +20,30 @@ namespace EDScenicRouteWeb.Server.Data
             modelBuilder.Entity<GalacticPOI>(e =>
             {
                 e.Property(x => x.Name)
-                    .HasColumnType("VARCHAR(200)")
-                    .HasMaxLength(200);
+                    .HasColumnType("VARCHAR(100)")
+                    .HasMaxLength(100);
 
-                e.Property(x => x.GalMapUrl).HasMaxLength(1000);
-                e.Property(x => x.GalMapSearch).HasMaxLength(600);
+                e.Property(x => x.Type).HasColumnType("SMALLINT");
+                e.Property(x => x.GalMapUrl)
+                    .HasColumnType("VARCHAR(100)")
+                    .HasMaxLength(100);
+                e.Property(x => x.GalMapSearch)
+                    .HasColumnType("VARCHAR(50)")
+                    .HasMaxLength(50);
                 e.Property(x => x.X).HasColumnName("Coordinates_X");
                 e.Property(x => x.Y).HasColumnName("Coordinates_Y");
                 e.Property(x => x.Z).HasColumnName("Coordinates_Z");
                 e.Ignore(x => x.Coordinates);
-                e.Property(x => x.Body).HasMaxLength(150);
+                e.Property(x => x.Body)
+                    .HasColumnType("VARCHAR(50)")
+                    .HasMaxLength(50);
             });
             modelBuilder.Entity<GalacticSystem>(e =>
             {
                 e.Ignore(s => s.GalMapUrl);
                 e.Property(x => x.Name)
-                    .HasColumnType("VARCHAR(200) UNIQUE")
-                    .HasMaxLength(200);
+                    .HasColumnType("VARCHAR(50) UNIQUE")
+                    .HasMaxLength(50);
                 e.Property(x => x.X).HasColumnName("Coordinates_X");
                 e.Property(x => x.Y).HasColumnName("Coordinates_Y");
                 e.Property(x => x.Z).HasColumnName("Coordinates_Z");
